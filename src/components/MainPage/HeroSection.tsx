@@ -1,32 +1,42 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import AnimatedSearchBar from '@/components/shared/AnimatedSearchBar';
 
-const BACKGROUND_PRODUCTS = [
-  '/api/placeholder/200/200',
-  '/api/placeholder/200/200',
-  '/api/placeholder/200/200',
-  '/api/placeholder/200/200',
-  '/api/placeholder/200/200',
-  '/api/placeholder/200/200',
-  '/api/placeholder/200/200',
-  '/api/placeholder/200/200',
-  '/api/placeholder/200/200',
-  '/api/placeholder/200/200',
-  '/api/placeholder/200/200',
-  '/api/placeholder/200/200',
-  '/api/placeholder/200/200',
-  '/api/placeholder/200/200',
-  '/api/placeholder/200/200',
-  '/api/placeholder/200/200',
-];
-
 const HeroSection: React.FC = () => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.8;
+    }
+  }, []);
+
   return (
     <section className="relative min-h-screen overflow-hidden bg-[var(--color-dark-navy)]">
-      <div className="absolute inset-0 opacity-[0.08]">
+      {/* Video Background */}
+      <div className="absolute inset-0">
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="h-full w-full object-cover opacity-70"
+        >
+          {/* 회전하는 컴퓨터 비디오 */}
+          <source src="/videos/spinning-pc.mp4" type="video/mp4" />
+          <source src="/videos/spinning-pc.webm" type="video/webm" />
+        </video>
+        {/* Gradient Overlay - 더 투명하게 */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-dark-navy)]/30 via-transparent to-[var(--color-dark-navy)]/50" />
+        {/* Radial Gradient for center focus - 더 투명하게 */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,var(--color-dark-navy)_85%)]" />
+      </div>
+
+      {/* Fallback: Grid Background (shown if video fails to load) */}
+      <div className="absolute inset-0 opacity-[0.05]">
         <div className="grid h-full grid-cols-4 gap-4 p-8 md:grid-cols-6 lg:grid-cols-8">
-          {BACKGROUND_PRODUCTS.map((_, index) => (
+          {Array.from({ length: 16 }).map((_, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0 }}
@@ -38,6 +48,7 @@ const HeroSection: React.FC = () => {
         </div>
       </div>
 
+      {/* Content */}
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
