@@ -50,13 +50,13 @@ const ImageGallery = ({ data }: { data?: ProductsCodeResDto }) => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       <div className="group relative">
-        <div className="flex max-h-[400px] w-full items-center justify-center overflow-hidden rounded-2xl border border-gray-100 bg-gray-50">
+        <div className="flex max-h-[320px] w-full items-center justify-center overflow-hidden rounded-2xl border border-gray-100 bg-gray-50">
           <img
             src={data.thumbnail_url}
             alt={data.product_name}
-            className="h-full max-h-[400px] w-auto object-contain transition-transform duration-500 group-hover:scale-105"
+            className="h-full max-h-[320px] w-auto object-contain transition-transform duration-500 group-hover:scale-105"
           />
         </div>
         <button className="absolute right-5 bottom-5 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 shadow-sm backdrop-blur-md transition-all hover:bg-white">

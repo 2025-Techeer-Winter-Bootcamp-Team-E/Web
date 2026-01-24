@@ -37,17 +37,17 @@ const ProductDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-white selection:bg-black/10">
-      <div className="mx-auto max-w-7xl px-6 py-8">
-        <div className="mb-8 flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
-          <div className="lg:w-[42%]">
+      <div className="mx-auto max-w-7xl px-6 py-6">
+        <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-start">
+          <div className="lg:w-[38%]">
             <ImageGallery data={productInfo} />
           </div>
-          <div className="lg:sticky lg:top-20 lg:w-[55%]">
+          <div className="lg:sticky lg:top-20 lg:w-[58%]">
             <ProductInfo productInfo={productInfo} />
           </div>
         </div>
         {/* Price Intelligence Section */}
-        <div className="mt-16">
+        <div className="mt-10">
           <div className="mb-8 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-r from-[var(--color-gradient-purple)] to-[var(--color-gradient-blue)]">

@@ -3,13 +3,19 @@ import { useSearchParams } from 'react-router-dom';
 import { X } from 'lucide-react';
 import FilterBar from '@/components/productList/FilterBar';
 import StoreSection from '@/components/productList/StoreSection';
+import LLMRecommendationSection from '@/components/productList/LLMRecommendationSection';
 import ProductGrid from '@/components/productList/ProductGrid';
 import AIChatbotPanel from '@/components/chatbot/AIChatbotPanel';
 import useProductListQuery from '@/hooks/queries/useProductListQuery';
+import type { LLMRecommendationEntity } from '@/types/searchType';
 
 const ProductListPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentQuery, setCurrentQuery] = useState('');
+  const [llmRecommendations, setLlmRecommendations] = useState<LLMRecommendationEntity[] | null>(
+    null
+  );
+  const [llmAnalysisMessage, setLlmAnalysisMessage] = useState<string>('');
 
   const searchQuery = searchParams.get('q') || '';
   const mainCat = searchParams.get('main_cat') || '';
@@ -61,6 +67,11 @@ const ProductListPage = () => {
     updateURL({ q: query, page: 1 });
   };
 
+  const handleLlmResult = (products: LLMRecommendationEntity[], analysisMessage: string) => {
+    setLlmRecommendations(products);
+    setLlmAnalysisMessage(analysisMessage);
+  };
+
   const handleFilterChange = (filters: Record<string, string>) => {
     updateURL({
       sort: filters.sort || undefined,
@@ -94,7 +105,14 @@ const ProductListPage = () => {
         <FilterBar onFilterChange={handleFilterChange} />
 
         <div className="mt-6">
-          <StoreSection />
+          {llmRecommendations && llmRecommendations.length > 0 ? (
+            <LLMRecommendationSection
+              products={llmRecommendations}
+              analysisMessage={llmAnalysisMessage}
+            />
+          ) : (
+            <StoreSection />
+          )}
         </div>
 
         <div className="mt-6">
@@ -103,7 +121,11 @@ const ProductListPage = () => {
       </div>
 
       <div className="sticky top-0 h-screen">
-        <AIChatbotPanel onSearch={handleSearch} initialQuery={searchQuery} />
+        <AIChatbotPanel
+          onSearch={handleSearch}
+          onLlmResult={handleLlmResult}
+          initialQuery={searchQuery}
+        />
       </div>
     </div>
   );

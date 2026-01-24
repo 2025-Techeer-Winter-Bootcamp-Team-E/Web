@@ -69,9 +69,18 @@ export type SearchShoppingResearchReqDto = {
 
 export type ProductSpecs = Record<string, string>;
 
+export type QuestionOption = {
+  id: string;
+  label: string;
+};
+
 export type QuestionEntity = {
   question_id: number;
   question: string;
+  options?: QuestionOption[];
+  customOption?: {
+    placeholder?: string;
+  };
 };
 
 /** 쇼핑 리서치 검색 요청 응답 (질문 생성)
