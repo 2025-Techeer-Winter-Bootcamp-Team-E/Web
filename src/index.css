@@ -1,0 +1,21 @@
+@import 'tailwindcss';
+
+:root {
+  --color-dark-navy: #0a0f1c;
+  --color-navy-blue: #1a1f2e;
+  --color-gradient-purple: #8b5cf6;
+  --color-gradient-blue: #3b82f6;
+  --color-accent-purple: #a855f7;
+  --color-light-gray: #f8fafc;
+  --color-border-gray: #e2e8f0;
+}
+
+body {
+  font-family:
+    'Pretendard Variable',
+    Pretendard,
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    sans-serif;
+}
