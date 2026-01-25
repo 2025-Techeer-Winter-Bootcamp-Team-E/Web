@@ -1,4 +1,3 @@
-import { AnimatePresence } from 'framer-motion';
 import ProductGridCard from './ProductGridCard';
 import type { Product } from '@/types/productType';
 
@@ -10,11 +9,11 @@ interface ProductGridProps {
 const ProductGrid = ({ products, isLoading }: ProductGridProps) => {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 justify-items-center gap-8 md:grid-cols-3 lg:grid-cols-4 lg:gap-12">
         {Array.from({ length: 8 }).map((_, index) => (
           <div
             key={index}
-            className="aspect-[3/4] animate-pulse rounded-2xl bg-gray-100"
+            className="aspect-square w-full max-w-[220px] rounded-xl bg-gray-100"
           />
         ))}
       </div>
@@ -32,23 +31,15 @@ const ProductGrid = ({ products, isLoading }: ProductGridProps) => {
 
   return (
     <section>
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-gray-900">Result</h2>
-        <button className="text-sm font-medium text-blue-600 hover:text-blue-700">
-          View All &gt;
-        </button>
+      <div className="grid grid-cols-2 justify-items-center gap-8 md:grid-cols-3 lg:grid-cols-4 lg:gap-12">
+        {products.map((product, index) => (
+          <ProductGridCard
+            key={product.product_code}
+            product={product}
+            index={index}
+          />
+        ))}
       </div>
-      <AnimatePresence mode="wait">
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {products.map((product, index) => (
-            <ProductGridCard
-              key={product.product_code}
-              product={product}
-              index={index}
-            />
-          ))}
-        </div>
-      </AnimatePresence>
     </section>
   );
 };

@@ -1,27 +1,52 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, ShoppingCart, X, ChevronDown } from 'lucide-react';
-import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import { Menu, ShoppingCart, X, ChevronDown, User } from 'lucide-react';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { PATH } from '@/routes/path';
 import { CATEGORY } from '@/constants/category';
+import FilterDropdown from '@/components/productList/FilterDropdown';
+import { useNavigation } from '@/contexts/NavigationContext';
+
+const SORT_OPTIONS = [
+  { value: 'relevance', label: '관련순' },
+  { value: 'price_low', label: '낮은 가격순' },
+  { value: 'price_high', label: '높은 가격순' },
+  { value: 'rating', label: '평점순' },
+  { value: 'newest', label: '최신순' },
+];
 
 const Header: React.FC = () => {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const timeoutRef = useRef<number | null>(null);
-  const navigate = useNavigate();
+  const { navigateWithAnimation } = useNavigation();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const isProductPage = location.pathname === '/products';
+  // Check login status
+  useEffect(() => {
+    const accessToken = localStorage.getItem('access_token');
+    setIsLoggedIn(!!accessToken);
+  }, [location]);
+
+  const isProductListPage = location.pathname === '/products';
   const mainCat = searchParams.get('main_cat') || '';
   const subCat = searchParams.get('sub_cat') || '';
+  const sort = searchParams.get('sort') || 'relevance';
+  const currentPage = Number(searchParams.get('page')) || 1;
+  const totalPages = 10; // This should come from API response, using placeholder for now
 
-  const clearCategory = () => {
+  const handlePageChange = (page: number) => {
     const params = Object.fromEntries(searchParams.entries());
-    delete params.main_cat;
-    delete params.sub_cat;
-    params.page = '1';
+    params.page = String(page);
+    setSearchParams(params, { replace: true });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSortChange = (value: string) => {
+    const params = Object.fromEntries(searchParams.entries());
+    params.sort = value;
     setSearchParams(params, { replace: true });
   };
 
@@ -54,13 +79,13 @@ const Header: React.FC = () => {
   };
 
   const handleCategoryClick = (categoryName: string) => {
-    navigate(`${PATH.PRODUCT_LIST}?main_cat=${encodeURIComponent(categoryName)}`);
+    navigateWithAnimation(`${PATH.PRODUCT_LIST}?main_cat=${encodeURIComponent(categoryName)}`);
     setActiveCategory(null);
     setIsMobileNavOpen(false);
   };
 
   const handleSubCategoryClick = (categoryName: string, subCategoryName: string) => {
-    navigate(`${PATH.PRODUCT_LIST}?main_cat=${encodeURIComponent(categoryName)}&sub_cat=${encodeURIComponent(subCategoryName)}`);
+    navigateWithAnimation(`${PATH.PRODUCT_LIST}?main_cat=${encodeURIComponent(categoryName)}&sub_cat=${encodeURIComponent(subCategoryName)}`);
     setActiveCategory(null);
     setIsMobileNavOpen(false);
   };
@@ -73,12 +98,14 @@ const Header: React.FC = () => {
         <div className="relative flex h-16 items-center justify-between">
           {/* Logo */}
           <div
-            className="flex cursor-pointer items-center transition-opacity hover:opacity-60"
-            onClick={() => navigate('/')}
+            className="ml-2 flex cursor-pointer items-center transition-opacity hover:opacity-60"
+            onClick={() => navigateWithAnimation('/')}
           >
-            <span className="text-lg font-light tracking-[0.1em] text-black uppercase">
-              Compare AI
-            </span>
+            <img
+              src="/videos/logo.png"
+              alt="WYW"
+              className="h-12 w-auto"
+            />
           </div>
 
           {/* Desktop Category Navigation - Always Centered */}
@@ -124,39 +151,31 @@ const Header: React.FC = () => {
             ))}
           </nav>
 
-          {/* Breadcrumb - Centered between Category Nav and Cart */}
-          {isProductPage && mainCat && (
-            <div className="absolute right-[12%] top-1/2 hidden -translate-y-1/2 items-center lg:flex">
-              <div className="flex items-center gap-2 border border-gray-200 px-3 py-1.5">
-                <span className="text-sm font-light text-black">
-                  {mainCat}
-                  {subCat && ` > ${subCat}`}
-                </span>
-                <button
-                  onClick={clearCategory}
-                  className="p-0.5 text-gray-400 transition-colors hover:text-black"
-                >
-                  <X className="h-3.5 w-3.5" strokeWidth={1.5} />
-                </button>
-              </div>
-            </div>
-          )}
-
           {/* Right Actions */}
           <div className="flex items-center gap-4">
             <button
               className="p-2 text-black transition-opacity hover:opacity-60"
-              onClick={() => navigate(PATH.CART)}
+              onClick={() => navigateWithAnimation(PATH.CART)}
               aria-label="장바구니"
             >
               <ShoppingCart className="h-5 w-5" strokeWidth={1.5} />
             </button>
-            <button
-              onClick={() => navigate(PATH.LOGIN)}
-              className="hidden border border-black px-5 py-2 text-sm font-light text-black transition-all hover:bg-black hover:text-white md:block"
-            >
-              Sign In
-            </button>
+            {isLoggedIn ? (
+              <button
+                onClick={() => navigateWithAnimation(PATH.MY_PAGE)}
+                className="hidden p-2 text-black transition-opacity hover:opacity-60 md:block"
+                aria-label="마이페이지"
+              >
+                <User className="h-5 w-5" strokeWidth={1.5} />
+              </button>
+            ) : (
+              <button
+                onClick={() => navigateWithAnimation(PATH.LOGIN)}
+                className="hidden rounded-full border border-black px-5 py-2 text-sm font-light text-black transition-all hover:bg-black hover:text-white md:block"
+              >
+                Sign In
+              </button>
+            )}
             <button
               className="p-2 lg:hidden"
               onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
@@ -169,6 +188,77 @@ const Header: React.FC = () => {
             </button>
           </div>
         </div>
+
+        {/* Product List Filter Bar - Second Row */}
+        {isProductListPage && (
+          <div className="flex items-center justify-between border-t border-gray-100 py-3">
+            {/* Category Tag - Left */}
+            <div className="flex items-center min-w-[200px]">
+              {mainCat && (
+                <div className="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700">
+                  {mainCat}
+                  {subCat && ` > ${subCat}`}
+                </div>
+              )}
+            </div>
+
+            {/* Pagination - Center */}
+            <div className="flex items-center gap-1">
+              {(() => {
+                const pages: (number | string)[] = [];
+                const showPages = 5;
+                let startPage = Math.max(1, currentPage - Math.floor(showPages / 2));
+                let endPage = Math.min(totalPages, startPage + showPages - 1);
+
+                if (endPage - startPage + 1 < showPages) {
+                  startPage = Math.max(1, endPage - showPages + 1);
+                }
+
+                if (startPage > 1) {
+                  pages.push(1);
+                  if (startPage > 2) pages.push('...');
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                  pages.push(i);
+                }
+
+                if (endPage < totalPages) {
+                  if (endPage < totalPages - 1) pages.push('...');
+                  pages.push(totalPages);
+                }
+
+                return pages.map((page, idx) =>
+                  typeof page === 'string' ? (
+                    <span key={`ellipsis-${idx}`} className="px-1 text-sm text-gray-400">{page}</span>
+                  ) : (
+                    <button
+                      key={page}
+                      onClick={() => handlePageChange(page)}
+                      className={`flex h-8 w-8 items-center justify-center text-sm transition-colors ${
+                        currentPage === page
+                          ? 'font-semibold text-black'
+                          : 'font-light text-gray-400 hover:text-black'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  )
+                );
+              })()}
+            </div>
+
+            {/* Sort Dropdown - Right */}
+            <div className="flex items-center justify-end min-w-[200px]">
+              <FilterDropdown
+                label="정렬"
+                options={SORT_OPTIONS}
+                value={sort}
+                onChange={handleSortChange}
+              />
+            </div>
+          </div>
+        )}
 
         {/* Mobile Navigation */}
         {isMobileNavOpen && (

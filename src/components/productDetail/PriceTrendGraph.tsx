@@ -1,5 +1,5 @@
 import { XAxis, YAxis, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
-import { TrendingDown, Calendar, ArrowDownRight } from 'lucide-react';
+import { TrendingDown, Calendar, ArrowDownRight, ArrowUpRight } from 'lucide-react';
 import useProductTrendQuery from '@/hooks/queries/useProductTrendQuery';
 
 const PriceTrendGraph = ({ productCode }: { productCode: number }) => {
@@ -20,47 +20,51 @@ const PriceTrendGraph = ({ productCode }: { productCode: number }) => {
   const priceChangePercent = ((priceChange / prices[0]) * 100).toFixed(1);
 
   return (
-    <div className="flex-1 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+    <div className="flex h-full flex-col border border-gray-200 bg-white p-6">
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-r from-[var(--color-gradient-purple)]/10 to-[var(--color-gradient-blue)]/10">
-            <TrendingDown className="h-5 w-5 text-[var(--color-gradient-purple)]" />
+          <div className="flex h-10 w-10 items-center justify-center border border-gray-200">
+            <TrendingDown className="h-5 w-5 text-black" strokeWidth={1.5} />
           </div>
           <div>
-            <h4 className="text-[15px] font-bold text-gray-900">최저가 추이</h4>
-            <p className="text-[12px] text-gray-500">
+            <h4 className="text-sm font-light tracking-wide text-black">최저가 추이</h4>
+            <p className="text-xs font-light text-gray-500">
               {data.selected_period}{data.period_unit} 가격 변동
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5">
-          <Calendar className="h-3 w-3 text-gray-500" />
-          <span className="text-[11px] font-medium text-gray-600">최근 7일</span>
+        <div className="flex items-center gap-1.5 border border-gray-200 px-3 py-1.5">
+          <Calendar className="h-3 w-3 text-gray-500" strokeWidth={1.5} />
+          <span className="text-xs font-light text-gray-600">최근 7일</span>
         </div>
       </div>
 
       {/* Price Summary Cards */}
       <div className="mb-6 grid grid-cols-3 gap-3">
-        <div className="rounded-xl bg-gradient-to-br from-[var(--color-gradient-purple)]/5 to-[var(--color-gradient-blue)]/5 p-3">
-          <p className="mb-1 text-[10px] font-bold uppercase tracking-wider text-gray-500">최저가</p>
-          <p className="text-lg font-bold text-[var(--color-gradient-purple)]">
+        <div className="border border-gray-200 p-3">
+          <p className="mb-1 text-xs font-light uppercase tracking-wider text-gray-500">최저가</p>
+          <p className="text-lg font-light text-black">
             {minPrice.toLocaleString()}
-            <span className="text-xs font-normal text-gray-400">원</span>
+            <span className="text-xs font-light text-gray-400">원</span>
           </p>
         </div>
-        <div className="rounded-xl bg-gray-50 p-3">
-          <p className="mb-1 text-[10px] font-bold uppercase tracking-wider text-gray-500">최고가</p>
-          <p className="text-lg font-bold text-gray-900">
+        <div className="border border-gray-100 bg-gray-50 p-3">
+          <p className="mb-1 text-xs font-light uppercase tracking-wider text-gray-500">최고가</p>
+          <p className="text-lg font-light text-black">
             {maxPrice.toLocaleString()}
-            <span className="text-xs font-normal text-gray-400">원</span>
+            <span className="text-xs font-light text-gray-400">원</span>
           </p>
         </div>
-        <div className="rounded-xl bg-gray-50 p-3">
-          <p className="mb-1 text-[10px] font-bold uppercase tracking-wider text-gray-500">변동</p>
+        <div className="border border-gray-100 bg-gray-50 p-3">
+          <p className="mb-1 text-xs font-light uppercase tracking-wider text-gray-500">변동</p>
           <div className="flex items-center gap-1">
-            <ArrowDownRight className={`h-4 w-4 ${priceChange <= 0 ? 'text-green-500' : 'text-red-500'}`} />
-            <p className={`text-lg font-bold ${priceChange <= 0 ? 'text-green-500' : 'text-red-500'}`}>
+            {priceChange <= 0 ? (
+              <ArrowDownRight className="h-4 w-4 text-black" strokeWidth={1.5} />
+            ) : (
+              <ArrowUpRight className="h-4 w-4 text-gray-500" strokeWidth={1.5} />
+            )}
+            <p className={`text-lg font-light ${priceChange <= 0 ? 'text-black' : 'text-gray-500'}`}>
               {priceChangePercent}%
             </p>
           </div>
@@ -68,20 +72,20 @@ const PriceTrendGraph = ({ productCode }: { productCode: number }) => {
       </div>
 
       {/* Chart */}
-      <div className="h-48 w-full">
+      <div className="min-h-48 flex-1 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={chartData}>
             <defs>
-              <linearGradient id="priceGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.3} />
-                <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0} />
+              <linearGradient id="priceGradientMinimal" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#000000" stopOpacity={0.1} />
+                <stop offset="100%" stopColor="#000000" stopOpacity={0} />
               </linearGradient>
             </defs>
             <XAxis
               dataKey="date"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 11, fill: '#9ca3af' }}
+              tick={{ fontSize: 11, fill: '#9ca3af', fontWeight: 300 }}
               dy={10}
             />
             <YAxis
@@ -91,25 +95,24 @@ const PriceTrendGraph = ({ productCode }: { productCode: number }) => {
             <Tooltip
               contentStyle={{
                 backgroundColor: 'white',
-                borderRadius: '12px',
                 border: '1px solid #e5e7eb',
-                boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
+                boxShadow: 'none',
                 padding: '12px 16px',
               }}
-              labelStyle={{ fontSize: '11px', color: '#6b7280', marginBottom: '4px' }}
-              itemStyle={{ fontSize: '14px', fontWeight: '700', color: '#111827' }}
+              labelStyle={{ fontSize: '11px', color: '#6b7280', marginBottom: '4px', fontWeight: 300 }}
+              itemStyle={{ fontSize: '14px', fontWeight: 300, color: '#000000' }}
               formatter={(value: number | undefined) => [`${(value ?? 0).toLocaleString()}원`, '가격']}
             />
             <Area
               type="monotone"
               dataKey="price"
-              stroke="#8b5cf6"
-              strokeWidth={2.5}
-              fill="url(#priceGradient)"
+              stroke="#000000"
+              strokeWidth={1.5}
+              fill="url(#priceGradientMinimal)"
               activeDot={{
-                r: 6,
-                fill: '#8b5cf6',
-                strokeWidth: 3,
+                r: 5,
+                fill: '#000000',
+                strokeWidth: 2,
                 stroke: 'white',
               }}
             />
@@ -118,16 +121,16 @@ const PriceTrendGraph = ({ productCode }: { productCode: number }) => {
       </div>
 
       {/* Bottom Info */}
-      <div className="mt-4 flex items-center justify-between border-t border-gray-100 pt-4">
+      <div className="mt-auto flex items-center justify-between border-t border-gray-200 pt-4">
         <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-[var(--color-gradient-purple)]" />
-          <span className="text-[12px] font-medium text-gray-500">현재가</span>
-          <span className="text-[14px] font-bold text-gray-900">
+          <div className="h-2 w-2 bg-black" />
+          <span className="text-xs font-light text-gray-500">현재가</span>
+          <span className="text-sm font-light text-black">
             {currentPrice.toLocaleString()}원
           </span>
         </div>
-        <button className="text-[12px] font-semibold text-[var(--color-gradient-purple)] hover:underline">
-          상세 분석 보기 →
+        <button className="text-xs font-light text-black underline underline-offset-2 hover:no-underline">
+          상세 분석 보기
         </button>
       </div>
     </div>

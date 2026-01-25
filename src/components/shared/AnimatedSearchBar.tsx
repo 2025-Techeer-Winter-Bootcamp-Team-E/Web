@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Search, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigation } from '@/contexts/NavigationContext';
 
 const TYPING_PHRASES = [
   'RTX 4070 그래픽카드 최저가 비교',
@@ -21,7 +21,7 @@ const AnimatedSearchBar = ({
   onSearch,
   initialQuery = '',
 }: AnimatedSearchBarProps) => {
-  const navigate = useNavigate();
+  const { navigateWithAnimation } = useNavigation();
   const [query, setQuery] = useState(initialQuery);
   const [displayedText, setDisplayedText] = useState('');
   const [isTyping, setIsTyping] = useState(true);
@@ -62,7 +62,8 @@ const AnimatedSearchBar = ({
     if (onSearch) {
       onSearch(query);
     } else {
-      navigate(`/products?q=${encodeURIComponent(query)}`);
+      // Navigate to product list page with AI panel open
+      navigateWithAnimation(`/products?q=${encodeURIComponent(query)}&ai_open=true`);
     }
   };
 

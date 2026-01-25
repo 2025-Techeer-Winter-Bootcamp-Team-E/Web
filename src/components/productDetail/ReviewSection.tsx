@@ -19,83 +19,86 @@ const ReviewSection = ({ productCode }: ReviewSectionProps) => {
   const { reviews, pagination, average_rating } = reviewData;
 
   return (
-    <section className="space-y-16">
-      <div className="flex flex-col gap-2">
-        <h2 className="text-3xl font-semibold tracking-tight text-[#1d1d1f]">구매 후기</h2>
-        <div className="mt-2 flex items-center gap-4">
+    <section className="space-y-12">
+      {/* Header */}
+      <div className="border-b border-gray-200 pb-6">
+        <h2 className="text-2xl font-light tracking-tight text-black">구매 후기</h2>
+        <div className="mt-4 flex items-center gap-4">
           <div className="flex items-center gap-0.5">
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
-                className={`h-5 w-5 ${i < Math.floor(average_rating) ? 'fill-[#1d1d1f] text-[#1d1d1f]' : 'text-[#d2d2d7]'}`}
+                className={`h-4 w-4 ${i < Math.floor(average_rating) ? 'fill-black text-black' : 'text-gray-300'}`}
+                strokeWidth={1.5}
               />
             ))}
           </div>
-          <span className="text-2xl font-bold tracking-tighter text-[#1d1d1f]">
+          <span className="text-xl font-light tracking-tight text-black">
             {average_rating.toFixed(1)}
           </span>
-          <span className="border-l border-[#d2d2d7] pl-4 text-sm font-medium text-[#86868b]">
+          <span className="border-l border-gray-300 pl-4 text-sm font-light text-gray-500">
             전체 {pagination.total_elements.toLocaleString()}개의 통합 리뷰
           </span>
         </div>
       </div>
 
+      {/* AI Summary */}
       {aiData && (
-        <div className="rounded-[2.5rem] border border-white/40 bg-[#f5f5f7]/60 p-10 shadow-sm backdrop-blur-sm">
-          <div className="mb-8 flex items-center gap-3">
-            <div className="flex h-7 w-12 items-center justify-center rounded-full bg-[#1d1d1f] text-[10px] font-bold tracking-widest text-white uppercase">
-              AI
+        <div className="border border-gray-200 bg-white p-8">
+          <div className="mb-6 flex items-center gap-3">
+            <div className="flex h-8 w-8 items-center justify-center bg-black">
+              <span className="text-xs font-light text-white">AI</span>
             </div>
-            <p className="text-lg font-semibold tracking-tight text-[#1d1d1f]">
+            <p className="text-base font-light tracking-wide text-black">
               {aiData.ai_summary}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
-            <div className="space-y-8">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+            <div className="space-y-6">
               <div>
-                <h4 className="mb-4 text-xs font-bold tracking-widest text-[#86868b] uppercase">
+                <h4 className="mb-3 text-xs font-light uppercase tracking-widest text-gray-500">
                   Pros
                 </h4>
-                <ul className="space-y-3 text-[14px] font-medium text-[#424245]">
+                <ul className="space-y-2 text-sm font-light text-gray-700">
                   {aiData.pros.map((item, idx) => (
-                    <li key={idx} className="flex gap-3 leading-relaxed">
-                      <span className="text-[#1d1d1f]">/</span> {item}
+                    <li key={idx} className="flex gap-2 leading-relaxed">
+                      <span className="text-black">/</span> {item}
                     </li>
                   ))}
                 </ul>
               </div>
               <div>
-                <h4 className="mb-4 text-xs font-bold tracking-widest text-[#86868b] uppercase">
+                <h4 className="mb-3 text-xs font-light uppercase tracking-widest text-gray-500">
                   Cons
                 </h4>
-                <ul className="space-y-3 text-[14px] font-medium text-[#86868b]">
+                <ul className="space-y-2 text-sm font-light text-gray-500">
                   {aiData.cons.map((item, idx) => (
-                    <li key={idx} className="flex gap-3 leading-relaxed">
-                      <span className="opacity-40">•</span> {item}
+                    <li key={idx} className="flex gap-2 leading-relaxed">
+                      <span className="opacity-40">-</span> {item}
                     </li>
                   ))}
                 </ul>
               </div>
             </div>
 
-            <div className="flex flex-col justify-center rounded-3xl border border-white/60 bg-white/40 p-8">
-              <h4 className="mb-2 text-xs font-bold tracking-widest text-[#86868b] uppercase">
+            <div className="flex flex-col justify-center border border-gray-100 bg-gray-50 p-6">
+              <h4 className="mb-2 text-xs font-light uppercase tracking-widest text-gray-500">
                 Recommendation
               </h4>
               <div className="mb-4 flex items-baseline gap-2">
-                <span className="text-5xl font-bold tracking-tighter text-[#1d1d1f]">
+                <span className="text-4xl font-light tracking-tight text-black">
                   {aiData.recommendation_score}
                 </span>
-                <span className="text-lg font-semibold text-[#86868b]">/ 100</span>
+                <span className="text-lg font-light text-gray-400">/ 100</span>
               </div>
-              <div className="mb-6 h-1 w-full overflow-hidden rounded-full bg-black/5">
+              <div className="mb-4 h-1 w-full overflow-hidden bg-gray-200">
                 <div
-                  className="h-full bg-[#1d1d1f]"
+                  className="h-full bg-black"
                   style={{ width: `${aiData.recommendation_score}%` }}
                 />
               </div>
-              <p className="text-[13px] leading-relaxed font-medium text-[#424245] italic">
+              <p className="text-sm font-light leading-relaxed text-gray-600 italic">
                 "{aiData.score_reason}"
               </p>
             </div>
@@ -103,7 +106,8 @@ const ReviewSection = ({ productCode }: ReviewSectionProps) => {
         </div>
       )}
 
-      <div className="divide-y divide-[#d2d2d7]/30">
+      {/* Review List */}
+      <div className="divide-y divide-gray-200">
         {reviews.map((review) => (
           <ReviewCard key={review.review_id} review={review} />
         ))}

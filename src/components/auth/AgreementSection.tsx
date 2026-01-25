@@ -36,7 +36,7 @@ const AgreementSection: React.FC<AgreementSectionProps> = ({ agreements, onAgree
         onClick={() => toggle('all')}
         className="flex w-full items-center justify-between px-4 py-4 transition-colors hover:bg-[#F5F5F7]"
       >
-        <span className="font-semibold text-[#1d1d1f]">약관 전체 동의</span>
+        <span className="font-semibold text-[#1d1d1f]">Agree to all terms</span>
         <input
           type="checkbox"
           checked={agreements.all}
@@ -48,10 +48,10 @@ const AgreementSection: React.FC<AgreementSectionProps> = ({ agreements, onAgree
 
       {['age14', 'service', 'privacy', 'marketing'].map((key) => {
         const labels: Record<string, string> = {
-          age14: '[필수] 만 14세 이상입니다.',
-          service: '[필수] 이용약관 동의',
-          privacy: '[필수] 개인정보 수집 및 이용 동의',
-          marketing: '[선택] 마케팅 정보 수신 동의',
+          age14: '[Required] I am 14 years or older',
+          service: '[Required] Terms of Service',
+          privacy: '[Required] Privacy Policy',
+          marketing: '[Optional] Marketing Communications',
         };
         return (
           <label

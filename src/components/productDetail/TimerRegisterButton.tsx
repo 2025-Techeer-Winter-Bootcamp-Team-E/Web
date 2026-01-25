@@ -1,13 +1,13 @@
-import { Plus } from 'lucide-react';
+import { Bell } from 'lucide-react';
 
 const TimerRegisterButton = ({ onClick }: { onClick: () => void }) => {
   return (
     <button
       onClick={onClick}
-      className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#1d1d1f] py-4 text-[15px] font-semibold text-white shadow-[0_10px_30px_rgba(0,0,0,0.1)] transition-all duration-300 hover:bg-[#424245] active:scale-[0.98]"
+      className="flex w-full items-center justify-center gap-2 border border-black bg-black py-4 text-sm font-light tracking-wide text-white transition-all hover:bg-white hover:text-black"
     >
-      <Plus className="h-4 w-4" strokeWidth={3} />
-      타이머 등록
+      <Bell className="h-4 w-4" strokeWidth={1.5} />
+      가격 알림 설정
     </button>
   );
 };

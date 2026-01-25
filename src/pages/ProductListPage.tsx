@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import FilterBar from '@/components/productList/FilterBar';
+import { MessageSquare } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import LLMRecommendationSection from '@/components/productList/LLMRecommendationSection';
 import ProductGrid from '@/components/productList/ProductGrid';
 import AIChatbotPanel from '@/components/chatbot/AIChatbotPanel';
@@ -14,6 +15,7 @@ const ProductListPage = () => {
     null
   );
   const [llmAnalysisMessage, setLlmAnalysisMessage] = useState<string>('');
+  const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
 
   const searchQuery = searchParams.get('q') || '';
   const mainCat = searchParams.get('main_cat') || '';
@@ -22,6 +24,18 @@ const ProductListPage = () => {
   const maxPrice = searchParams.get('max_price') || '';
   const sort = searchParams.get('sort') || 'popular';
   const page = Number(searchParams.get('page')) || 1;
+  const aiOpen = searchParams.get('ai_open') === 'true';
+
+  // Auto-open AI panel if ai_open param is true
+  useEffect(() => {
+    if (aiOpen && !isAIPanelOpen) {
+      setIsAIPanelOpen(true);
+      // Remove ai_open param from URL after opening
+      const params = Object.fromEntries(searchParams.entries());
+      delete params.ai_open;
+      setSearchParams(params, { replace: true });
+    }
+  }, [aiOpen]);
 
   useEffect(() => {
     if (searchQuery) {
@@ -66,40 +80,73 @@ const ProductListPage = () => {
     setLlmAnalysisMessage(analysisMessage);
   };
 
-  const handleFilterChange = (filters: Record<string, string>) => {
-    updateURL({
-      sort: filters.sort || undefined,
-    });
-  };
-
   const products = data?.products || [];
 
   return (
     <div className="flex min-h-screen bg-white">
-      <div className="flex-1 overflow-y-auto px-8 py-6">
-        <FilterBar onFilterChange={handleFilterChange} />
+      <div
+        className={`flex-1 overflow-y-auto transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isAIPanelOpen ? 'mr-[340px]' : 'mr-0'
+        }`}
+      >
+        {/* Content Area - Aligned with Header, pt-20 accounts for filter bar row */}
+        <div className="mx-auto max-w-7xl px-6 lg:px-12 pt-20 pb-6">
+          {llmRecommendations && llmRecommendations.length > 0 && (
+            <div className="mb-6">
+              <LLMRecommendationSection
+                products={llmRecommendations}
+                analysisMessage={llmAnalysisMessage}
+              />
+            </div>
+          )}
 
-        {llmRecommendations && llmRecommendations.length > 0 && (
-          <div className="mt-6">
-            <LLMRecommendationSection
-              products={llmRecommendations}
-              analysisMessage={llmAnalysisMessage}
-            />
-          </div>
-        )}
-
-        <div className="mt-6">
           <ProductGrid products={products} isLoading={isLoading} />
         </div>
       </div>
 
-      <div className="sticky top-0 h-screen">
-        <AIChatbotPanel
-          onSearch={handleSearch}
-          onLlmResult={handleLlmResult}
-          initialQuery={searchQuery}
-        />
-      </div>
+      {/* AI Panel - Fixed Position */}
+      <AnimatePresence>
+        {isAIPanelOpen && (
+          <motion.div
+            initial={{ x: 340, opacity: 0, scale: 0.95 }}
+            animate={{ x: 0, opacity: 1, scale: 1 }}
+            exit={{ x: 340, opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed right-4 top-32 z-40 h-[calc(100vh-160px)] w-[340px] overflow-hidden"
+          >
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.0, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="h-full w-full"
+            >
+              <AIChatbotPanel
+                onSearch={handleSearch}
+                onLlmResult={handleLlmResult}
+                initialQuery={searchQuery}
+                onClose={() => setIsAIPanelOpen(false)}
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Toggle Button - Fixed Position */}
+      <AnimatePresence>
+        {!isAIPanelOpen && (
+          <motion.button
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            onClick={() => setIsAIPanelOpen(true)}
+            className="fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center bg-black text-white shadow-lg transition-all hover:bg-gray-800"
+          >
+            <MessageSquare className="h-6 w-6" strokeWidth={1.5} />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

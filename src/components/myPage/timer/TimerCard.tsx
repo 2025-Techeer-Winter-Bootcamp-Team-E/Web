@@ -55,68 +55,75 @@ const TimerCard = ({ timer }: TimerCardProps) => {
 
   return (
     <>
-      <div className="group relative flex h-full flex-col overflow-hidden rounded-4xl border border-black/5 bg-white p-6 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
+      <div className="group relative flex h-full flex-col border border-gray-200 bg-white p-6 transition-all hover:border-black">
+        {/* Delete Button */}
         <button
           onClick={handleDelete}
-          className="absolute top-5 right-5 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-[#86868b] opacity-0 backdrop-blur-md transition-all group-hover:opacity-100 hover:bg-[#ff3b30] hover:text-white"
+          className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center text-gray-400 opacity-0 transition-all group-hover:opacity-100 hover:text-black"
         >
-          <X className="h-4 w-4" />
+          <X className="h-4 w-4" strokeWidth={1.5} />
         </button>
 
-        <div className="relative mb-6 flex h-48 items-center justify-center rounded-3xl bg-[#F5F5F7] p-6 transition-transform duration-700 group-hover:scale-[1.02]">
+        {/* Product Image */}
+        <div className="relative mb-6 flex h-48 items-center justify-center bg-gray-50 p-6">
           {timer.thumbnail_url ? (
             <img
               src={timer.thumbnail_url}
               alt={timer.product_name}
-              className="h-full object-contain mix-blend-multiply"
+              className="h-full object-contain"
             />
           ) : (
-            <span className="text-[13px] font-medium text-[#d2d2d7]">No Image</span>
+            <span className="text-sm font-light text-gray-400">No Image</span>
           )}
         </div>
 
-        <div className="mb-5 space-y-2">
-          <h3 className="line-clamp-2 min-h-11 text-[17px] leading-tight font-semibold tracking-tight text-[#1d1d1f]">
+        {/* Product Info */}
+        <div className="mb-6 space-y-2">
+          <h3 className="line-clamp-2 min-h-[2.75rem] text-base font-light leading-snug tracking-tight text-black">
             {timer.product_name}
           </h3>
-          <div className="flex items-baseline gap-2">
-            <span className="text-[24px] font-bold tracking-tighter text-[#1d1d1f]">
-              {timer.predicted_price.toLocaleString()}원
+          <div className="flex items-baseline gap-3">
+            <span className="text-xl font-light tracking-tight text-black">
+              ₩{timer.predicted_price.toLocaleString()}
             </span>
-            <span className="text-[12px] font-semibold tracking-tight text-[#86868b]">
-              목표 {timer.target_price.toLocaleString()}원
+            <span className="text-xs font-light text-gray-500">
+              목표 ₩{timer.target_price.toLocaleString()}
             </span>
           </div>
         </div>
-        <div className="mb-6 rounded-[20px] bg-[#F5F5F7] p-5">
+
+        {/* Score Section */}
+        <div className="mb-6 border border-gray-100 bg-gray-50 p-4">
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-[11px] font-bold tracking-widest text-[#86868b] uppercase">
+            <span className="text-xs font-light uppercase tracking-widest text-gray-500">
               Score
             </span>
-            <span className="text-[15px] font-bold text-[#0066cc]">
+            <span className="text-sm font-light text-black">
               {timer.recommendation_score}%
             </span>
           </div>
-          <p className="line-clamp-2 text-[13px] leading-relaxed text-[#424245]">
+          <p className="line-clamp-2 text-sm font-light leading-relaxed text-gray-600">
             {timer.reason_message}
           </p>
         </div>
 
-        <div className="mt-auto flex gap-3">
+        {/* Action Buttons */}
+        <div className="mt-auto flex gap-2">
           <button
             onClick={handleOpenEditModal}
-            className="flex h-13 w-13 items-center justify-center rounded-2xl border border-[#d2d2d7] bg-white text-[#1d1d1f] transition-all hover:bg-[#F5F5F7]"
+            className="flex h-12 w-12 items-center justify-center border border-gray-200 bg-white text-gray-600 transition-all hover:border-black hover:text-black"
           >
-            <Pencil className="h-5 w-5" />
+            <Pencil className="h-4 w-4" strokeWidth={1.5} />
           </button>
           <button
             onClick={handleGoToProduct}
-            className="flex-1 rounded-2xl bg-[#1d1d1f] px-4 py-3 text-[15px] font-semibold text-white transition-all hover:bg-[#424245] active:scale-[0.97]"
+            className="flex-1 bg-black py-3 text-sm font-light tracking-wide text-white transition-opacity hover:opacity-80"
           >
             상세 보기
           </button>
         </div>
       </div>
+
       <TimerModal
         isOpen={isEditModalOpen}
         onClose={handleCloseEditModal}

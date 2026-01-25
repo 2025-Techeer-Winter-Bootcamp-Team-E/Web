@@ -1,35 +1,12 @@
 import { useState } from 'react';
 import FilterDropdown from './FilterDropdown';
 
-const CATEGORY_OPTIONS = [
-  { value: '', label: 'All Categories' },
-  { value: 'electronics', label: 'Electronics' },
-  { value: 'fashion', label: 'Fashion' },
-  { value: 'home', label: 'Home & Living' },
-  { value: 'sports', label: 'Sports' },
-];
-
-const RATING_OPTIONS = [
-  { value: '', label: 'All Ratings' },
-  { value: '4', label: '4+ Stars' },
-  { value: '3', label: '3+ Stars' },
-  { value: '2', label: '2+ Stars' },
-];
-
-const PRICE_OPTIONS = [
-  { value: '', label: 'All Prices' },
-  { value: '0-50000', label: 'Under 50,000' },
-  { value: '50000-100000', label: '50,000 - 100,000' },
-  { value: '100000-200000', label: '100,000 - 200,000' },
-  { value: '200000+', label: '200,000+' },
-];
-
 const SORT_OPTIONS = [
-  { value: 'relevance', label: 'Relevance' },
-  { value: 'price-asc', label: 'Price: Low to High' },
-  { value: 'price-desc', label: 'Price: High to Low' },
-  { value: 'rating', label: 'Highest Rated' },
-  { value: 'newest', label: 'Newest' },
+  { value: 'relevance', label: '관련순' },
+  { value: 'price-asc', label: '낮은 가격순' },
+  { value: 'price-desc', label: '높은 가격순' },
+  { value: 'rating', label: '평점순' },
+  { value: 'newest', label: '최신순' },
 ];
 
 interface FilterBarProps {
@@ -38,9 +15,6 @@ interface FilterBarProps {
 
 const FilterBar = ({ onFilterChange }: FilterBarProps) => {
   const [filters, setFilters] = useState({
-    category: '',
-    rating: '',
-    price: '',
     sort: 'relevance',
   });
 
@@ -51,33 +25,13 @@ const FilterBar = ({ onFilterChange }: FilterBarProps) => {
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-3 border-b border-gray-100 pb-4">
+    <div className="flex flex-wrap items-center justify-end border-b border-gray-100 pb-4">
       <FilterDropdown
-        label="Category"
-        options={CATEGORY_OPTIONS}
-        value={filters.category}
-        onChange={(value) => handleFilterChange('category', value)}
+        label="정렬"
+        options={SORT_OPTIONS}
+        value={filters.sort}
+        onChange={(value) => handleFilterChange('sort', value)}
       />
-      <FilterDropdown
-        label="Rating"
-        options={RATING_OPTIONS}
-        value={filters.rating}
-        onChange={(value) => handleFilterChange('rating', value)}
-      />
-      <FilterDropdown
-        label="Price"
-        options={PRICE_OPTIONS}
-        value={filters.price}
-        onChange={(value) => handleFilterChange('price', value)}
-      />
-      <div className="ml-auto">
-        <FilterDropdown
-          label="Sort by"
-          options={SORT_OPTIONS}
-          value={filters.sort}
-          onChange={(value) => handleFilterChange('sort', value)}
-        />
-      </div>
     </div>
   );
 };

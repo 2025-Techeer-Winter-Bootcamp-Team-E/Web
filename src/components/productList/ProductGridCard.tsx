@@ -1,33 +1,29 @@
-import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import type { Product } from '@/types/productType';
 import { PATH } from '@/routes/path';
 
 interface ProductGridCardProps {
   product: Product;
-  index: number;
+  index?: number;
 }
 
-const ProductGridCard = ({ product, index }: ProductGridCardProps) => {
+const ProductGridCard = ({ product, index = 0 }: ProductGridCardProps) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
     navigate(PATH.PRODUCT_DETAIL(product.product_code));
   };
 
+  // Calculate row for staggered animation
+  const row = Math.floor(index / 4);
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.5,
-        delay: index * 0.08,
-        ease: [0.16, 1, 0.3, 1],
-      }}
+    <div
       onClick={handleClick}
-      className="group cursor-pointer border border-gray-100 bg-white p-4 transition-all hover:border-black"
+      className="group cursor-pointer rounded-xl border border-gray-100 bg-white p-3 transition-colors hover:border-black max-w-[220px] animate-slideUp"
+      style={{ animationDelay: `${row * 500}ms` }}
     >
-      <div className="aspect-square overflow-hidden bg-gray-50">
+      <div className="aspect-square overflow-hidden rounded-lg bg-gray-50">
         <img
           src={product.thumbnail_url || '/api/placeholder/300/300'}
           alt={product.product_name}
@@ -45,7 +41,7 @@ const ProductGridCard = ({ product, index }: ProductGridCardProps) => {
           <span className="text-xs font-light text-gray-400">원</span>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

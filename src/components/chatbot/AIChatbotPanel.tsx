@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Search, ArrowRight, ImagePlus, ShoppingBag } from 'lucide-react';
+import { Search, ArrowRight, ImagePlus, ShoppingBag, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ChatMessage from './ChatMessage';
 import SuggestedTags from './SuggestedTags';
@@ -17,20 +17,20 @@ const SUGGESTED_TAGS = [
   'RTX 4070',
   '라이젠 7',
   '게이밍 노트북',
-  'SSD 1TB',
-  'DDR5 램',
 ];
 
 interface AIChatbotPanelProps {
   onSearch: (query: string) => void;
   onLlmResult?: (products: LLMRecommendationEntity[], analysisMessage: string) => void;
   initialQuery?: string;
+  onClose?: () => void;
 }
 
 const AIChatbotPanel = ({
   onSearch,
   onLlmResult,
   initialQuery = '',
+  onClose,
 }: AIChatbotPanelProps) => {
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [input, setInput] = useState('');
@@ -380,29 +380,40 @@ const AIChatbotPanel = ({
   return (
     <motion.div
       layoutId="search-bar"
-      className="flex h-full w-96 flex-col border-l border-gray-100 bg-white"
+      className="flex h-full w-[340px] flex-col rounded-3xl border border-white/20 bg-white/40 shadow-2xl backdrop-blur-2xl"
+      style={{ backdropFilter: 'blur(30px) saturate(180%)' }}
     >
-      <div className="border-b border-gray-100 p-5">
-        <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center bg-black">
-            <span className="text-xs font-light text-white">AI</span>
+      <div className="rounded-t-3xl border-b border-white/30 bg-white/30 p-5 backdrop-blur-sm">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="ai-icon-animated flex h-10 w-10 items-center justify-center rounded-2xl">
+              <span className="text-sm font-medium text-white">AI</span>
+            </div>
+            <div>
+              <h2 className="text-sm font-medium tracking-wide text-black">AI Assistant</h2>
+              <p className="text-xs font-light text-gray-500">
+                {isShoppingResearchMode ? 'Shopping Research' : 'Smart Shopping'}
+              </p>
+            </div>
           </div>
-          <div>
-            <h2 className="text-sm font-light tracking-wide text-black">AI Assistant</h2>
-            <p className="text-xs font-light text-gray-400">
-              {isShoppingResearchMode ? 'Shopping Research' : 'Smart Shopping'}
-            </p>
-          </div>
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="flex h-8 w-8 items-center justify-center rounded-xl border border-gray-200/50 bg-white/50 text-gray-500 transition-all hover:border-black hover:bg-black hover:text-white"
+            >
+              <X className="h-4 w-4" strokeWidth={1.5} />
+            </button>
+          )}
         </div>
       </div>
 
-      <div className="flex-1 space-y-4 overflow-y-auto p-4">
+      <div className="flex-1 space-y-4 overflow-y-auto p-4 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         {messages.length === 0 && (
           <div className="flex h-full flex-col items-center justify-center text-center">
-            <div className="mb-6 flex h-16 w-16 items-center justify-center bg-black">
-              <span className="text-xl font-light text-white">AI</span>
+            <div className="ai-icon-animated mb-8 flex h-20 w-20 items-center justify-center rounded-3xl">
+              <span className="text-2xl font-medium text-white">AI</span>
             </div>
-            <p className="text-sm font-light text-gray-400">
+            <p className="text-base font-normal leading-loose text-gray-500">
               찾으시는 제품에 대해
               <br />
               무엇이든 물어보세요
@@ -411,21 +422,23 @@ const AIChatbotPanel = ({
         )}
         {messages.map((message) => renderMessage(message))}
         {isLoading && (
-          <div className="flex gap-3">
-            <div className="h-8 w-8 flex-shrink-0 bg-black" />
-            <div className="bg-gray-50 px-4 py-3">
-              <div className="flex gap-1">
-                <span className="h-1.5 w-1.5 animate-pulse bg-gray-300" />
-                <span className="h-1.5 w-1.5 animate-pulse bg-gray-300" style={{ animationDelay: '0.2s' }} />
-                <span className="h-1.5 w-1.5 animate-pulse bg-gray-300" style={{ animationDelay: '0.4s' }} />
-              </div>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center gap-3"
+          >
+            <div className="ai-icon-animated h-8 w-8 flex-shrink-0 rounded-xl" />
+            <div className="rounded-2xl bg-white/60 px-4 py-3 backdrop-blur-sm">
+              <p className="loading-text-animate text-sm text-gray-500">
+                최적의 상품을 검색 중입니다...
+              </p>
             </div>
-          </div>
+          </motion.div>
         )}
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="border-t border-gray-100 p-4">
+      <div className="rounded-b-3xl border-t border-white/30 bg-white/30 p-4 backdrop-blur-sm">
         {!isShoppingResearchMode && (
           <SuggestedTags tags={SUGGESTED_TAGS} onTagClick={handleTagClick} />
         )}
@@ -436,17 +449,17 @@ const AIChatbotPanel = ({
               {questions.map((_, idx) => (
                 <div
                   key={idx}
-                  className={`h-1 w-4 ${idx <= currentQuestionIndex ? 'bg-black' : 'bg-gray-200'}`}
+                  className={`h-1.5 w-5 rounded-full transition-colors ${idx <= currentQuestionIndex ? 'bg-black' : 'bg-gray-200'}`}
                 />
               ))}
             </div>
-            <span className="text-xs font-light text-gray-400">
+            <span className="text-xs font-medium text-gray-500">
               {currentQuestionIndex + 1}/{questions.length}
             </span>
           </div>
         )}
 
-        <div className="mt-4 flex items-center gap-3 border-b border-gray-200 bg-white px-2 py-3">
+        <div className="mt-4 flex items-center gap-2 rounded-2xl border border-gray-200/50 bg-white/60 px-4 py-3 backdrop-blur-sm">
           <Search className="h-4 w-4 flex-shrink-0 text-gray-400" strokeWidth={1.5} />
           <input
             type="text"
@@ -454,22 +467,20 @@ const AIChatbotPanel = ({
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={isShoppingResearchMode ? '답변을 입력하세요...' : '무엇이든 물어보세요...'}
-            className="flex-1 bg-transparent text-sm font-light outline-none placeholder:text-gray-400"
+            className="flex-1 bg-transparent text-sm font-normal outline-none placeholder:text-gray-400"
           />
+          {!isShoppingResearchMode && (
+            <button className="p-2 text-gray-400 transition-colors hover:text-black">
+              <ImagePlus className="h-4 w-4" strokeWidth={1.5} />
+            </button>
+          )}
           <button
             onClick={() => handleSendMessage(input)}
-            className="p-2 text-black transition-opacity hover:opacity-60"
+            className="rounded-xl bg-black p-2 text-white transition-all hover:bg-gray-800"
           >
             <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
           </button>
         </div>
-
-        {!isShoppingResearchMode && (
-          <button className="mt-4 flex w-full items-center justify-center gap-2 border border-gray-200 py-3 text-sm font-light text-gray-600 transition-all hover:border-black hover:text-black">
-            <ImagePlus className="h-4 w-4" strokeWidth={1.5} />
-            이미지로 검색
-          </button>
-        )}
       </div>
     </motion.div>
   );

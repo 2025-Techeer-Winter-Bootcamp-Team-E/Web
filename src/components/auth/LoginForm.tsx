@@ -29,11 +29,12 @@ const LoginForm = () => {
     <div className="flex min-h-screen items-center justify-center bg-white px-4 py-32">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <div className="mb-4 flex items-center justify-center gap-1">
-            <span className="text-2xl font-bold text-gray-900">Compare</span>
-            <span className="bg-gradient-to-r from-[var(--color-gradient-purple)] to-[var(--color-gradient-blue)] bg-clip-text text-2xl font-bold text-transparent">
-              AI
-            </span>
+          <div className="mb-4 flex items-center justify-center">
+            <img
+              src="/videos/logo.png"
+              alt="WYW"
+              className="h-16 w-auto"
+            />
           </div>
           <h1 className="text-2xl font-semibold text-gray-900">Welcome back</h1>
           <p className="mt-2 text-sm text-gray-500">Sign in to continue shopping</p>

@@ -11,7 +11,8 @@
       "Bash(find:*)",
       "WebFetch(domain:godly.website)",
       "WebFetch(domain:www.gentlemonster.com)",
-      "Bash(yarn dev)"
+      "Bash(yarn dev)",
+      "Bash(ls:*)"
     ]
   }
 }

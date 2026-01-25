@@ -13,7 +13,7 @@ const ChatMessage = ({ message }: ChatMessageProps) => {
         animate={{ opacity: 1, y: 0 }}
         className="flex justify-end"
       >
-        <div className="max-w-[80%] bg-black px-4 py-3 text-sm font-light text-white">
+        <div className="max-w-[80%] rounded-2xl rounded-tr-sm bg-black px-4 py-3 text-sm font-normal text-white shadow-lg">
           {message.content}
         </div>
       </motion.div>
@@ -26,12 +26,12 @@ const ChatMessage = ({ message }: ChatMessageProps) => {
       animate={{ opacity: 1, y: 0 }}
       className="flex gap-3"
     >
-      <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center bg-black">
-        <span className="text-xs font-light text-white">AI</span>
+      <div className="ai-icon-animated flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl">
+        <span className="text-xs font-medium text-white">AI</span>
       </div>
       <div className="max-w-[80%]">
-        <div className="border border-gray-100 bg-white px-4 py-3">
-          <p className="text-sm font-light leading-relaxed text-gray-700">{message.content}</p>
+        <div className="rounded-2xl rounded-tl-sm border border-gray-100/50 bg-white/60 px-4 py-3 backdrop-blur-sm">
+          <p className="text-sm font-normal leading-relaxed text-gray-700">{message.content}</p>
         </div>
       </div>
     </motion.div>

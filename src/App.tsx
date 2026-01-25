@@ -2,15 +2,16 @@ import RootRoute from '@/routes/RootRoute';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/api/queryClient';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { NavigationProvider } from '@/contexts/NavigationContext';
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <RootRoute />
+        <NavigationProvider>
+          <RootRoute />
+        </NavigationProvider>
       </BrowserRouter>
-      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }
