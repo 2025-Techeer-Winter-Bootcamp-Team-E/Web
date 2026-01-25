@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { X } from 'lucide-react';
 import FilterBar from '@/components/productList/FilterBar';
-import StoreSection from '@/components/productList/StoreSection';
 import LLMRecommendationSection from '@/components/productList/LLMRecommendationSection';
 import ProductGrid from '@/components/productList/ProductGrid';
 import AIChatbotPanel from '@/components/chatbot/AIChatbotPanel';
@@ -45,10 +43,6 @@ const ProductListPage = () => {
     setSearchParams(params, { replace: true });
   };
 
-  const clearCategory = () => {
-    updateURL({ main_cat: undefined, sub_cat: undefined, page: 1 });
-  };
-
   const queryParams = {
     q: currentQuery || undefined,
     main_cat: mainCat || undefined,
@@ -83,37 +77,16 @@ const ProductListPage = () => {
   return (
     <div className="flex min-h-screen bg-white">
       <div className="flex-1 overflow-y-auto px-8 py-6">
-        {/* Category Filter Display */}
-        {mainCat && (
-          <div className="mb-4 flex items-center gap-2">
-            <span className="text-sm text-gray-500">카테고리:</span>
-            <div className="flex items-center gap-2 rounded-full bg-gradient-to-r from-[var(--color-gradient-purple)]/10 to-[var(--color-gradient-blue)]/10 px-3 py-1.5">
-              <span className="text-sm font-medium text-gray-900">
-                {mainCat}
-                {subCat && ` > ${subCat}`}
-              </span>
-              <button
-                onClick={clearCategory}
-                className="rounded-full p-0.5 text-gray-500 transition-colors hover:bg-gray-200 hover:text-gray-700"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
-            </div>
-          </div>
-        )}
-
         <FilterBar onFilterChange={handleFilterChange} />
 
-        <div className="mt-6">
-          {llmRecommendations && llmRecommendations.length > 0 ? (
+        {llmRecommendations && llmRecommendations.length > 0 && (
+          <div className="mt-6">
             <LLMRecommendationSection
               products={llmRecommendations}
               analysisMessage={llmAnalysisMessage}
             />
-          ) : (
-            <StoreSection />
-          )}
-        </div>
+          </div>
+        )}
 
         <div className="mt-6">
           <ProductGrid products={products} isLoading={isLoading} />

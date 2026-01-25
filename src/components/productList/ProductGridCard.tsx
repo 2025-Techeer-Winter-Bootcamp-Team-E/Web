@@ -1,4 +1,3 @@
-import { Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import type { Product } from '@/types/productType';
@@ -26,29 +25,24 @@ const ProductGridCard = ({ product, index }: ProductGridCardProps) => {
         ease: [0.16, 1, 0.3, 1],
       }}
       onClick={handleClick}
-      className="group cursor-pointer overflow-hidden rounded-2xl bg-gray-50 p-4 transition-all hover:shadow-lg"
+      className="group cursor-pointer border border-gray-100 bg-white p-4 transition-all hover:border-black"
     >
-      <div className="aspect-square overflow-hidden rounded-xl bg-white">
+      <div className="aspect-square overflow-hidden bg-gray-50">
         <img
           src={product.thumbnail_url || '/api/placeholder/300/300'}
           alt={product.product_name}
-          className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+          className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
         />
       </div>
       <div className="mt-4">
-        <h3 className="line-clamp-2 text-sm font-medium text-gray-900">
+        <h3 className="line-clamp-2 text-sm font-light text-black">
           {product.product_name}
         </h3>
-        <div className="mt-2 flex items-center gap-1">
-          <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-          <span className="text-xs font-medium text-gray-600">4.5</span>
-          <span className="text-xs text-gray-400">(120)</span>
-        </div>
-        <div className="mt-2 flex items-baseline gap-2">
-          <span className="text-base font-bold text-gray-900">
+        <div className="mt-3 flex items-baseline gap-2">
+          <span className="text-base font-medium text-black">
             {product.base_price?.toLocaleString() || '0'}
           </span>
-          <span className="text-xs text-gray-400">AED</span>
+          <span className="text-xs font-light text-gray-400">원</span>
         </div>
       </div>
     </motion.div>

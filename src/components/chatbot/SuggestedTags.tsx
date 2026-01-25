@@ -10,7 +10,7 @@ const SuggestedTags = ({ tags, onTagClick }: SuggestedTagsProps) => {
         <button
           key={tag}
           onClick={() => onTagClick(tag)}
-          className="rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-200"
+          className="border border-gray-200 bg-white px-3 py-1.5 text-xs font-light text-gray-600 transition-all hover:border-black hover:text-black"
         >
           {tag}
         </button>

@@ -9,7 +9,9 @@
       "Bash(npx tsc:*)",
       "Bash(yarn tsc:*)",
       "Bash(find:*)",
-      "WebFetch(domain:godly.website)"
+      "WebFetch(domain:godly.website)",
+      "WebFetch(domain:www.gentlemonster.com)",
+      "Bash(yarn dev)"
     ]
   }
 }
