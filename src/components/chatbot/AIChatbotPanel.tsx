@@ -380,10 +380,10 @@ const AIChatbotPanel = ({
   return (
     <motion.div
       layoutId="search-bar"
-      className="flex h-full w-[340px] flex-col rounded-3xl border border-white/20 bg-white/40 shadow-2xl backdrop-blur-2xl"
-      style={{ backdropFilter: 'blur(30px) saturate(180%)' }}
+      className="flex h-full w-[340px] flex-col overflow-hidden rounded-3xl border border-gray-200/50 bg-gray-50/85 shadow-2xl backdrop-blur-xl"
+      style={{ backdropFilter: 'blur(20px) saturate(150%)' }}
     >
-      <div className="rounded-t-3xl border-b border-white/30 bg-white/30 p-5 backdrop-blur-sm">
+      <div className="rounded-t-3xl border-b border-gray-200/40 bg-gray-100/60 p-5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="ai-icon-animated flex h-10 w-10 items-center justify-center rounded-2xl">
@@ -428,7 +428,7 @@ const AIChatbotPanel = ({
             className="flex items-center gap-3"
           >
             <div className="ai-icon-animated h-8 w-8 flex-shrink-0 rounded-xl" />
-            <div className="rounded-2xl bg-white/60 px-4 py-3 backdrop-blur-sm">
+            <div className="rounded-2xl bg-white/80 px-4 py-3 border border-gray-100">
               <p className="loading-text-animate text-sm text-gray-500">
                 최적의 상품을 검색 중입니다...
               </p>
@@ -438,7 +438,7 @@ const AIChatbotPanel = ({
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="rounded-b-3xl border-t border-white/30 bg-white/30 p-4 backdrop-blur-sm">
+      <div className="border-t border-gray-200/40 bg-gray-100/60 p-4">
         {!isShoppingResearchMode && (
           <SuggestedTags tags={SUGGESTED_TAGS} onTagClick={handleTagClick} />
         )}
@@ -459,7 +459,7 @@ const AIChatbotPanel = ({
           </div>
         )}
 
-        <div className="mt-4 flex items-center gap-2 rounded-2xl border border-gray-200/50 bg-white/60 px-4 py-3 backdrop-blur-sm">
+        <div className="mt-4 flex items-center gap-2 rounded-2xl border border-gray-200 bg-white/90 px-4 py-3">
           <Search className="h-4 w-4 flex-shrink-0 text-gray-400" strokeWidth={1.5} />
           <input
             type="text"

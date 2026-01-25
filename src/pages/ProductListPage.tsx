@@ -112,7 +112,7 @@ const ProductListPage = () => {
             animate={{ x: 0, opacity: 1, scale: 1 }}
             exit={{ x: 340, opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed right-4 top-32 z-40 h-[calc(100vh-160px)] w-[340px] overflow-hidden"
+            className="fixed right-4 top-32 z-40 h-[calc(100vh-160px)] w-[340px]"
           >
             <motion.div
               initial={{ opacity: 0 }}
