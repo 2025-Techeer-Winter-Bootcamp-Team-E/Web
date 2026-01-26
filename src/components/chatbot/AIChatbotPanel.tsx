@@ -11,10 +11,12 @@ import type {
   LlmRecommendationEntity,
   ResearchQuestionAnswerEntity,
   ResearchQuestionEntity,
+  ShoppingResearchResultEntity,
 } from '@/types/searchType';
-import { useNavigate } from 'react-router-dom';
-import { PATH } from '@/routes/path';
 import useSearchPopularQuery from '@/hooks/queries/useSearchPopularQuery';
+import ShoppingResultModal from '@/components/shoppingResearchResult/ShoppingResultModal';
+import { Link } from 'react-router-dom';
+import { PATH } from '@/routes/path';
 
 interface AIChatbotPanelProps {
   onSearch: (query: string) => void;
@@ -29,8 +31,6 @@ const AIChatbotPanel = ({
   initialQuery = '',
   onClose,
 }: AIChatbotPanelProps) => {
-  const navigate = useNavigate();
-
   const { data: popularData } = useSearchPopularQuery();
 
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
@@ -45,6 +45,11 @@ const AIChatbotPanel = ({
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<ResearchQuestionAnswerEntity[]>([]);
   const initialQueryProcessedRef = useRef(false);
+
+  // Modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalProducts, setModalProducts] = useState<ShoppingResearchResultEntity[]>([]);
+  const [modalQuery, setModalQuery] = useState('');
 
   const llmMutation = useLlmRecoMutation();
   const shoppingResearchMutation = useShoppingResearchMutation();
@@ -112,7 +117,6 @@ const AIChatbotPanel = ({
     } catch (error: unknown) {
       let errorContent = '죄송합니다. 검색 중 오류가 발생했습니다. 다시 시도해주세요.';
 
-      // Check for 401 authentication error
       if (error && typeof error === 'object' && 'response' in error) {
         const axiosError = error as { response?: { status?: number } };
         if (axiosError.response?.status === 401) {
@@ -219,19 +223,19 @@ const AIChatbotPanel = ({
           survey_contents: updatedAnswers,
         });
 
-        const targetUrl = `${PATH.SHOPPING_RESEARCH_RESULT}?q=${currentQuery}&search_id=${searchId}`;
-        navigate(targetUrl, {
-          state: {
-            user_query: currentQuery,
-            products: result.product,
-            survey_contents: updatedAnswers,
-          },
-        });
+        if (result.product && result.product.length > 0) {
+          setModalProducts(result.product);
+          setModalQuery(currentQuery);
+          setIsModalOpen(true);
+        }
 
         const resultMessage: ChatMessageType = {
           id: (Date.now() + 1).toString(),
           role: 'assistant',
-          content: `쇼핑 리서치가 완료되었습니다.`,
+          content:
+            result.product && result.product.length > 0
+              ? `쇼핑 리서치가 완료되었습니다. ${result.product.length}개의 상품을 찾았습니다.`
+              : '쇼핑 리서치가 완료되었지만 상품을 찾지 못했습니다.',
           type: 'shopping_result',
           shoppingResults: result.product,
           timestamp: new Date(),
@@ -273,6 +277,15 @@ const AIChatbotPanel = ({
     handleShoppingAnswer(optionLabel);
   };
 
+  const handleViewResults = (products: ShoppingResearchResultEntity[]) => {
+    if (!products || products.length === 0) {
+      return;
+    }
+    setModalProducts(products);
+    setModalQuery(currentQuery);
+    setIsModalOpen(true);
+  };
+
   const isCurrentQuestion = (message: ChatMessageType) => {
     if (message.type !== 'shopping_question' || !isShoppingResearchMode) return false;
     const questionMessages = messages.filter((m) => m.type === 'shopping_question');
@@ -286,7 +299,8 @@ const AIChatbotPanel = ({
           <ChatMessage message={{ ...message, llmProducts: undefined }} />
           <div className="ml-11 space-y-2">
             {message.llmProducts.slice(0, 3).map((product) => (
-              <div
+              <Link
+                to={PATH.PRODUCT_DETAIL(product.product_code)}
                 key={product.product_code}
                 className="flex items-center gap-3 border border-gray-100 bg-gray-50 p-3"
               >
@@ -299,7 +313,7 @@ const AIChatbotPanel = ({
                   <p className="truncate text-sm font-light text-black">{product.product_name}</p>
                   <p className="text-xs text-gray-500">{product.price.toLocaleString()}원</p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -355,36 +369,21 @@ const AIChatbotPanel = ({
       );
     }
 
-    if (message.type === 'shopping_result' && message.shoppingResults) {
+    if (
+      message.type === 'shopping_result' &&
+      message.shoppingResults &&
+      message.shoppingResults.length > 0
+    ) {
       return (
         <div key={message.id} className="space-y-3">
           <ChatMessage message={{ ...message, shoppingResults: undefined }} />
-          <div className="ml-11 space-y-2">
-            {message.shoppingResults.slice(0, 3).map((product, index) => (
-              <div key={product.product_code} className="border border-gray-100 bg-white p-3">
-                <div className="flex items-start gap-3">
-                  <img
-                    src={product.product_image_url}
-                    alt={product.product_name}
-                    className="h-16 w-16 bg-gray-50 object-contain"
-                  />
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="bg-black px-2 py-0.5 text-xs font-light text-white">
-                        {index + 1}
-                      </span>
-                      <span className="text-xs text-gray-400">
-                        {Math.round(product.similarity_score * 100)}% match
-                      </span>
-                    </div>
-                    <p className="mt-1 truncate text-sm font-light text-black">
-                      {product.product_name}
-                    </p>
-                    <p className="text-xs text-gray-500">{product.price.toLocaleString()}원</p>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="ml-11">
+            <button
+              onClick={() => handleViewResults(message.shoppingResults!)}
+              className="flex items-center gap-2 rounded-full border border-black bg-black px-4 py-2 text-sm font-light text-white transition-all hover:bg-white hover:text-black"
+            >
+              상세 결과 보기
+            </button>
           </div>
         </div>
       );
@@ -394,114 +393,126 @@ const AIChatbotPanel = ({
   };
 
   return (
-    <motion.div
-      layoutId="search-bar"
-      className="flex h-full w-[340px] flex-col overflow-hidden rounded-3xl border border-gray-200/50 bg-gray-50/85 shadow-2xl backdrop-blur-xl"
-      style={{ backdropFilter: 'blur(20px) saturate(150%)' }}
-    >
-      <div className="rounded-t-3xl border-b border-gray-200/40 bg-gray-100/60 p-5">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center">
-              <img src="/ai-logo.png" alt="AI" className="h-10 w-10 object-contain" />
-            </div>
-            <div>
-              <h2 className="text-sm font-medium tracking-wide text-black">AI Assistant</h2>
-              <p className="text-xs font-light text-gray-500">
-                {isShoppingResearchMode ? 'Shopping Research' : 'Smart Shopping'}
-              </p>
-            </div>
-          </div>
-          {onClose && (
-            <button
-              onClick={onClose}
-              className="flex h-8 w-8 items-center justify-center rounded-xl border border-gray-200/50 bg-white/50 text-gray-500 transition-all hover:border-black hover:bg-black hover:text-white"
-            >
-              <X className="h-4 w-4" strokeWidth={1.5} />
-            </button>
-          )}
-        </div>
-      </div>
-
-      <div
-        className="scrollbar-hide flex-1 space-y-4 overflow-y-auto p-4"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+    <>
+      <motion.div
+        layoutId="search-bar"
+        className="flex h-full w-85 flex-col overflow-hidden rounded-3xl border border-gray-200/50 bg-gray-50/85 shadow-2xl backdrop-blur-xl"
+        style={{ backdropFilter: 'blur(20px) saturate(150%)' }}
       >
-        {messages.length === 0 && (
-          <div className="flex h-full flex-col items-center justify-center text-center">
-            <div className="mb-8 flex h-20 w-20 items-center justify-center">
-              <img src="/ai-logo.png" alt="AI" className="h-20 w-20 object-contain" />
+        <div className="rounded-t-3xl border-b border-gray-200/40 bg-gray-100/60 p-5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center">
+                <img src="/ai-logo.png" alt="AI" className="h-10 w-10 object-contain" />
+              </div>
+              <div>
+                <h2 className="text-sm font-medium tracking-wide text-black">AI Assistant</h2>
+                <p className="text-xs font-light text-gray-500">
+                  {isShoppingResearchMode ? 'Shopping Research' : 'Smart Shopping'}
+                </p>
+              </div>
             </div>
-            <p className="text-base leading-loose font-normal text-gray-500">
-              찾으시는 제품에 대해
-              <br />
-              무엇이든 물어보세요
-            </p>
+            {onClose && (
+              <button
+                onClick={onClose}
+                className="flex h-8 w-8 items-center justify-center rounded-xl border border-gray-200/50 bg-white/50 text-gray-500 transition-all hover:border-black hover:bg-black hover:text-white"
+              >
+                <X className="h-4 w-4" strokeWidth={1.5} />
+              </button>
+            )}
           </div>
-        )}
-        {messages.map((message) => renderMessage(message))}
-        {isLoading && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-3"
-          >
-            <img src="/ai-logo.png" alt="AI" className="h-8 w-8 flex-shrink-0 object-contain" />
-            <div className="rounded-2xl border border-gray-100 bg-white/80 px-4 py-3">
-              <p className="loading-text-animate text-sm text-gray-500">
-                최적의 상품을 검색 중입니다...
+        </div>
+
+        <div
+          className="scrollbar-hide flex-1 space-y-4 overflow-y-auto p-4"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {messages.length === 0 && (
+            <div className="flex h-full flex-col items-center justify-center text-center">
+              <div className="mb-8 flex h-20 w-20 items-center justify-center">
+                <img src="/ai-logo.png" alt="AI" className="h-20 w-20 object-contain" />
+              </div>
+              <p className="text-base leading-loose font-normal text-gray-500">
+                찾으시는 제품에 대해
+                <br />
+                무엇이든 물어보세요
               </p>
             </div>
-          </motion.div>
-        )}
-        <div ref={messagesEndRef} />
-      </div>
-
-      <div className="border-t border-gray-200/40 bg-gray-100/60 p-4">
-        {!isShoppingResearchMode && popularData && (
-          <SuggestedTags tags={popularData} onTagClick={handleTagClick} />
-        )}
-
-        {isShoppingResearchMode && questions.length > 0 && (
-          <div className="mb-3 flex items-center gap-2">
-            <div className="flex gap-1">
-              {questions.map((_, idx) => (
-                <div
-                  key={idx}
-                  className={`h-1.5 w-5 rounded-full transition-colors ${idx <= currentQuestionIndex ? 'bg-black' : 'bg-gray-200'}`}
-                />
-              ))}
-            </div>
-            <span className="text-xs font-medium text-gray-500">
-              {currentQuestionIndex + 1}/{questions.length}
-            </span>
-          </div>
-        )}
-
-        <div className="mt-4 flex items-center gap-2 rounded-2xl border border-gray-200 bg-white/90 px-4 py-3">
-          <Search className="h-4 w-4 flex-shrink-0 text-gray-400" strokeWidth={1.5} />
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder={isShoppingResearchMode ? '답변을 입력하세요...' : '무엇이든 물어보세요...'}
-            className="flex-1 bg-transparent text-sm font-normal outline-none placeholder:text-gray-400"
-          />
-          {!isShoppingResearchMode && (
-            <button className="p-2 text-gray-400 transition-colors hover:text-black">
-              <ImagePlus className="h-4 w-4" strokeWidth={1.5} />
-            </button>
           )}
-          <button
-            onClick={() => handleSendMessage(input)}
-            className="rounded-xl bg-black p-2 text-white transition-all hover:bg-gray-800"
-          >
-            <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
-          </button>
+          {messages.map((message) => renderMessage(message))}
+          {isLoading && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-3"
+            >
+              <img src="/ai-logo.png" alt="AI" className="h-8 w-8 flex-shrink-0 object-contain" />
+              <div className="rounded-2xl border border-gray-100 bg-white/80 px-4 py-3">
+                <p className="loading-text-animate text-sm text-gray-500">
+                  최적의 상품을 검색 중입니다...
+                </p>
+              </div>
+            </motion.div>
+          )}
+          <div ref={messagesEndRef} />
         </div>
-      </div>
-    </motion.div>
+
+        <div className="border-t border-gray-200/40 bg-gray-100/60 p-4">
+          {!isShoppingResearchMode && popularData && (
+            <SuggestedTags tags={popularData} onTagClick={handleTagClick} />
+          )}
+
+          {isShoppingResearchMode && questions.length > 0 && (
+            <div className="mb-3 flex items-center gap-2">
+              <div className="flex gap-1">
+                {questions.map((_, idx) => (
+                  <div
+                    key={idx}
+                    className={`h-1.5 w-5 rounded-full transition-colors ${idx <= currentQuestionIndex ? 'bg-black' : 'bg-gray-200'}`}
+                  />
+                ))}
+              </div>
+              <span className="text-xs font-medium text-gray-500">
+                {currentQuestionIndex + 1}/{questions.length}
+              </span>
+            </div>
+          )}
+
+          <div className="mt-4 flex items-center gap-2 rounded-2xl border border-gray-200 bg-white/90 px-4 py-3">
+            <Search className="h-4 w-4 shrink-0 text-gray-400" strokeWidth={1.5} />
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder={
+                isShoppingResearchMode ? '답변을 입력하세요...' : '무엇이든 물어보세요...'
+              }
+              className="flex-1 bg-transparent text-sm font-normal outline-none placeholder:text-gray-400"
+            />
+            {!isShoppingResearchMode && (
+              <button className="p-2 text-gray-400 transition-colors hover:text-black">
+                <ImagePlus className="h-4 w-4" strokeWidth={1.5} />
+              </button>
+            )}
+            <button
+              onClick={() => handleSendMessage(input)}
+              className="rounded-xl bg-black p-2 text-white transition-all hover:bg-gray-800"
+            >
+              <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
+            </button>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Modal */}
+      <ShoppingResultModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        products={modalProducts}
+        userQuery={modalQuery}
+      />
+    </>
   );
 };
 

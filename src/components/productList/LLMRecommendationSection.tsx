@@ -23,7 +23,7 @@ const LLMRecommendationCard = ({ product, index }: LLMRecommendationCardProps) =
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.4 }}
       onClick={handleClick}
-      className="flex w-56 flex-shrink-0 cursor-pointer flex-col rounded-2xl bg-white p-4 shadow-[0_2px_15px_rgba(0,0,0,0.08)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
+      className="flex w-56 shrink-0 cursor-pointer flex-col rounded-2xl bg-white p-4 shadow-[0_2px_15px_rgba(0,0,0,0.08)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
     >
       <div className="mb-3 flex h-32 items-center justify-center overflow-hidden rounded-lg bg-gray-50">
         <img
@@ -38,14 +38,6 @@ const LLMRecommendationCard = ({ product, index }: LLMRecommendationCardProps) =
       </p>
       <div className="mt-auto flex items-center justify-between">
         <span className="text-sm font-medium text-black">{product.price.toLocaleString()}원</span>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-          className="rounded-full bg-black px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-gray-800"
-        >
-          구매
-        </button>
       </div>
     </motion.div>
   );

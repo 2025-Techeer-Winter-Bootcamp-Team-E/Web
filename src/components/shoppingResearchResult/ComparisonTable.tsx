@@ -71,7 +71,7 @@ const ComparisonTable = ({ products }: ComparisonTableProps) => {
                   </td>
                 ))}
               </tr>
-              <tr>
+              <tbody className="divide-y divide-gray-100">
                 {specKeys.map((specKey) => (
                   <tr key={specKey}>
                     <td className="bg-[#f5f5f7]/30 px-6 py-5 text-center text-[14px] font-semibold text-[#86868b]">
@@ -87,7 +87,7 @@ const ComparisonTable = ({ products }: ComparisonTableProps) => {
                     ))}
                   </tr>
                 ))}
-              </tr>
+              </tbody>
             </tbody>
           </table>
         </div>
