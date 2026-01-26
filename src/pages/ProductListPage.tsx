@@ -71,10 +71,6 @@ const ProductListPage = () => {
 
   const { data, isLoading } = useProductListQuery(queryParams);
 
-  const handleSearch = (query: string) => {
-    updateURL({ q: query, page: 1 });
-  };
-
   const handleLlmResult = (products: LlmRecommendationEntity[], analysisMessage: string) => {
     setLlmRecommendations(products);
     setLlmAnalysisMessage(analysisMessage);
@@ -156,7 +152,6 @@ const ProductListPage = () => {
               className="h-full w-full"
             >
               <AIChatbotPanel
-                onSearch={handleSearch}
                 onLlmResult={handleLlmResult}
                 initialQuery={aiQuery || searchQuery}
                 onClose={() => setIsAIPanelOpen(false)}

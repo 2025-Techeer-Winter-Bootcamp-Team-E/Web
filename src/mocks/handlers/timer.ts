@@ -15,7 +15,7 @@ export const timerHandler = [
     return HttpResponse.json(suceessTimerGet);
   }),
 
-  http.get(API.TIMERS, ({ request }) => {
+  http.get(API.TIMERS, () => {
     return HttpResponse.json(myPageAllTImerPaging);
   }),
 

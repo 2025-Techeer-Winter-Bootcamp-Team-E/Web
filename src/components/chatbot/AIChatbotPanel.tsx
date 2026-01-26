@@ -20,18 +20,12 @@ import { PATH } from '@/routes/path';
 const SUGGESTED_TAGS = ['RTX 4070', '라이젠 7', '게이밍 노트북'];
 
 interface AIChatbotPanelProps {
-  onSearch: (query: string) => void;
   onLlmResult?: (products: LlmRecommendationEntity[], analysisMessage: string) => void;
   initialQuery?: string;
   onClose?: () => void;
 }
 
-const AIChatbotPanel = ({
-  onSearch,
-  onLlmResult,
-  initialQuery = '',
-  onClose,
-}: AIChatbotPanelProps) => {
+const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPanelProps) => {
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
