@@ -13,10 +13,11 @@ import type {
   ResearchQuestionEntity,
   ShoppingResearchResultEntity,
 } from '@/types/searchType';
-import useSearchPopularQuery from '@/hooks/queries/useSearchPopularQuery';
 import ShoppingResultModal from '@/components/shoppingResearchResult/ShoppingResultModal';
 import { Link } from 'react-router-dom';
 import { PATH } from '@/routes/path';
+
+const SUGGESTED_TAGS = ['RTX 4070', '라이젠 7', '게이밍 노트북'];
 
 interface AIChatbotPanelProps {
   onSearch: (query: string) => void;
@@ -31,8 +32,6 @@ const AIChatbotPanel = ({
   initialQuery = '',
   onClose,
 }: AIChatbotPanelProps) => {
-  const { data: popularData } = useSearchPopularQuery();
-
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -458,8 +457,8 @@ const AIChatbotPanel = ({
         </div>
 
         <div className="border-t border-gray-200/40 bg-gray-100/60 p-4">
-          {!isShoppingResearchMode && popularData && (
-            <SuggestedTags tags={popularData} onTagClick={handleTagClick} />
+          {!isShoppingResearchMode && (
+            <SuggestedTags tags={SUGGESTED_TAGS} onTagClick={handleTagClick} />
           )}
 
           {isShoppingResearchMode && questions.length > 0 && (
