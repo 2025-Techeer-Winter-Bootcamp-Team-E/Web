@@ -12,7 +12,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <ToastContainer
-          position="top-left"
+          position="top-center"
           transition={Slide}
           autoClose={2000}
           hideProgressBar
