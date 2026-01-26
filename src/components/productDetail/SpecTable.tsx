@@ -52,28 +52,30 @@ const SpecTable = ({ productInfo }: SpecTableProps) => {
         ) : (
           <>
             <div
-              className={`flex w-full flex-col gap-12 overflow-hidden transition-all duration-500 ${
-                open ? 'max-h-1250 opacity-100' : 'max-h-0 opacity-0'
+              className={`relative w-full overflow-hidden transition-all duration-700 ease-in-out ${
+                open ? 'max-h-full' : 'max-h-150'
               }`}
             >
-              {productInfo.product_image_url_list.map((url, index) => (
-                <img
-                  key={index}
-                  src={url}
-                  alt={`product-detail-${index}`}
-                  className="w-full rounded-3xl border border-black/5 object-cover"
-                  loading="lazy"
-                />
-              ))}
+              <img
+                src={productInfo.product_detail_url}
+                alt="product-detail"
+                className="h-auto w-full rounded-3xl border border-black/5"
+                loading="lazy"
+              />
+
+              {!open && (
+                <div className="absolute bottom-0 left-0 h-40 w-full bg-linear-to-t from-[#f5f5f7] to-transparent" />
+              )}
             </div>
-            <div className={`flex flex-col items-center ${open ? 'mt-16' : ''}`}>
+
+            <div className={`flex w-full flex-col items-center ${open ? 'mt-16' : 'z-10 -mt-10'}`}>
               <button
                 onClick={() => setOpen((prev) => !prev)}
                 className="group flex items-center gap-3 rounded-full bg-[#1d1d1f] px-10 py-4 text-[15px] font-semibold text-white shadow-xl shadow-black/10 transition-all hover:bg-[#424245] active:scale-95"
               >
                 상세 이미지 {open ? '접기' : '펼쳐보기'}
                 <ChevronDown
-                  className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`}
+                  className={`h-4 w-4 transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
                 />
               </button>
             </div>
