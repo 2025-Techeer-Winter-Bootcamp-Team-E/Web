@@ -4,6 +4,7 @@ import { QUERY_KEY } from '@/constants/queryKey';
 import type { ProductsListParams } from '@/types/productsType';
 
 const useProductListQuery = (params: ProductsListParams) => {
+  console.log('useProductListQuery params:', params);
   return useQuery({
     queryKey: QUERY_KEY.PRODUCT_LIST({
       q: params.q,

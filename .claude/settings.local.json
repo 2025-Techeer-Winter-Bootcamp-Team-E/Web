@@ -13,7 +13,8 @@
       "WebFetch(domain:www.gentlemonster.com)",
       "Bash(yarn dev)",
       "Bash(ls:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(jq:*)"
     ]
   }
 }

@@ -308,7 +308,7 @@ const AIChatbotPanel = ({
             <button
               onClick={handleStartShoppingResearch}
               disabled={isLoading}
-              className="flex items-center gap-2 border border-black bg-black px-4 py-2 text-sm font-light text-white transition-all hover:bg-white hover:text-black disabled:opacity-50"
+              className="flex items-center gap-2 rounded-full border border-black bg-black px-4 py-2 text-sm font-light text-white transition-all hover:bg-white hover:text-black disabled:opacity-50"
             >
               <ShoppingBag className="h-4 w-4" strokeWidth={1.5} />
               쇼핑 리서치 시작하기
