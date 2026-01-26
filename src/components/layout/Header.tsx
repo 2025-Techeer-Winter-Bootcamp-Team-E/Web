@@ -3,7 +3,7 @@ import { Menu, ShoppingCart, X, ChevronDown, User } from 'lucide-react';
 import { PATH } from '@/routes/path';
 import { CATEGORY } from '@/constants/category';
 import { useNavigation } from '@/contexts/NavigationContext';
-import useRequireAuth from '@/hooks/useRequireAuth';
+import useAuth from '@/hooks/useAuth';
 
 const Header: React.FC = () => {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
@@ -12,7 +12,7 @@ const Header: React.FC = () => {
   const timeoutRef = useRef<number | null>(null);
   const { navigateWithAnimation } = useNavigation();
 
-  const { isAuthenticated } = useRequireAuth();
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);

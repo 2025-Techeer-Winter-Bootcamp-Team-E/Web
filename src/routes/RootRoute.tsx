@@ -6,9 +6,6 @@ import SignupPage from '@/pages/SignupPage';
 import ShoppingCartPage from '@/pages/CartPage';
 import CheckoutPage from '@/pages/CheckoutPage';
 import ProductDetailPage from '@/pages/ProductDetailPage';
-import LLMSearchResultPage from '@/pages/LLMSearchResultPage';
-import ShoppingResearchPage from '@/pages/ShoppingResearchPage';
-import ShoppingResearchResultPage from '@/pages/ShoppingResearchResultPage';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import TokenChargePage from '@/pages/TokenChargePage';
 import MyTimerGrid from '@/pages/MyTimerGridPage';
@@ -30,13 +27,6 @@ const RootRoute = () => {
 
         <Route path={ROUTE_PATH.PRODUCT_LIST} element={<ProductListPage />} />
         <Route path={ROUTE_PATH.PRODUCT_DETAIL} element={<ProductDetailPage />} />
-
-        <Route path={ROUTE_PATH.LLM_SEARCH_RESULT} element={<LLMSearchResultPage />} />
-        <Route path={ROUTE_PATH.SHOPPING_RESEARCH} element={<ShoppingResearchPage />} />
-        <Route
-          path={ROUTE_PATH.SHOPPING_RESEARCH_RESULT}
-          element={<ShoppingResearchResultPage />}
-        />
 
         <Route path={ROUTE_PATH.MY_PAGE} element={<MyPage />}>
           <Route index element={<Navigate to={ROUTE_PATH.TIMER} replace />} />

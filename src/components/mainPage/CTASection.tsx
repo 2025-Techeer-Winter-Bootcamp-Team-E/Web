@@ -19,7 +19,7 @@ const CTASection: React.FC = () => {
             </span>
           </h2>
           <p className="mb-12 text-xl font-medium text-gray-400">
-            COMPARE의 프리미엄 AI 분석과 함께
+            modulo 의 프리미엄 AI 분석과 함께
             <br />
             웰컴 토큰 혜택을 즉시 확인해보세요.
           </p>
