@@ -19,7 +19,8 @@ const TimerCard = ({ timer }: TimerCardProps) => {
   const deleteTimerMutation = useTimerDeleteMutation();
   const patchTimerMutation = useTimerPatchMutation();
 
-  const handleDelete = () => {
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation(); // 카드 클릭 이벤트 방지
     if (!confirm('이 타이머를 삭제하시겠습니까?')) return;
     deleteTimerMutation.mutate(timer.timer_id);
   };
@@ -33,7 +34,7 @@ const TimerCard = ({ timer }: TimerCardProps) => {
       {
         onSuccess: () => {
           setIsEditModalOpen(false);
-          toast.error('목표가격이 수정되었습니다.');
+          toast.success('목표가격이 수정되었습니다.');
         },
         onError: () => {
           toast.error('목표가격 수정에 실패했습니다.');
@@ -42,31 +43,22 @@ const TimerCard = ({ timer }: TimerCardProps) => {
     );
   };
 
-  const handleOpenEditModal = () => {
-    setIsEditModalOpen(true);
-  };
-
-  const handleCloseEditModal = () => {
-    setIsEditModalOpen(false);
-  };
-
-  const handleGoToProduct = () => {
-    navigate(PATH.PRODUCT_DETAIL(timer.product_code));
-  };
-
   return (
     <>
-      <div className="group relative flex h-full flex-col border border-gray-200 bg-white p-6 transition-all hover:border-black">
-        {/* Delete Button */}
+      <div className="group relative flex flex-col overflow-hidden rounded-3xl border border-gray-100 bg-white p-6 shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(0,0,0,0.1)]">
+        {/* 우측 상단 삭제 버튼 (호버 시 선명하게) */}
         <button
           onClick={handleDelete}
-          className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center text-gray-400 opacity-0 transition-all group-hover:opacity-100 hover:text-black"
+          className="absolute top-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-400 opacity-0 transition-all group-hover:opacity-100 hover:bg-red-50 hover:text-red-500"
         >
-          <X className="h-4 w-4" strokeWidth={1.5} />
+          <X className="h-4 w-4" strokeWidth={2} />
         </button>
 
-        {/* Product Image */}
-        <div className="relative mb-6 flex h-48 items-center justify-center bg-gray-50 p-6">
+        {/* 상품 이미지 영역 */}
+        <div
+          className="relative mb-6 flex aspect-square w-full cursor-pointer items-center justify-center rounded-2xl bg-[#F5F5F7] p-8"
+          onClick={() => navigate(PATH.PRODUCT_DETAIL(timer.product_code))}
+        >
           {timer.thumbnail_url ? (
             <img
               src={timer.thumbnail_url}
@@ -78,11 +70,12 @@ const TimerCard = ({ timer }: TimerCardProps) => {
           )}
         </div>
 
-        {/* Product Info */}
+        {/* 상품 정보 */}
         <div className="mb-6 space-y-2">
-          <h3 className="line-clamp-2 min-h-11 text-base font-light leading-snug tracking-tight text-black">
+          <h3 className="line-clamp-2 min-h-11 text-base leading-snug font-light tracking-tight text-black">
             {timer.product_name}
           </h3>
+
           <div className="flex items-baseline gap-3">
             <span className="text-xl font-light tracking-tight text-black">
               ₩{timer.predicted_price.toLocaleString()}
@@ -93,32 +86,31 @@ const TimerCard = ({ timer }: TimerCardProps) => {
           </div>
         </div>
 
-        {/* Score Section */}
-        <div className="mb-6 border border-gray-100 bg-gray-50 p-4">
+        {/* AI 분석 요약 스코어 (깔끔한 배지 스타일) */}
+        <div className="mb-6 rounded-2xl border border-gray-100 bg-gray-50 p-4">
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-xs font-light uppercase tracking-widest text-gray-500">
+            <span className="text-xs font-light tracking-widest text-gray-500 uppercase">
               Score
             </span>
-            <span className="text-sm font-light text-black">
-              {timer.recommendation_score}%
-            </span>
+            <span className="text-sm font-light text-black">{timer.recommendation_score}%</span>
           </div>
-          <p className="line-clamp-2 text-sm font-light leading-relaxed text-gray-600">
+          <p className="line-clamp-2 text-sm leading-relaxed font-light text-gray-600">
             {timer.reason_message}
           </p>
         </div>
 
-        {/* Action Buttons */}
         <div className="mt-auto flex gap-2">
+          {' '}
           <button
-            onClick={handleOpenEditModal}
-            className="flex h-12 w-12 items-center justify-center border border-gray-200 bg-white text-gray-600 transition-all hover:border-black hover:text-black"
+            onClick={() => setIsEditModalOpen(true)}
+            className="flex h-11 w-11 items-center justify-center rounded-xl bg-gray-100 text-[#424245] transition-colors hover:bg-gray-200"
+            title="가격 수정"
           >
-            <Pencil className="h-4 w-4" strokeWidth={1.5} />
+            <Pencil className="h-4 w-4" />
           </button>
           <button
-            onClick={handleGoToProduct}
-            className="flex-1 bg-black py-3 text-sm font-light tracking-wide text-white transition-opacity hover:opacity-80"
+            onClick={() => navigate(PATH.PRODUCT_DETAIL(timer.product_code))}
+            className="flex-1 rounded-xl bg-black py-3 text-sm font-light tracking-wide text-white transition-opacity hover:opacity-80"
           >
             상세 보기
           </button>
@@ -127,7 +119,7 @@ const TimerCard = ({ timer }: TimerCardProps) => {
 
       <TimerModal
         isOpen={isEditModalOpen}
-        onClose={handleCloseEditModal}
+        onClose={() => setIsEditModalOpen(false)}
         onSubmit={handleSubmitEdit}
         productId={timer.product_code}
         initialData={{ target_price: timer.target_price }}

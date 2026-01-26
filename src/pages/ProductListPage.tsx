@@ -97,15 +97,7 @@ const ProductListPage = () => {
         }`}
       >
         {/* Content Area - Aligned with Header, pt-20 accounts for filter bar row */}
-        <div className="mx-auto max-w-7xl px-6 pt-20 pb-6 lg:px-12">
-          <div className="flex justify-between">
-            <PriceRangeFilter
-              initialMin={minPrice}
-              initialMax={maxPrice}
-              onApply={handleApplyPriceRange}
-            />
-            <SortControl currentSort={sort} onSortChange={handleSortChange} />
-          </div>
+        <div className="mx-auto max-w-7xl px-6 pt-4 pb-6 lg:px-12">
           {llmRecommendations && llmRecommendations.length > 0 && (
             <div className="mb-6">
               <LLMRecommendationSection
@@ -114,6 +106,19 @@ const ProductListPage = () => {
               />
             </div>
           )}
+          <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="shrink-0">
+              <PriceRangeFilter
+                initialMin={minPrice}
+                initialMax={maxPrice}
+                onApply={handleApplyPriceRange}
+              />
+            </div>
+
+            <div className="flex justify-end md:block">
+              <SortControl currentSort={sort} onSortChange={handleSortChange} />
+            </div>
+          </div>
 
           <ProductGrid products={products} isLoading={isLoading} />
           {data && data.pagination.count > 0 && (
