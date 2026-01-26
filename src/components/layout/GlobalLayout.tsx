@@ -14,7 +14,7 @@ const GlobalLayout = () => {
   // isExiting 체크를 먼저 해야 함!
   if (isExiting) {
     return (
-      <div className="flex min-h-screen flex-col bg-[#f5f5f7] overflow-hidden">
+      <div className="flex min-h-screen flex-col overflow-hidden bg-[#f5f5f7]">
         <Header />
         <main className="mt-16 flex-1">
           <section className="relative min-h-screen overflow-hidden bg-[#f5f5f7]">
@@ -46,8 +46,10 @@ const GlobalLayout = () => {
                 <div className="mx-auto w-full max-w-xl">
                   <div className="relative">
                     <div className="flex items-center gap-4 border-b border-black px-2 py-4">
-                      <Search className="h-5 w-5 flex-shrink-0 text-black" strokeWidth={1.5} />
-                      <span className="flex-1 text-lg font-light text-gray-400">검색어를 입력하세요</span>
+                      <Search className="h-5 w-5 shrink-0 text-black" strokeWidth={1.5} />
+                      <span className="flex-1 text-lg font-light text-gray-400">
+                        검색어를 입력하세요
+                      </span>
                       <div className="rounded-full p-2 text-black">
                         <ArrowRight className="h-5 w-5" strokeWidth={1.5} />
                       </div>
@@ -89,6 +91,7 @@ const GlobalLayout = () => {
             <Outlet />
           </motion.div>
         </main>
+        <Footer />
       </div>
     );
   }

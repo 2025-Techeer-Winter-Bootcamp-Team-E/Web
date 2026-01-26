@@ -1,28 +1,22 @@
-import useLogInMutation from '@/hooks/mutations/useLogInMutation';
 import { PATH } from '@/routes/path';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 
-const LoginForm = () => {
-  const navigate = useNavigate();
-  const { mutate: login, isPending } = useLogInMutation();
+interface LoginFormProps {
+  onSubmit: (email: string, password: string) => void;
+  loading: boolean;
+}
 
+const LoginForm = ({ onSubmit, loading }: LoginFormProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    login(
-      { email, password },
-      {
-        onSuccess: () => {
-          navigate(PATH.ROOT);
-        },
-      },
-    );
+    onSubmit(email, password);
   };
 
   return (
@@ -30,16 +24,11 @@ const LoginForm = () => {
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <div className="mb-4 flex items-center justify-center">
-            <img
-              src="/videos/logo.png"
-              alt="WYW"
-              className="h-16 w-auto"
-            />
+            <img src="/videos/logo.png" alt="WYW" className="h-16 w-auto" />
           </div>
           <h1 className="text-2xl font-semibold text-gray-900">Welcome back</h1>
           <p className="mt-2 text-sm text-gray-500">Sign in to continue shopping</p>
         </div>
-
         <Card padding="lg">
           <form onSubmit={handleSubmit} className="space-y-5">
             <Input
@@ -61,19 +50,18 @@ const LoginForm = () => {
               label="Password"
               placeholder="Enter your password"
             />
-
-            <Button type="submit" disabled={isPending} fullWidth size="lg">
-              {isPending ? 'Signing in...' : 'Sign In'}
+            <Button type="submit" disabled={loading} fullWidth size="lg">
+              {loading ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>
         </Card>
 
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-500">
-            Don&apos;t have an account?{' '}
+            Don&apos;t have an account?
             <Link
               to={PATH.SIGNUP}
-              className="font-medium text-[var(--color-gradient-purple)] hover:underline"
+              className="font-medium text-(--color-gradient-purple) hover:underline"
             >
               Create one
             </Link>

@@ -1,17 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import LLMRecommendationSection from '@/components/productList/LLMRecommendationSection';
 import ProductGrid from '@/components/productList/ProductGrid';
 import AIChatbotPanel from '@/components/chatbot/AIChatbotPanel';
 import useProductListQuery from '@/hooks/queries/useProductListQuery';
-import type { LLMRecommendationEntity } from '@/types/searchType';
+import type { LlmRecommendationEntity } from '@/types/searchType';
+import Pagination from '@/components/layout/Pagination';
+import { PriceRangeFilter } from '@/components/productList';
+import SortControl from '@/components/productList/Sortcontrol';
 
 const ProductListPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentQuery, setCurrentQuery] = useState('');
-  const [llmRecommendations, setLlmRecommendations] = useState<LLMRecommendationEntity[] | null>(
-    null
+  const [llmRecommendations, setLlmRecommendations] = useState<LlmRecommendationEntity[] | null>(
+    null,
   );
   const [llmAnalysisMessage, setLlmAnalysisMessage] = useState<string>('');
   const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
@@ -24,24 +27,14 @@ const ProductListPage = () => {
   const maxPrice = searchParams.get('max_price') || '';
   const sort = searchParams.get('sort') || 'popular';
   const page = Number(searchParams.get('page')) || 1;
-  const aiOpen = searchParams.get('ai_open') === 'true';
 
-  // Auto-open AI panel if ai_open param is true
-  useEffect(() => {
-    if (aiOpen && !isAIPanelOpen) {
-      setIsAIPanelOpen(true);
-      // Remove ai_open param from URL after opening
-      const params = Object.fromEntries(searchParams.entries());
-      delete params.ai_open;
-      setSearchParams(params, { replace: true });
-    }
-  }, [aiOpen]);
-
-  useEffect(() => {
-    if (searchQuery) {
-      setCurrentQuery(searchQuery);
-    }
-  }, [searchQuery]);
+  const handleApplyPriceRange = (min: string, max: string) => {
+    updateURL({
+      min_price: min || undefined,
+      max_price: max || undefined,
+      page: 1,
+    });
+  };
 
   const updateURL = (newParams: Record<string, string | number | undefined>) => {
     const params = Object.fromEntries(searchParams.entries());
@@ -75,22 +68,44 @@ const ProductListPage = () => {
     updateURL({ q: query, page: 1 });
   };
 
-  const handleLlmResult = (products: LLMRecommendationEntity[], analysisMessage: string) => {
+  const handleLlmResult = (products: LlmRecommendationEntity[], analysisMessage: string) => {
     setLlmRecommendations(products);
     setLlmAnalysisMessage(analysisMessage);
   };
 
   const products = data?.products || [];
 
+  const totalPages = data?.pagination.total_pages ?? 1;
+
+  const handlePageChange = (newPage: number) => {
+    updateURL({ page: newPage });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSortChange = (newSort: string) => {
+    const params = Object.fromEntries(searchParams.entries());
+    params.sort = newSort;
+    params.page = '1';
+    setSearchParams(params);
+  };
+
   return (
     <div className="flex min-h-screen bg-[#f5f5f7]">
       <div
         className={`flex-1 overflow-y-auto transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isAIPanelOpen ? 'mr-[340px]' : 'mr-0'
+          isAIPanelOpen ? 'mr-85' : 'mr-0'
         }`}
       >
         {/* Content Area - Aligned with Header, pt-20 accounts for filter bar row */}
-        <div className="mx-auto max-w-7xl px-6 lg:px-12 pt-20 pb-6">
+        <div className="mx-auto max-w-7xl px-6 pt-20 pb-6 lg:px-12">
+          <div className="flex justify-between">
+            <PriceRangeFilter
+              initialMin={minPrice}
+              initialMax={maxPrice}
+              onApply={handleApplyPriceRange}
+            />
+            <SortControl currentSort={sort} onSortChange={handleSortChange} />
+          </div>
           {llmRecommendations && llmRecommendations.length > 0 && (
             <div className="mb-6">
               <LLMRecommendationSection
@@ -101,6 +116,13 @@ const ProductListPage = () => {
           )}
 
           <ProductGrid products={products} isLoading={isLoading} />
+          {data && data.pagination.count > 0 && (
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          )}
         </div>
       </div>
 
@@ -112,7 +134,7 @@ const ProductListPage = () => {
             animate={{ x: 0, opacity: 1, scale: 1 }}
             exit={{ x: 340, opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed right-6 top-[140px] z-40 h-[calc(100vh-170px)] w-[340px]"
+            className="fixed top-35 right-6 z-40 h-[calc(100vh-170px)] w-85"
           >
             <motion.div
               initial={{ opacity: 0 }}
@@ -148,7 +170,7 @@ const ProductListPage = () => {
               alt="AI Assistant"
               className="h-20 w-20 object-contain drop-shadow-xl"
               animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
               whileHover={{ scale: 1.1 }}
             />
           </motion.button>

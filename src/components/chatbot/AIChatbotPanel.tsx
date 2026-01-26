@@ -4,24 +4,20 @@ import { motion } from 'framer-motion';
 import ChatMessage from './ChatMessage';
 import SuggestedTags from './SuggestedTags';
 import type { ChatMessage as ChatMessageType } from '@/types/chatbotType';
-import type {
-  LLMRecommendationEntity,
-  QuestionEntity,
-  QuestionAnswerEntity,
-} from '@/types/searchType';
 import useLlmRecoMutation from '@/hooks/mutations/useLlmRecoMutation';
 import useShoppingResearchMutation from '@/hooks/mutations/useShoppingResearchMutation';
 import useShoppingResultMutation from '@/hooks/mutations/useShoppingResultMutation';
+import type {
+  LlmRecommendationEntity,
+  ResearchQuestionAnswerEntity,
+  ResearchQuestionEntity,
+} from '@/types/searchType';
 
-const SUGGESTED_TAGS = [
-  'RTX 4070',
-  '라이젠 7',
-  '게이밍 노트북',
-];
+const SUGGESTED_TAGS = ['RTX 4070', '라이젠 7', '게이밍 노트북'];
 
 interface AIChatbotPanelProps {
   onSearch: (query: string) => void;
-  onLlmResult?: (products: LLMRecommendationEntity[], analysisMessage: string) => void;
+  onLlmResult?: (products: LlmRecommendationEntity[], analysisMessage: string) => void;
   initialQuery?: string;
   onClose?: () => void;
 }
@@ -40,9 +36,9 @@ const AIChatbotPanel = ({
 
   const [isShoppingResearchMode, setIsShoppingResearchMode] = useState(false);
   const [searchId, setSearchId] = useState<string | null>(null);
-  const [questions, setQuestions] = useState<QuestionEntity[]>([]);
+  const [questions, setQuestions] = useState<ResearchQuestionEntity[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState<QuestionAnswerEntity[]>([]);
+  const [answers, setAnswers] = useState<ResearchQuestionAnswerEntity[]>([]);
   const initialQueryProcessedRef = useRef(false);
 
   const llmMutation = useLlmRecoMutation();
@@ -186,7 +182,7 @@ const AIChatbotPanel = ({
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
 
-    const newAnswer: QuestionAnswerEntity = {
+    const newAnswer: ResearchQuestionAnswerEntity = {
       question_id: currentQuestion.question_id,
       question: currentQuestion.question,
       answer: answer,
@@ -277,21 +273,17 @@ const AIChatbotPanel = ({
           <div className="ml-11 space-y-2">
             {message.llmProducts.slice(0, 3).map((product) => (
               <div
-                key={product.product_id || product.product_code}
+                key={product.product_code}
                 className="flex items-center gap-3 border border-gray-100 bg-gray-50 p-3"
               >
                 <img
-                  src={product.thumbnail_url || product.product_image_url}
+                  src={product.thumbnail_url}
                   alt={product.product_name}
-                  className="h-12 w-12 object-contain bg-white"
+                  className="h-12 w-12 bg-white object-contain"
                 />
-                <div className="flex-1 min-w-0">
-                  <p className="truncate text-sm font-light text-black">
-                    {product.product_name}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    {product.price.toLocaleString()}원
-                  </p>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-light text-black">{product.product_name}</p>
+                  <p className="text-xs text-gray-500">{product.price.toLocaleString()}원</p>
                 </div>
               </div>
             ))}
@@ -319,13 +311,18 @@ const AIChatbotPanel = ({
     }
 
     if (message.type === 'shopping_question' && message.questionData) {
-      const showOptions = isCurrentQuestion(message) && message.questionData.options && message.questionData.options.length > 0;
+      const showOptions =
+        isCurrentQuestion(message) &&
+        message.questionData.options &&
+        message.questionData.options.length > 0;
       return (
         <div key={message.id} className="space-y-3">
           <ChatMessage message={message} />
           {showOptions && (
             <div className="ml-11">
-              <p className="mb-2 text-xs font-light tracking-wide text-gray-400 uppercase">Quick Select</p>
+              <p className="mb-2 text-xs font-light tracking-wide text-gray-400 uppercase">
+                Quick Select
+              </p>
               <div className="flex flex-wrap gap-2">
                 {message.questionData.options!.map((option) => (
                   <button
@@ -350,17 +347,14 @@ const AIChatbotPanel = ({
           <ChatMessage message={{ ...message, shoppingResults: undefined }} />
           <div className="ml-11 space-y-2">
             {message.shoppingResults.slice(0, 3).map((product, index) => (
-              <div
-                key={product.product_code}
-                className="border border-gray-100 bg-white p-3"
-              >
+              <div key={product.product_code} className="border border-gray-100 bg-white p-3">
                 <div className="flex items-start gap-3">
                   <img
                     src={product.product_image_url}
                     alt={product.product_name}
-                    className="h-16 w-16 object-contain bg-gray-50"
+                    className="h-16 w-16 bg-gray-50 object-contain"
                   />
-                  <div className="flex-1 min-w-0">
+                  <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <span className="bg-black px-2 py-0.5 text-xs font-light text-white">
                         {index + 1}
@@ -372,9 +366,7 @@ const AIChatbotPanel = ({
                     <p className="mt-1 truncate text-sm font-light text-black">
                       {product.product_name}
                     </p>
-                    <p className="text-xs text-gray-500">
-                      {product.price.toLocaleString()}원
-                    </p>
+                    <p className="text-xs text-gray-500">{product.price.toLocaleString()}원</p>
                   </div>
                 </div>
               </div>
@@ -417,13 +409,16 @@ const AIChatbotPanel = ({
         </div>
       </div>
 
-      <div className="flex-1 space-y-4 overflow-y-auto p-4 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+      <div
+        className="scrollbar-hide flex-1 space-y-4 overflow-y-auto p-4"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
         {messages.length === 0 && (
           <div className="flex h-full flex-col items-center justify-center text-center">
             <div className="mb-8 flex h-20 w-20 items-center justify-center">
               <img src="/ai-logo.png" alt="AI" className="h-20 w-20 object-contain" />
             </div>
-            <p className="text-base font-normal leading-loose text-gray-500">
+            <p className="text-base leading-loose font-normal text-gray-500">
               찾으시는 제품에 대해
               <br />
               무엇이든 물어보세요
@@ -438,7 +433,7 @@ const AIChatbotPanel = ({
             className="flex items-center gap-3"
           >
             <img src="/ai-logo.png" alt="AI" className="h-8 w-8 flex-shrink-0 object-contain" />
-            <div className="rounded-2xl bg-white/80 px-4 py-3 border border-gray-100">
+            <div className="rounded-2xl border border-gray-100 bg-white/80 px-4 py-3">
               <p className="loading-text-animate text-sm text-gray-500">
                 최적의 상품을 검색 중입니다...
               </p>

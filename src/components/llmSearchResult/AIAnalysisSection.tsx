@@ -1,14 +1,11 @@
-import React from 'react';
 import { Sparkles } from 'lucide-react';
 
 interface AIAnalysisProps {
-  analysis: {
-    description: string;
-    keyword: string;
-  };
+  analysisMessage?: string;
+  keyword: string;
 }
 
-const AIAnalysisSection: React.FC<AIAnalysisProps> = ({ analysis }) => {
+const AIAnalysisSection = ({ analysisMessage, keyword }: AIAnalysisProps) => {
   return (
     <div className="group rounded-2xl border border-gray-100 bg-white p-10 shadow-sm transition-all hover:shadow-md">
       <div className="mb-8 flex items-center gap-3">
@@ -21,11 +18,11 @@ const AIAnalysisSection: React.FC<AIAnalysisProps> = ({ analysis }) => {
       <div className="space-y-6">
         <p className="text-[17px] leading-relaxed">
           <span className="font-medium text-gray-500">검색어 : </span>
-          <span className="font-bold text-gray-900">"{analysis.keyword}"</span>
+          <span className="font-bold text-gray-900">"{keyword}"</span>
         </p>
         <div className="h-px w-full bg-gray-100" />
         <p className="text-[17px] leading-[1.6] font-medium whitespace-pre-wrap text-gray-600">
-          {analysis.description}
+          {analysisMessage}
         </p>
       </div>
     </div>

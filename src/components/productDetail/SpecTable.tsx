@@ -1,12 +1,17 @@
-import type { ProductsCodeResDto } from '@/types/productsType';
+import type { ProductDetailResDto } from '@/types/productsType';
 import { ChevronDown } from 'lucide-react';
+import { useState } from 'react';
 
 interface SpecTableProps {
-  productInfo?: ProductsCodeResDto;
+  productInfo?: ProductDetailResDto;
 }
 
 const SpecTable = ({ productInfo }: SpecTableProps) => {
-  const specs = productInfo ? Object.entries(productInfo.specs) : [];
+  const [open, setOpen] = useState(false);
+
+  if (!productInfo) return null;
+
+  const specs = Object.entries(productInfo.specs ?? []);
 
   return (
     <div className="rounded-[2.5rem] border border-black/3 bg-white p-10 shadow-[0_4px_24px_rgba(0,0,0,0.02)] md:p-16">
@@ -45,13 +50,34 @@ const SpecTable = ({ productInfo }: SpecTableProps) => {
             </p>
           </div>
         ) : (
-          <div className="flex flex-col items-center gap-8">
-            {/* 실제 이미지가 있을 경우 보여줄 미리보기나 레이아웃 */}
-            <button className="group flex items-center gap-3 rounded-full bg-[#1d1d1f] px-10 py-4 text-[15px] font-semibold text-white shadow-xl shadow-black/10 transition-all hover:bg-[#424245] active:scale-95">
-              상세 이미지 펼쳐보기
-              <ChevronDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
-            </button>
-          </div>
+          <>
+            <div
+              className={`flex w-full flex-col gap-12 overflow-hidden transition-all duration-500 ${
+                open ? 'max-h-1250 opacity-100' : 'max-h-0 opacity-0'
+              }`}
+            >
+              {productInfo.product_image_url_list.map((url, index) => (
+                <img
+                  key={index}
+                  src={url}
+                  alt={`product-detail-${index}`}
+                  className="w-full rounded-3xl border border-black/5 object-cover"
+                  loading="lazy"
+                />
+              ))}
+            </div>
+            <div className={`flex flex-col items-center ${open ? 'mt-16' : ''}`}>
+              <button
+                onClick={() => setOpen((prev) => !prev)}
+                className="group flex items-center gap-3 rounded-full bg-[#1d1d1f] px-10 py-4 text-[15px] font-semibold text-white shadow-xl shadow-black/10 transition-all hover:bg-[#424245] active:scale-95"
+              >
+                상세 이미지 {open ? '접기' : '펼쳐보기'}
+                <ChevronDown
+                  className={`h-4 w-4 transition-transform ${open ? 'rotate-180' : ''}`}
+                />
+              </button>
+            </div>
+          </>
         )}
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   ImageGallery,
   ProductInfo,
@@ -14,6 +14,10 @@ import useTimerGetQuery from '@/hooks/queries/useTimerGetQuery';
 import useTimerPostMutation from '@/hooks/mutations/useTimerPostMutation';
 import TimerModal from '@/components/myPage/timer/TimerModal';
 import { Bell } from 'lucide-react';
+import useProductTrendQuery from '@/hooks/queries/useProductTrendQuery';
+import useProductPricesQuery from '@/hooks/queries/useProductPricesQuery';
+import useAuth from '@/hooks/useAuth';
+import { PATH } from '@/routes/path';
 
 const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -23,11 +27,24 @@ const ProductDetailPage = () => {
   const { data: timerInfo } = useTimerGetQuery(productCode);
   const postTimerMutate = useTimerPostMutation();
 
+  const { data: productTrend } = useProductTrendQuery(productCode);
+
+  const { data: comparisons } = useProductPricesQuery(productCode);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const comparisonRef = useRef<HTMLDivElement>(null);
 
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
+  const { isAuthenticated } = useAuth();
+
+  const navigate = useNavigate();
+
+  const handleOpenModal = () => {
+    if (!isAuthenticated) {
+      navigate(PATH.LOGIN);
+      return;
+    }
+    return setIsModalOpen(!isModalOpen);
+  };
 
   const handleSubmitTimer = (data: { product_code: number; target_price: number }) => {
     postTimerMutate.mutate(data, {
@@ -58,8 +75,12 @@ const ProductDetailPage = () => {
         <div className="mb-24">
           <div className="mb-8 flex items-center justify-between border-b border-gray-200 pb-6">
             <div>
-              <h2 className="text-5xl font-bold tracking-tight text-black lg:text-6xl">AI 가격 인텔리전스</h2>
-              <p className="mt-3 text-lg font-light text-gray-500">실시간 가격 분석 및 구매 타이밍 예측</p>
+              <h2 className="text-5xl font-bold tracking-tight text-black lg:text-6xl">
+                AI 가격 인텔리전스
+              </h2>
+              <p className="mt-3 text-lg font-light text-gray-500">
+                실시간 가격 분석 및 구매 타이밍 예측
+              </p>
             </div>
             {!timerInfo && (
               <button
@@ -78,13 +99,11 @@ const ProductDetailPage = () => {
                 <div>
                   <PriceTrendCard timerInfo={timerInfo} />
                 </div>
-                <div>
-                  <PriceTrendGraph productCode={productCode} />
-                </div>
+                <div>{productTrend && <PriceTrendGraph productTrend={productTrend} />} </div>
               </>
             ) : (
               <div className="lg:col-span-2">
-                <PriceTrendGraph productCode={productCode} />
+                {productTrend && <PriceTrendGraph productTrend={productTrend} />}{' '}
               </div>
             )}
           </div>
@@ -98,7 +117,7 @@ const ProductDetailPage = () => {
                 판매처별 최저가
               </h3>
             </div>
-            <PriceComparisonTable />
+            {comparisons && <PriceComparisonTable comparisons={comparisons} />}
           </section>
 
           <section id="specs" className="scroll-mt-32">
@@ -106,14 +125,14 @@ const ProductDetailPage = () => {
           </section>
 
           <section id="reviews" className="scroll-mt-32 pb-24">
-            <ReviewSection productCode={productCode} />
+            <ReviewSection key={productCode} productCode={productCode} />
           </section>
         </div>
       </div>
 
       <TimerModal
         isOpen={isModalOpen}
-        onClose={handleCloseModal}
+        onClose={handleOpenModal}
         onSubmit={handleSubmitTimer}
         productId={productCode}
         mode="create"

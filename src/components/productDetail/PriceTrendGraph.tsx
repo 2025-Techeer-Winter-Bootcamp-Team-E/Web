@@ -1,23 +1,28 @@
 import { XAxis, YAxis, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
 import { TrendingDown, Calendar, ArrowDownRight, ArrowUpRight } from 'lucide-react';
-import useProductTrendQuery from '@/hooks/queries/useProductTrendQuery';
+import type { ProductPriceTrendsResDto } from '@/types/productsType';
 
-const PriceTrendGraph = ({ productCode }: { productCode: number }) => {
-  const { data } = useProductTrendQuery(productCode);
+interface PriceTrendGraphProps {
+  productTrend: ProductPriceTrendsResDto;
+}
 
-  if (!data) return null;
-
-  const chartData = data.price_history.map((item) => ({
+const PriceTrendGraph = ({ productTrend }: PriceTrendGraphProps) => {
+  const chartData = productTrend.price_history.map((item) => ({
     date: item.date.slice(5),
     price: item.price,
   }));
 
   const prices = chartData.map((d) => d.price);
-  const minPrice = Math.min(...prices);
-  const maxPrice = Math.max(...prices);
-  const currentPrice = prices[prices.length - 1];
-  const priceChange = currentPrice - prices[0];
-  const priceChangePercent = ((priceChange / prices[0]) * 100).toFixed(1);
+
+  const minPrice = prices.length ? Math.min(...prices) : 0;
+  const maxPrice = prices.length ? Math.max(...prices) : 0;
+
+  const currentPrice = prices.length ? prices[prices.length - 1] : 0;
+  const previousPrice = prices.length ? prices[0] : 0;
+
+  const priceChange = currentPrice - previousPrice;
+  const priceChangePercent =
+    previousPrice === 0 ? 0 : Math.round((priceChange / previousPrice) * 100);
 
   return (
     <div className="flex h-full flex-col rounded-3xl bg-white p-8 shadow-sm">
@@ -30,7 +35,8 @@ const PriceTrendGraph = ({ productCode }: { productCode: number }) => {
           <div>
             <h4 className="text-sm font-light tracking-wide text-black">최저가 추이</h4>
             <p className="text-xs font-light text-gray-500">
-              {data.selected_period}{data.period_unit} 가격 변동
+              ({productTrend.selected_period}
+              {productTrend.period_unit})가격 변동
             </p>
           </div>
         </div>
@@ -43,28 +49,30 @@ const PriceTrendGraph = ({ productCode }: { productCode: number }) => {
       {/* Price Summary Cards */}
       <div className="mb-6 grid grid-cols-3 gap-3">
         <div className="rounded-2xl border border-gray-200 p-4">
-          <p className="mb-1 text-xs font-light uppercase tracking-wider text-gray-500">최저가</p>
+          <p className="mb-1 text-xs font-light tracking-wider text-gray-500 uppercase">최저가</p>
           <p className="text-lg font-light text-black">
-            {minPrice.toLocaleString()}
+            {minPrice}
             <span className="text-xs font-light text-gray-400">원</span>
           </p>
         </div>
         <div className="rounded-2xl border border-gray-100 bg-gray-50 p-4">
-          <p className="mb-1 text-xs font-light uppercase tracking-wider text-gray-500">최고가</p>
+          <p className="mb-1 text-xs font-light tracking-wider text-gray-500 uppercase">최고가</p>
           <p className="text-lg font-light text-black">
-            {maxPrice.toLocaleString()}
+            {maxPrice}
             <span className="text-xs font-light text-gray-400">원</span>
           </p>
         </div>
         <div className="rounded-2xl border border-gray-100 bg-gray-50 p-4">
-          <p className="mb-1 text-xs font-light uppercase tracking-wider text-gray-500">변동</p>
+          <p className="mb-1 text-xs font-light tracking-wider text-gray-500 uppercase">변동</p>
           <div className="flex items-center gap-1">
             {priceChange <= 0 ? (
               <ArrowDownRight className="h-4 w-4 text-black" strokeWidth={1.5} />
             ) : (
               <ArrowUpRight className="h-4 w-4 text-gray-500" strokeWidth={1.5} />
             )}
-            <p className={`text-lg font-light ${priceChange <= 0 ? 'text-black' : 'text-gray-500'}`}>
+            <p
+              className={`text-lg font-light ${priceChange <= 0 ? 'text-black' : 'text-gray-500'}`}
+            >
               {priceChangePercent}%
             </p>
           </div>
@@ -72,7 +80,7 @@ const PriceTrendGraph = ({ productCode }: { productCode: number }) => {
       </div>
 
       {/* Chart */}
-      <div className="min-h-48 flex-1 w-full">
+      <div className="min-h-48 w-full flex-1">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={chartData}>
             <defs>
@@ -88,10 +96,7 @@ const PriceTrendGraph = ({ productCode }: { productCode: number }) => {
               tick={{ fontSize: 11, fill: '#9ca3af', fontWeight: 300 }}
               dy={10}
             />
-            <YAxis
-              hide
-              domain={['dataMin - 5000', 'dataMax + 5000']}
-            />
+            <YAxis hide domain={['dataMin - 5000', 'dataMax + 5000']} />
             <Tooltip
               contentStyle={{
                 backgroundColor: 'white',
@@ -99,9 +104,17 @@ const PriceTrendGraph = ({ productCode }: { productCode: number }) => {
                 boxShadow: 'none',
                 padding: '12px 16px',
               }}
-              labelStyle={{ fontSize: '11px', color: '#6b7280', marginBottom: '4px', fontWeight: 300 }}
+              labelStyle={{
+                fontSize: '11px',
+                color: '#6b7280',
+                marginBottom: '4px',
+                fontWeight: 300,
+              }}
               itemStyle={{ fontSize: '14px', fontWeight: 300, color: '#000000' }}
-              formatter={(value: number | undefined) => [`${(value ?? 0).toLocaleString()}원`, '가격']}
+              formatter={(value: number | undefined) => [
+                `${(value ?? 0).toLocaleString()}원`,
+                '가격',
+              ]}
             />
             <Area
               type="monotone"
@@ -125,9 +138,7 @@ const PriceTrendGraph = ({ productCode }: { productCode: number }) => {
         <div className="flex items-center gap-2">
           <div className="h-2 w-2 bg-black" />
           <span className="text-xs font-light text-gray-500">현재가</span>
-          <span className="text-sm font-light text-black">
-            {currentPrice.toLocaleString()}원
-          </span>
+          <span className="text-sm font-light text-black">{currentPrice.toLocaleString()}원</span>
         </div>
         <button className="text-xs font-light text-black underline underline-offset-2 hover:no-underline">
           상세 분석 보기

@@ -1,15 +1,17 @@
 import { Star } from 'lucide-react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import ReviewCard from './ReviewCard';
 import useProductReviewQuery from '@/hooks/queries/useProductReviewQuery';
 import useProductAIReviewQuery from '@/hooks/queries/useProductAIReviewQuery';
+import Pagination from '@/components/layout/Pagination';
 
 interface ReviewSectionProps {
   productCode: number;
 }
 
 const ReviewSection = ({ productCode }: ReviewSectionProps) => {
-  const [page, _setPage] = useState(1);
+  const [page, setPage] = useState(1);
+  const reviewContainerRef = useRef<HTMLDivElement>(null);
 
   const { data: reviewData } = useProductReviewQuery(productCode, page);
   const { data: aiData } = useProductAIReviewQuery(productCode);
@@ -17,6 +19,13 @@ const ReviewSection = ({ productCode }: ReviewSectionProps) => {
   if (!reviewData) return null;
 
   const { reviews, pagination, average_rating } = reviewData;
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage < 1 || newPage > pagination.total_pages) return;
+
+    setPage(newPage);
+    reviewContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   return (
     <section className="space-y-12">
@@ -37,7 +46,7 @@ const ReviewSection = ({ productCode }: ReviewSectionProps) => {
             {average_rating.toFixed(1)}
           </span>
           <span className="border-l border-gray-300 pl-4 text-sm font-light text-gray-500">
-            전체 {pagination.total_elements.toLocaleString()}개의 통합 리뷰
+            전체 {pagination.count}개의 통합 리뷰
           </span>
         </div>
       </div>
@@ -46,14 +55,14 @@ const ReviewSection = ({ productCode }: ReviewSectionProps) => {
       {aiData && (
         <div className="rounded-3xl bg-white p-8 shadow-sm">
           <h3 className="mb-6 text-4xl font-bold tracking-tight text-black">AI 통합 리뷰</h3>
-          <p className="mb-8 text-base font-light leading-relaxed tracking-wide text-black">
+          <p className="mb-8 text-base leading-relaxed font-light tracking-wide text-black">
             {aiData.ai_summary}
           </p>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             <div className="space-y-6">
               <div>
-                <h4 className="mb-3 text-xs font-light uppercase tracking-widest text-gray-500">
+                <h4 className="mb-3 text-xs font-light tracking-widest text-gray-500 uppercase">
                   Pros
                 </h4>
                 <ul className="space-y-2 text-sm font-light text-gray-700">
@@ -65,7 +74,7 @@ const ReviewSection = ({ productCode }: ReviewSectionProps) => {
                 </ul>
               </div>
               <div>
-                <h4 className="mb-3 text-xs font-light uppercase tracking-widest text-gray-500">
+                <h4 className="mb-3 text-xs font-light tracking-widest text-gray-500 uppercase">
                   Cons
                 </h4>
                 <ul className="space-y-2 text-sm font-light text-gray-500">
@@ -79,7 +88,7 @@ const ReviewSection = ({ productCode }: ReviewSectionProps) => {
             </div>
 
             <div className="flex flex-col justify-center rounded-2xl border border-gray-100 bg-gray-50 p-6">
-              <h4 className="mb-2 text-xs font-light uppercase tracking-widest text-gray-500">
+              <h4 className="mb-2 text-xs font-light tracking-widest text-gray-500 uppercase">
                 Recommendation
               </h4>
               <div className="mb-4 flex items-baseline gap-2">
@@ -94,7 +103,7 @@ const ReviewSection = ({ productCode }: ReviewSectionProps) => {
                   style={{ width: `${aiData.recommendation_score}%` }}
                 />
               </div>
-              <p className="text-sm font-light leading-relaxed text-gray-600 italic">
+              <p className="text-sm leading-relaxed font-light text-gray-600 italic">
                 "{aiData.score_reason}"
               </p>
             </div>
@@ -108,6 +117,12 @@ const ReviewSection = ({ productCode }: ReviewSectionProps) => {
           <ReviewCard key={review.review_id} review={review} />
         ))}
       </div>
+
+      <Pagination
+        currentPage={page}
+        totalPages={pagination.total_pages}
+        onPageChange={handlePageChange}
+      />
     </section>
   );
 };

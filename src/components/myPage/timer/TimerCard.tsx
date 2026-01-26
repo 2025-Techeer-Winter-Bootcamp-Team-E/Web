@@ -1,14 +1,15 @@
 import { X, Pencil } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import type { TimersEntity } from '@/types/timerType';
 import useTimerDeleteMutation from '@/hooks/mutations/useTimerDeleteMutation';
 import useTimerPatchMutation from '@/hooks/mutations/useTimerPatchMutation';
 import TimerModal from './TimerModal';
 import { PATH } from '@/routes/path';
+import type { TimerEntity } from '@/types/timerType';
+import { toast } from 'react-toastify';
 
 interface TimerCardProps {
-  timer: TimersEntity;
+  timer: TimerEntity;
 }
 
 const TimerCard = ({ timer }: TimerCardProps) => {
@@ -32,10 +33,10 @@ const TimerCard = ({ timer }: TimerCardProps) => {
       {
         onSuccess: () => {
           setIsEditModalOpen(false);
-          alert('목표가격이 수정되었습니다.');
+          toast.error('목표가격이 수정되었습니다.');
         },
         onError: () => {
-          alert('목표가격 수정에 실패했습니다.');
+          toast.error('목표가격 수정에 실패했습니다.');
         },
       },
     );
@@ -79,7 +80,7 @@ const TimerCard = ({ timer }: TimerCardProps) => {
 
         {/* Product Info */}
         <div className="mb-6 space-y-2">
-          <h3 className="line-clamp-2 min-h-[2.75rem] text-base font-light leading-snug tracking-tight text-black">
+          <h3 className="line-clamp-2 min-h-11 text-base font-light leading-snug tracking-tight text-black">
             {timer.product_name}
           </h3>
           <div className="flex items-baseline gap-3">

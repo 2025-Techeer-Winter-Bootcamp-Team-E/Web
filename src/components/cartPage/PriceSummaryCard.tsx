@@ -1,16 +1,10 @@
-import PriceSummaryRow from '@/components/cartPage/PriceSummaryRow';
-
 const PriceSummaryCard = ({
-  summary,
+  total,
   selectedItemsCount,
   onCheckout,
   availableTokens,
 }: {
-  summary: {
-    subtotal: number;
-    discount: number;
-    total: number;
-  };
+  total: number;
   selectedItemsCount: number;
   onCheckout: () => void;
   availableTokens: number;
@@ -22,17 +16,11 @@ const PriceSummaryCard = ({
           <h3 className="mb-8 text-[19px] font-semibold tracking-tight text-[#1d1d1f]">
             결제 내역
           </h3>
-
-          <div className="space-y-4">
-            <PriceSummaryRow label="총 상품금액" amount={summary.subtotal} />
-            <PriceSummaryRow label="할인 금액" amount={summary.discount} isDiscount />
-          </div>
-
           <div className="mt-8 border-t border-[#f5f5f7] pt-8">
             <div className="mb-8 flex items-baseline justify-between">
               <span className="text-base font-semibold text-[#1d1d1f]">최종 결제 금액</span>
               <span className="text-3xl font-bold tracking-tighter text-[#1d1d1f]">
-                {summary.total.toLocaleString()} <span className="text-lg font-medium">TK</span>
+                {total.toLocaleString()} <span className="text-lg font-medium">TK</span>
               </span>
             </div>
 

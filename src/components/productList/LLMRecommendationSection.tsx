@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import type { LLMRecommendationEntity } from '@/types/searchType';
 import { PATH } from '@/routes/path';
+import type { LlmRecommendationEntity } from '@/types/searchType';
 
 interface LLMRecommendationCardProps {
-  product: LLMRecommendationEntity;
+  product: LlmRecommendationEntity;
   index: number;
 }
 
@@ -27,23 +27,21 @@ const LLMRecommendationCard = ({ product, index }: LLMRecommendationCardProps) =
     >
       <div className="mb-3 flex h-32 items-center justify-center overflow-hidden rounded-lg bg-gray-50">
         <img
-          src={product.thumbnail_url || product.product_image_url}
+          src={product.thumbnail_url || product.thumbnail_url}
           alt={product.product_name}
           className="h-full w-full object-contain"
         />
       </div>
-      <h3 className="mb-2 line-clamp-2 text-sm font-light text-black">
-        {product.product_name}
-      </h3>
+      <h3 className="mb-2 line-clamp-2 text-sm font-light text-black">{product.product_name}</h3>
       <p className="mb-2 line-clamp-2 text-xs font-light text-gray-500">
         {product.recommendation_reason}
       </p>
       <div className="mt-auto flex items-center justify-between">
-        <span className="text-sm font-medium text-black">
-          {product.price.toLocaleString()}원
-        </span>
+        <span className="text-sm font-medium text-black">{product.price.toLocaleString()}원</span>
         <button
-          onClick={(e) => { e.stopPropagation(); }}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
           className="rounded-full bg-black px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-gray-800"
         >
           구매
@@ -54,14 +52,11 @@ const LLMRecommendationCard = ({ product, index }: LLMRecommendationCardProps) =
 };
 
 interface LLMRecommendationSectionProps {
-  products: LLMRecommendationEntity[];
+  products: LlmRecommendationEntity[];
   analysisMessage?: string;
 }
 
-const LLMRecommendationSection = ({
-  products,
-  analysisMessage,
-}: LLMRecommendationSectionProps) => {
+const LLMRecommendationSection = ({ products, analysisMessage }: LLMRecommendationSectionProps) => {
   if (products.length === 0) return null;
 
   return (
@@ -75,7 +70,7 @@ const LLMRecommendationSection = ({
       <div className="flex gap-4 overflow-x-auto pb-2">
         {products.map((product, index) => (
           <LLMRecommendationCard
-            key={product.product_id || product.product_code}
+            key={product.product_code || product.product_code}
             product={product}
             index={index}
           />

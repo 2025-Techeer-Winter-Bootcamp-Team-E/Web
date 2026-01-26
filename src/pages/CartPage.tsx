@@ -3,23 +3,22 @@ import { PATH } from '@/routes/path';
 import Checkbox from '@/components/cartPage/Checkbox';
 import PriceSummaryCard from '@/components/cartPage/PriceSummaryCard';
 import useCartQuery from '@/hooks/queries/useCartQuery';
-import { useCartItems } from '@/hooks/useCartItems';
 import { useCartSelection } from '@/hooks/useCartSelectioin';
 import { useCartSummary } from '@/hooks/useCartSummary';
 import CartItemWrapper from '@/components/cartPage/CartItemWrapper';
 import useTokenBalanceQuery from '@/hooks/queries/useTokenBalanceQuery';
+import { toast } from 'react-toastify';
 
 const CartPage = () => {
   const navigate = useNavigate();
   const { data } = useCartQuery();
-
-  const cartItems = useCartItems(data);
-  const itemIds = cartItems.map((item) => item.id);
+  const cartItems = data || [];
+  const itemIds = cartItems.map((item) => item.cart_item_id);
 
   const { selectedItems, toggleItem, toggleAll, removeItem, allSelected } =
     useCartSelection(itemIds);
 
-  const summary = useCartSummary(cartItems, selectedItems);
+  const { total } = useCartSummary(cartItems, selectedItems);
 
   const { data: tokenData } = useTokenBalanceQuery();
   const availableTokens = tokenData?.current_tokens ?? 0;
@@ -44,11 +43,11 @@ const CartPage = () => {
             <div className="space-y-3">
               {cartItems.map((item) => (
                 <CartItemWrapper
-                  key={item.id}
+                  key={item.cart_item_id}
                   item={item}
-                  isSelected={selectedItems.includes(item.id)}
-                  onToggle={() => toggleItem(item.id)}
-                  onRemoveSuccess={() => removeItem(item.id)}
+                  isSelected={selectedItems.includes(item.cart_item_id)}
+                  onToggle={() => toggleItem(item.cart_item_id)}
+                  onRemoveSuccess={() => removeItem(item.cart_item_id)}
                 />
               ))}
             </div>
@@ -56,10 +55,10 @@ const CartPage = () => {
           <div className="w-full lg:sticky lg:top-20 lg:w-96">
             <PriceSummaryCard
               availableTokens={availableTokens}
-              summary={summary}
+              total={total}
               selectedItemsCount={selectedItems.length}
               onCheckout={() => {
-                if (selectedItems.length === 0) return alert('Please select items.');
+                if (selectedItems.length === 0) return toast('상품을 선택해주세요.');
                 navigate(PATH.CHECKOUT, { state: { mode: 'cart', selectedItems } });
               }}
             />

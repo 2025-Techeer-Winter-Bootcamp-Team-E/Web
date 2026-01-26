@@ -1,20 +1,17 @@
+import type { ProductListItem } from '@/types/productsType';
 import ProductGridCard from './ProductGridCard';
-import type { Product } from '@/types/productType';
 
 interface ProductGridProps {
-  products: Product[];
+  products: ProductListItem[];
   isLoading?: boolean;
 }
 
 const ProductGrid = ({ products, isLoading }: ProductGridProps) => {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 justify-items-center gap-8 md:grid-cols-3 lg:grid-cols-4 lg:gap-12">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-8">
         {Array.from({ length: 8 }).map((_, index) => (
-          <div
-            key={index}
-            className="aspect-square w-full max-w-[220px] rounded-xl bg-gray-100"
-          />
+          <div key={index} className="aspect-[3/4] w-full animate-pulse rounded-2xl bg-gray-100" />
         ))}
       </div>
     );
@@ -31,13 +28,9 @@ const ProductGrid = ({ products, isLoading }: ProductGridProps) => {
 
   return (
     <section>
-      <div className="grid grid-cols-2 justify-items-center gap-8 md:grid-cols-3 lg:grid-cols-4 lg:gap-12">
+      <div className="grid grid-cols-2 items-stretch gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-8">
         {products.map((product, index) => (
-          <ProductGridCard
-            key={product.product_code}
-            product={product}
-            index={index}
-          />
+          <ProductGridCard key={product.product_code} product={product} index={index} />
         ))}
       </div>
     </section>

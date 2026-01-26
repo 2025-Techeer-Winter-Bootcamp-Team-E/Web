@@ -2,10 +2,10 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import { PATH } from '@/routes/path';
-import type { LLMRecommendationEntity } from '@/types/searchType';
+import type { LlmRecommendationEntity } from '@/types/searchType';
 
 interface ProductCardProps {
-  product: LLMRecommendationEntity;
+  product: LlmRecommendationEntity;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
@@ -13,7 +13,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   const handleCardClick = () => {
     if (product.product_detail_url) window.open(product.product_detail_url, '_blank');
-    else navigate(PATH.PRODUCT_DETAIL(product.product_id));
+    else navigate(PATH.PRODUCT_DETAIL(product.product_code));
   };
 
   return (
@@ -28,7 +28,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             alt={product.product_name}
             className="h-full w-full object-contain mix-blend-multiply transition-transform duration-700 group-hover:scale-105"
           />
-          <div className="absolute top-6 left-6 rounded-full bg-gradient-to-r from-[var(--color-gradient-purple)] to-[var(--color-gradient-blue)] px-3 py-1 text-[11px] font-bold tracking-tight text-white">
+          <div className="absolute top-6 left-6 rounded-full bg-linear-to-r from-[var(--color-gradient-purple)] to-[var(--color-gradient-blue)] px-3 py-1 text-[11px] font-bold tracking-tight text-white">
             BEST PICK
           </div>
         </div>
@@ -62,7 +62,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </div>
           </div>
           <div className="mt-10 rounded-xl bg-gray-50 p-6">
-            <p className="mb-1.5 text-[11px] font-bold tracking-widest text-[var(--color-gradient-purple)] uppercase">
+            <p className="mb-1.5 text-[11px] font-bold tracking-widest text-(--color-gradient-purple) uppercase">
               AI Analysis
             </p>
             <p className="line-clamp-2 text-[15px] leading-relaxed font-medium text-gray-600">

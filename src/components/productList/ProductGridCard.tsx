@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import type { Product } from '@/types/productType';
 import { PATH } from '@/routes/path';
+import type { ProductListItem } from '@/types/productsType';
 
 interface ProductGridCardProps {
-  product: Product;
+  product: ProductListItem;
   index?: number;
 }
 
@@ -14,13 +14,12 @@ const ProductGridCard = ({ product, index = 0 }: ProductGridCardProps) => {
     navigate(PATH.PRODUCT_DETAIL(product.product_code));
   };
 
-  // Calculate row for staggered animation
   const row = Math.floor(index / 4);
 
   return (
     <div
       onClick={handleClick}
-      className="group flex h-full cursor-pointer flex-col rounded-2xl bg-white p-3 shadow-[0_2px_15px_rgba(0,0,0,0.08)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] max-w-[220px] animate-slideUp"
+      className="group animate-slideUp flex h-full w-full cursor-pointer flex-col rounded-2xl bg-white p-3 shadow-[0_2px_15px_rgba(0,0,0,0.08)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
       style={{ animationDelay: `${row * 500}ms` }}
     >
       <div className="aspect-square overflow-hidden rounded-lg bg-gray-50">
@@ -31,9 +30,7 @@ const ProductGridCard = ({ product, index = 0 }: ProductGridCardProps) => {
         />
       </div>
       <div className="mt-4 flex flex-1 flex-col">
-        <h3 className="line-clamp-2 text-sm font-light text-black">
-          {product.product_name}
-        </h3>
+        <h3 className="line-clamp-2 text-sm font-light text-black">{product.product_name}</h3>
         <div className="mt-auto flex items-baseline gap-2 pt-3">
           <span className="text-base font-medium text-black">
             {product.base_price?.toLocaleString() || '0'}

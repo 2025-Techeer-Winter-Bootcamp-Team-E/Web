@@ -1,8 +1,8 @@
+import type { TimerGetByProductCodeResDto } from '@/types/timerType';
 import { TrendingDown, TrendingUp, Target, Bell } from 'lucide-react';
-import type { TimersIdGetResDto } from '@/types/timerType';
 
 interface PriceTrendCardProps {
-  timerInfo: TimersIdGetResDto;
+  timerInfo: TimerGetByProductCodeResDto;
 }
 
 const PriceTrendCard = ({ timerInfo }: PriceTrendCardProps) => {
@@ -46,22 +46,18 @@ const PriceTrendCard = ({ timerInfo }: PriceTrendCardProps) => {
 
       {/* AI Message */}
       <div className="mb-6 rounded-2xl border border-gray-100 bg-gray-50 p-4">
-        <p className="text-center text-sm font-light leading-relaxed text-gray-600">
+        <p className="text-center text-sm leading-relaxed font-light text-gray-600">
           {timerInfo.reason_message}
         </p>
       </div>
 
       {/* Price Gap Display */}
       <div className="mb-6 text-center">
-        <p className="mb-2 text-xs font-light uppercase tracking-widest text-gray-500">
+        <p className="mb-2 text-xs font-light tracking-widest text-gray-500 uppercase">
           목표가 대비
         </p>
         <div className="flex items-baseline justify-center gap-1">
-          <span
-            className={`text-3xl font-light ${
-              isGoodDeal ? 'text-black' : 'text-gray-500'
-            }`}
-          >
+          <span className={`text-3xl font-light ${isGoodDeal ? 'text-black' : 'text-gray-500'}`}>
             {priceDiff > 0 ? '+' : ''}
             {priceDiff.toLocaleString()}
           </span>

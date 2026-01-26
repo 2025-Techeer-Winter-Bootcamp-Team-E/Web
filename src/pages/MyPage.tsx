@@ -19,7 +19,7 @@ const MyPage = () => {
             <SidebarMenu />
           </aside>
           <main className="flex-1">
-            <div className="min-h-[500px] overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+            <div className="min-h-125 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
               <Outlet />
             </div>
           </main>

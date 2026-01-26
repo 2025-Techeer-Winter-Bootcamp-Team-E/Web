@@ -1,17 +1,12 @@
-import React from 'react';
 import { Sparkles } from 'lucide-react';
 import ProductCard from './ProductCard';
-import type { LLMRecommendationEntity } from '@/types/searchType';
+import type { LlmRecommendationEntity } from '@/types/searchType';
 
 interface BestRecommendationsProps {
-  recommendations: LLMRecommendationEntity[];
+  recommendedProducts?: LlmRecommendationEntity[];
 }
 
-const BestRecommendations: React.FC<BestRecommendationsProps> = ({ recommendations }) => {
-  if (!recommendations || recommendations.length === 0) {
-    return null;
-  }
-
+const BestRecommendations = ({ recommendedProducts }: BestRecommendationsProps) => {
   return (
     <div className="flex flex-col gap-12">
       <div className="flex flex-col gap-4 px-2">
@@ -29,15 +24,16 @@ const BestRecommendations: React.FC<BestRecommendationsProps> = ({ recommendatio
         </p>
       </div>
       <div className="flex flex-col gap-6">
-        {recommendations.map((product, index) => (
-          <div
-            key={product.product_code}
-            className="animate-in fade-in slide-in-from-bottom-8 fill-mode-both duration-1000"
-            style={{ animationDelay: `${index * 150}ms` }}
-          >
-            <ProductCard product={product} />
-          </div>
-        ))}
+        {recommendedProducts &&
+          recommendedProducts.map((product, index) => (
+            <div
+              key={product.product_code}
+              className="animate-in fade-in slide-in-from-bottom-8 fill-mode-both duration-1000"
+              style={{ animationDelay: `${index * 150}ms` }}
+            >
+              <ProductCard product={product} />
+            </div>
+          ))}
       </div>
       <div className="mt-8 flex justify-center">
         <div className="h-px w-16 bg-gray-200" />

@@ -1,13 +1,14 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Minus } from 'lucide-react';
-import type { ProductsCodeResDto } from '@/types/productsType';
 import useCartItemPostMutation from '@/hooks/mutations/useCartItemPostMutation';
 import useProductPricesQuery from '@/hooks/queries/useProductPricesQuery';
 import { PATH } from '@/routes/path';
+import type { ProductDetailResDto } from '@/types/productsType';
+import { toast } from 'react-toastify';
 
 interface ProductInfoProps {
-  productInfo?: ProductsCodeResDto;
+  productInfo?: ProductDetailResDto;
 }
 
 interface AccordionProps {
@@ -48,10 +49,10 @@ const ProductInfo = ({ productInfo }: ProductInfoProps) => {
   // 최저가 계산
   const lowestPrice = useMemo(() => {
     if (pricesData && pricesData.length > 0) {
-      return Math.min(...pricesData.map(p => p.price));
+      return Math.min(...pricesData.map((p) => p.price));
     }
-    return productInfo?.base_price;
-  }, [pricesData, productInfo?.base_price]);
+    return productInfo?.price;
+  }, [pricesData, productInfo?.price]);
 
   const hasPrice = lowestPrice !== undefined && lowestPrice !== null;
 
@@ -64,7 +65,7 @@ const ProductInfo = ({ productInfo }: ProductInfoProps) => {
       },
       {
         onSuccess: () => {
-          alert('장바구니에 추가되었습니다.');
+          toast.success('장바구니에 추가되었습니다.');
         },
       },
     );
@@ -80,7 +81,7 @@ const ProductInfo = ({ productInfo }: ProductInfoProps) => {
           name: productInfo.product_name,
           image: productInfo.thumbnail_url,
           quantity: quantity,
-          price: lowestPrice || productInfo.base_price,
+          price: lowestPrice || productInfo.price,
         },
       },
     });
@@ -120,7 +121,7 @@ const ProductInfo = ({ productInfo }: ProductInfoProps) => {
           >
             <Minus className="h-3 w-3" strokeWidth={1.5} />
           </button>
-          <span className="min-w-[2rem] text-center text-sm font-light">{quantity}</span>
+          <span className="min-w-8 text-center text-sm font-light">{quantity}</span>
           <button
             onClick={() => setQuantity((prev) => prev + 1)}
             className="flex h-8 w-8 items-center justify-center border border-gray-200 transition-colors hover:border-black"
@@ -149,7 +150,7 @@ const ProductInfo = ({ productInfo }: ProductInfoProps) => {
       {/* Accordion Sections */}
       <div className="mt-auto">
         <Accordion title="무료 배송 & 반품">
-          <div className="space-y-2 text-sm font-light leading-relaxed text-gray-600">
+          <div className="space-y-2 text-sm leading-relaxed font-light text-gray-600">
             <p>무료 배송 (3~5일 소요)</p>
             <p>14일 이내 무료 반품 가능</p>
             <p>상품 수령 후 14일 이내, 미사용 상태에 한해 반품 가능</p>

@@ -1,8 +1,4 @@
-import type {
-  LLMRecommendationEntity,
-  QuestionEntity,
-  ShoppingResultEntity,
-} from './searchType';
+import type { LlmRecommendationEntity, ResearchQuestionEntity, ShoppingResearchResultEntity } from "@/types/searchType";
 
 export interface Product {
   product_code: number;
@@ -25,9 +21,9 @@ export interface ChatMessage {
   content: string;
   type?: ChatMessageType;
   products?: Product[];
-  llmProducts?: LLMRecommendationEntity[];
-  shoppingResults?: ShoppingResultEntity[];
-  questionData?: QuestionEntity;
+  llmProducts?: LlmRecommendationEntity[];
+  shoppingResults?: ShoppingResearchResultEntity[];
+  questionData?: ResearchQuestionEntity;
   timestamp: Date;
 }
 

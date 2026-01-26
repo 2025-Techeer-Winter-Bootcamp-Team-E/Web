@@ -1,12 +1,12 @@
-import useProductPricesQuery from '@/hooks/queries/useProductPricesQuery';
-import { useParams } from 'react-router-dom';
+interface PriceComparisonTableProps {
+  comparisons: {
+    mall_name: string;
+    price: number;
+    url: string;
+  }[];
+}
 
-const PriceComparisonTable = () => {
-  const { id } = useParams<{ id: string }>();
-
-  const { data } = useProductPricesQuery(Number(id));
-  const comparisons = data ?? [];
-
+const PriceComparisonTable = ({ comparisons }: PriceComparisonTableProps) => {
   return (
     <div className="overflow-hidden rounded-3xl bg-white shadow-sm">
       <div className="flex items-center justify-between border-b border-gray-200 p-6">
@@ -18,13 +18,13 @@ const PriceComparisonTable = () => {
         <table className="w-full">
           <thead>
             <tr className="border-b border-gray-100">
-              <th className="px-6 py-4 text-left text-xs font-light uppercase tracking-wider text-gray-500">
+              <th className="px-6 py-4 text-left text-xs font-light tracking-wider text-gray-500 uppercase">
                 판매처
               </th>
-              <th className="px-6 py-4 text-right text-xs font-light uppercase tracking-wider text-gray-500">
+              <th className="px-6 py-4 text-right text-xs font-light tracking-wider text-gray-500 uppercase">
                 가격
               </th>
-              <th className="px-6 py-4 text-center text-xs font-light uppercase tracking-wider text-gray-500">
+              <th className="px-6 py-4 text-center text-xs font-light tracking-wider text-gray-500 uppercase">
                 구매
               </th>
             </tr>
@@ -33,9 +33,7 @@ const PriceComparisonTable = () => {
             {comparisons.map((comparison, index) => (
               <tr key={index} className="transition-colors hover:bg-gray-50">
                 <td className="px-6 py-5">
-                  <span className="text-sm font-light text-black">
-                    {comparison.mall_name}
-                  </span>
+                  <span className="text-sm font-light text-black">{comparison.mall_name}</span>
                 </td>
                 <td className="px-6 py-5 text-right">
                   <span className="text-base font-light tracking-tight text-black">

@@ -1,8 +1,8 @@
+import type { ReviewEntity } from '@/types/productsType';
 import { Star } from 'lucide-react';
-import type { ReivewEntity } from '@/types/productsType';
 
 interface ReviewCardProps {
-  review: ReivewEntity;
+  review: ReviewEntity;
 }
 
 const ReviewCard = ({ review }: ReviewCardProps) => {

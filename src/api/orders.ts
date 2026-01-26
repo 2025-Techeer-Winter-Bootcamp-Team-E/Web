@@ -2,73 +2,99 @@ import getAPIResponseData from '@/api/getAPIResponseData';
 import { API } from '@/constants/api';
 import type {
   CartAllItemsResDto,
+  CartItemPatchReqDto,
   CartItemPostReqDto,
   CartItemPostResDto,
-  CartItemsReqDto,
-  CartItemsResDto,
+  CartItemsCheckoutReqDto,
+  CartItemsCheckoutResDto,
+  SingleItemCheckoutReqDto,
+  SingleItemCheckoutResDto,
   TokenBalanceResDto,
   TokenRechargeReqDto,
   TokenRechargeResDto,
-  TokenSingleItemReqDto,
-  TokenSingleItemResDto,
 } from '@/types/ordersType';
 
-// 결제를 위한 토큰 충전 POST
-export const postTokenRecharge = async (body: TokenRechargeReqDto) => {
-  return await getAPIResponseData<TokenRechargeResDto, TokenRechargeReqDto>({
+/**
+ * 토큰 충전
+ * POST /orders/tokens/recharge
+ */
+export const postTokenRecharge = (body: TokenRechargeReqDto) =>
+  getAPIResponseData<TokenRechargeResDto, TokenRechargeReqDto>({
     method: 'POST',
     url: API.ORDERS_TOKEN_RECHARGE,
     data: body,
   });
-};
 
-// 결제 토큰 조회 GET
-export const getTokenBalance = async () => {
-  return await getAPIResponseData<TokenBalanceResDto>({
+/**
+ * 보유 토큰 조회
+ * GET /orders/tokens
+ */
+export const getTokenBalance = () =>
+  getAPIResponseData<TokenBalanceResDto>({
     method: 'GET',
     url: API.ORDERS_TOKENS,
   });
-};
 
-// 토큰으로 상품 직접 결제 POST
-export const postTokenSingleItem = async (body: TokenSingleItemReqDto) => {
-  return await getAPIResponseData<TokenSingleItemResDto, TokenSingleItemReqDto>({
+/**
+ * 토큰으로 단일 상품 결제
+ * POST /orders/checkout
+ */
+export const postTokenSingleItemCheckout = (body: SingleItemCheckoutReqDto) =>
+  getAPIResponseData<SingleItemCheckoutResDto, SingleItemCheckoutReqDto>({
     method: 'POST',
     url: API.ORDERS_CHECKOUT,
     data: body,
   });
-};
 
-// 장바구니 상품 결제 POST
-export const postCartItemsCheckout = async (body: CartItemsReqDto) => {
-  return await getAPIResponseData<CartItemsResDto, CartItemsReqDto>({
+/**
+ * 장바구니 상품 결제
+ * POST /orders/cart/checkout
+ */
+export const postCartItemsCheckout = (body: CartItemsCheckoutReqDto) =>
+  getAPIResponseData<CartItemsCheckoutResDto, CartItemsCheckoutReqDto>({
     method: 'POST',
     url: API.ORDERS_CART_CHECKOUT,
     data: body,
   });
-};
 
-// 장바구니 상품 추가 POST
-export const postCartItem = async (body: CartItemPostReqDto) => {
-  return await getAPIResponseData<CartItemPostResDto, CartItemPostReqDto>({
+/**
+ * 장바구니 상품 추가
+ * POST /orders/cart
+ */
+export const postCartItem = (body: CartItemPostReqDto) =>
+  getAPIResponseData<CartItemPostResDto, CartItemPostReqDto>({
     method: 'POST',
     url: API.ORDERS_CART,
     data: body,
   });
-};
 
-// 장바구니 상품 삭제 DELETE
-export const delteeCartItem = async (cart_item_id: number) => {
-  return await getAPIResponseData<null, null>({
-    method: 'DELETE',
-    url: API.ORDERS_CART_ITEM_ID(cart_item_id),
+/**
+ * 장바구니 상품 수량 변경
+ * PATCH /orders/cart/{cart_item_id}
+ */
+export const patchCartItem = (cartItemId: number, body: CartItemPatchReqDto) =>
+  getAPIResponseData<null, CartItemPatchReqDto>({
+    method: 'PATCH',
+    url: API.ORDERS_CART_ITEM_ID(cartItemId),
+    data: body,
   });
-};
 
-// 장바구나 상품 목록 조회 GET
-export const getCartAllItem = async () => {
-  return await getAPIResponseData<CartAllItemsResDto, null>({
+/**
+ * 장바구니 상품 삭제
+ * DELETE /orders/cart/{cart_item_id}
+ */
+export const deleteCartItem = (cartItemId: number) =>
+  getAPIResponseData<null>({
+    method: 'DELETE',
+    url: API.ORDERS_CART_ITEM_ID(cartItemId),
+  });
+
+/**
+ * 장바구니 상품 목록 조회
+ * GET /orders/cart
+ */
+export const getCartItems = () =>
+  getAPIResponseData<CartAllItemsResDto>({
     method: 'GET',
     url: API.ORDERS_CART,
   });
-};

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { X } from 'lucide-react';
 import type { TimerPostReqDto } from '@/types/timerType';
+import { createPortal } from 'react-dom';
 
 interface TimerModalProps {
   isOpen: boolean;
@@ -52,7 +53,10 @@ const TimerModal = ({
 
   if (!isOpen) return null;
 
-  return (
+  const modalRoot = document.getElementById('modal-root');
+  if (!modalRoot) return null;
+
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" onClick={onClose} />
@@ -62,7 +66,7 @@ const TimerModal = ({
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 p-1 text-gray-400 transition-colors hover:text-black"
+          className="absolute top-4 right-4 p-1 text-gray-400 transition-colors hover:text-black"
         >
           <X className="h-5 w-5" strokeWidth={1.5} />
         </button>
@@ -80,7 +84,7 @@ const TimerModal = ({
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Price Input */}
           <div className="space-y-3">
-            <label className="block text-xs font-light uppercase tracking-widest text-gray-500">
+            <label className="block text-xs font-light tracking-widest text-gray-500 uppercase">
               목표 가격
             </label>
             <div className="flex items-center border-b border-gray-200 pb-2">
@@ -114,7 +118,8 @@ const TimerModal = ({
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    modalRoot,
   );
 };
 
