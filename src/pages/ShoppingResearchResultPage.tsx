@@ -32,18 +32,17 @@ const ShoppingResearchResultPage = () => {
         user_query: state.user_query,
         survey_contents: state.survey_contents,
       });
-    } else if (!searchIdFromUrl || !userQueryFromUrl) {
+    }
+    else if (searchIdFromUrl && userQueryFromUrl) {
+      mutate({
+        search_id: searchIdFromUrl,
+        user_query: decodeURIComponent(userQueryFromUrl),
+        survey_contents: [],       });
+    }
+    else {
       navigate(PATH.SHOPPING_RESEARCH);
     }
-  }, [
-    state?.search_id,
-    state?.user_query,
-    state?.survey_contents,
-    mutate,
-    searchIdFromUrl,
-    userQueryFromUrl,
-    navigate,
-  ]);
+  }, [state, searchIdFromUrl, userQueryFromUrl, mutate, navigate]);
 
   const products = data?.product || [];
   const topProduct = products[0];

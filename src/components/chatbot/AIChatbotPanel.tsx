@@ -219,7 +219,7 @@ const AIChatbotPanel = ({
           survey_contents: updatedAnswers,
         });
 
-        const targetUrl = `${PATH.SHOPPING_RESEARCH_RESULT}?search_id=${searchId}`;
+        const targetUrl = `${PATH.SHOPPING_RESEARCH_RESULT}?q=${currentQuery}&search_id=${searchId}`;
         navigate(targetUrl, {
           state: {
             user_query: currentQuery,

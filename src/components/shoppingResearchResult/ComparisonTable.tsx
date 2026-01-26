@@ -72,9 +72,6 @@ const ComparisonTable = ({ products }: ComparisonTableProps) => {
                 ))}
               </tr>
               <tr>
-                <td className="bg-gray-50/50 px-6 py-5 text-center text-[14px] font-semibold text-gray-500">
-                  프로세서
-                </td>
                 {specKeys.map((specKey) => (
                   <tr key={specKey}>
                     <td className="bg-[#f5f5f7]/30 px-6 py-5 text-center text-[14px] font-semibold text-[#86868b]">
