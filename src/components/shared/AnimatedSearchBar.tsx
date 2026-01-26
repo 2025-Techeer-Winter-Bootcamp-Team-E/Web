@@ -62,8 +62,9 @@ const AnimatedSearchBar = ({
     if (onSearch) {
       onSearch(query);
     } else {
-      // Navigate to product list page with AI panel open
-      navigateWithAnimation(`/products?q=${encodeURIComponent(query)}&ai_open=true`);
+      // Navigate to product list page with default category and AI panel open
+      // Use ai_query instead of q to avoid filtering product list
+      navigateWithAnimation(`/products?main_cat=노트북&sub_cat=LG그램&ai_query=${encodeURIComponent(query)}&ai_open=true`);
     }
   };
 
@@ -78,7 +79,7 @@ const AnimatedSearchBar = ({
     return (
       <motion.div layoutId="search-bar" className="mx-auto w-full max-w-xl">
         <div className="relative">
-          <div className="flex items-center gap-4 border-b border-black px-2 py-4">
+          <div className="flex items-center gap-4 rounded-full bg-white/90 px-6 py-4 shadow-lg backdrop-blur-sm">
             <Search className="h-5 w-5 flex-shrink-0 text-black" strokeWidth={1.5} />
             <input
               type="text"
@@ -90,7 +91,7 @@ const AnimatedSearchBar = ({
             />
             <button
               onClick={handleSearch}
-              className="rounded-full p-2 text-black transition-colors hover:bg-gray-100"
+              className="rounded-full bg-black p-2 text-white transition-opacity hover:opacity-80"
             >
               <ArrowRight className="h-5 w-5" strokeWidth={1.5} />
             </button>

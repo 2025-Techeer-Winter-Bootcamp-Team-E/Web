@@ -20,7 +20,7 @@ const ProductGridCard = ({ product, index = 0 }: ProductGridCardProps) => {
   return (
     <div
       onClick={handleClick}
-      className="group cursor-pointer rounded-2xl bg-white p-3 shadow-[0_2px_15px_rgba(0,0,0,0.08)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] max-w-[220px] animate-slideUp"
+      className="group flex h-full cursor-pointer flex-col rounded-2xl bg-white p-3 shadow-[0_2px_15px_rgba(0,0,0,0.08)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] max-w-[220px] animate-slideUp"
       style={{ animationDelay: `${row * 500}ms` }}
     >
       <div className="aspect-square overflow-hidden rounded-lg bg-gray-50">
@@ -30,11 +30,11 @@ const ProductGridCard = ({ product, index = 0 }: ProductGridCardProps) => {
           className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
         />
       </div>
-      <div className="mt-4">
+      <div className="mt-4 flex flex-1 flex-col">
         <h3 className="line-clamp-2 text-sm font-light text-black">
           {product.product_name}
         </h3>
-        <div className="mt-3 flex items-baseline gap-2">
+        <div className="mt-auto flex items-baseline gap-2 pt-3">
           <span className="text-base font-medium text-black">
             {product.base_price?.toLocaleString() || '0'}
           </span>

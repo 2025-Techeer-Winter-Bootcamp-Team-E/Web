@@ -14,9 +14,7 @@ const PriceTrendCard = ({ timerInfo }: PriceTrendCardProps) => {
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-black">
-            <span className="text-xs font-light text-white">AI</span>
-          </div>
+          <img src="/ai-logo.png" alt="AI" className="h-10 w-10 object-contain" />
           <div>
             <h4 className="text-sm font-light tracking-wide text-black">AI 가격 분석</h4>
             <p className="text-xs font-light text-gray-500">구매 타이밍 예측</p>
@@ -105,9 +103,7 @@ const PriceTrendCard = ({ timerInfo }: PriceTrendCardProps) => {
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex h-4 w-4 items-center justify-center rounded bg-black">
-              <span className="text-[8px] text-white">AI</span>
-            </div>
+            <img src="/ai-logo.png" alt="AI" className="h-4 w-4 object-contain" />
             <span className="text-sm font-light text-gray-500">AI 예측가</span>
           </div>
           <span className="text-sm font-light text-black">

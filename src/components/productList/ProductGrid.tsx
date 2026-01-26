@@ -23,8 +23,8 @@ const ProductGrid = ({ products, isLoading }: ProductGridProps) => {
   if (products.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
-        <p className="text-lg font-medium text-gray-500">No products found</p>
-        <p className="mt-2 text-sm text-gray-400">Try a different search query</p>
+        <p className="text-lg font-medium text-gray-500">상품을 찾을 수 없습니다</p>
+        <p className="mt-2 text-sm text-gray-400">다른 검색어로 시도해보세요</p>
       </div>
     );
   }

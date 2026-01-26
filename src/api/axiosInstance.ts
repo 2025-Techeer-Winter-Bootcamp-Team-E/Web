@@ -51,7 +51,10 @@ axiosInstance.interceptors.response.use(
     if (statusCode === 403) {
       window.location.href = '/';
     }
-    alert(errorData);
+    // 에러 메시지 표시 (개발 모드에서만)
+    if (import.meta.env.MODE === 'development') {
+      console.error('API Error:', errorData);
+    }
     return Promise.reject(error);
   },
 );

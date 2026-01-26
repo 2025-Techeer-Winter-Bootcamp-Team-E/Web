@@ -1,4 +1,3 @@
-import { API } from '@/constants/api';
 import {
   deleteRecentSearch,
   llmSearch,
@@ -10,28 +9,30 @@ import {
 } from '@/mocks/data/search';
 import { http, HttpResponse } from 'msw';
 
+const API_BASE = '*/api/v1';
+
 export const searchHandler = [
-  http.get(API.SEARCH_RECENT, () => {
+  http.get(`${API_BASE}/search/recent/`, () => {
     return HttpResponse.json(searchRecent);
   }),
-  http.delete('/search/recent/:id', ({ params }) => {
+  http.delete(`${API_BASE}/search/recent/:id`, ({ params }) => {
     const { id: _id } = params;
     return HttpResponse.json(deleteRecentSearch);
   }),
 
-  http.get(API.SEARCH_POPULAR, () => {
+  http.get(`${API_BASE}/search/popular/`, () => {
     return HttpResponse.json(searchPopluar);
   }),
-  http.get(API.SEARCH_AUTOCOMPLETE, () => {
+  http.get(`${API_BASE}/search/autocomplete/`, () => {
     return HttpResponse.json(searchAutoComplete);
   }),
-  http.post(API.SEARCH_LLM_RECOMMENDATION, async () => {
+  http.post(`${API_BASE}/search/llm-recommendation/`, async () => {
     return HttpResponse.json(llmSearch);
   }),
-  http.post(API.SEARCH_QUESTION, async () => {
+  http.post(`${API_BASE}/search/questions/`, async () => {
     return HttpResponse.json(ShoppingResearchQuestion);
   }),
-  http.post(API.SEARCH_SHOPPING_RESEARCH, async () => {
+  http.post(`${API_BASE}/search/shopping-research/`, async () => {
     return HttpResponse.json(ShoppingResearchResule);
   }),
 ];

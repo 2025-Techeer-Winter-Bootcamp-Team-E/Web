@@ -8,11 +8,9 @@ import FilterDropdown from '@/components/productList/FilterDropdown';
 import { useNavigation } from '@/contexts/NavigationContext';
 
 const SORT_OPTIONS = [
-  { value: 'relevance', label: '관련순' },
+  { value: 'popular', label: '인기순' },
   { value: 'price_low', label: '낮은 가격순' },
   { value: 'price_high', label: '높은 가격순' },
-  { value: 'rating', label: '평점순' },
-  { value: 'newest', label: '최신순' },
 ];
 
 const Header: React.FC = () => {
@@ -34,7 +32,7 @@ const Header: React.FC = () => {
   const isProductListPage = location.pathname === '/products';
   const mainCat = searchParams.get('main_cat') || '';
   const subCat = searchParams.get('sub_cat') || '';
-  const sort = searchParams.get('sort') || 'relevance';
+  const sort = searchParams.get('sort') || 'popular';
   const currentPage = Number(searchParams.get('page')) || 1;
   const totalPages = 10; // This should come from API response, using placeholder for now
 
@@ -105,7 +103,7 @@ const Header: React.FC = () => {
             <img
               src="/videos/logo.png"
               alt="WYW"
-              className="h-12 w-auto"
+              className="h-7 w-auto"
             />
           </div>
 

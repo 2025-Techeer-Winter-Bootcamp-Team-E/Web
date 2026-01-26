@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { MessageSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import LLMRecommendationSection from '@/components/productList/LLMRecommendationSection';
 import ProductGrid from '@/components/productList/ProductGrid';
@@ -18,6 +17,7 @@ const ProductListPage = () => {
   const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
 
   const searchQuery = searchParams.get('q') || '';
+  const aiQuery = searchParams.get('ai_query') || ''; // AI search query (separate from product filter)
   const mainCat = searchParams.get('main_cat') || '';
   const subCat = searchParams.get('sub_cat') || '';
   const minPrice = searchParams.get('min_price') || '';
@@ -124,7 +124,7 @@ const ProductListPage = () => {
               <AIChatbotPanel
                 onSearch={handleSearch}
                 onLlmResult={handleLlmResult}
-                initialQuery={searchQuery}
+                initialQuery={aiQuery || searchQuery}
                 onClose={() => setIsAIPanelOpen(false)}
               />
             </motion.div>
@@ -141,9 +141,16 @@ const ProductListPage = () => {
             exit={{ scale: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             onClick={() => setIsAIPanelOpen(true)}
-            className="fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center bg-black text-white shadow-lg transition-all hover:bg-gray-800"
+            className="fixed right-6 bottom-6 z-50 flex items-center justify-center"
           >
-            <MessageSquare className="h-6 w-6" strokeWidth={1.5} />
+            <motion.img
+              src="/ai-logo.png"
+              alt="AI Assistant"
+              className="h-20 w-20 object-contain drop-shadow-xl"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              whileHover={{ scale: 1.1 }}
+            />
           </motion.button>
         )}
       </AnimatePresence>

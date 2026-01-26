@@ -18,8 +18,8 @@ const HeroSection: React.FC = () => {
             alt="WYW - Whatever You Want"
             className="mx-auto mb-6 h-20 w-auto md:h-24 lg:h-28"
           />
-          <p className="text-sm font-light tracking-[0.2em] text-gray-500">
-            당신이 원하는 제품은 이곳에 전부 있습니다.
+          <p className="text-xl font-bold tracking-wide text-black md:text-2xl">
+            당신이 원하는 제품은 이곳에 전부 있습니다
           </p>
         </motion.div>
 
@@ -38,7 +38,7 @@ const HeroSection: React.FC = () => {
           transition={{ delay: 1.3, duration: 2.5 }}
           className="mt-16 text-center"
         >
-          <p className="text-sm font-light tracking-wide text-gray-400">
+          <p className="text-lg font-bold tracking-wide text-black md:text-xl">
             원하는 제품을 검색하고 최저가를 비교해보세요
           </p>
         </motion.div>
@@ -50,7 +50,7 @@ const HeroSection: React.FC = () => {
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ delay: 1.8, duration: 2.5, ease: [0.16, 1, 0.3, 1] }}
-          className="h-px w-16 bg-gray-200"
+          className="h-px w-16 bg-gray-300"
         />
       </div>
     </section>

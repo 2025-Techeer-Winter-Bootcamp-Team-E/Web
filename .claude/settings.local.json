@@ -12,7 +12,8 @@
       "WebFetch(domain:godly.website)",
       "WebFetch(domain:www.gentlemonster.com)",
       "Bash(yarn dev)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(curl:*)"
     ]
   }
 }

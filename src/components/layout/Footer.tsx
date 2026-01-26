@@ -7,9 +7,8 @@ const Footer: React.FC = () => {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <div className="mb-6 flex flex-col gap-1">
-              <span className="text-2xl font-bold tracking-tight text-black">WYW</span>
-              <p className="text-sm font-medium text-gray-400">Whatever You Want.</p>
+            <div className="mb-6">
+              <img src="/videos/logo.png" alt="modulo" className="h-8 w-auto" />
             </div>
 
             <div className="mb-6 space-y-1">
@@ -60,7 +59,7 @@ const Footer: React.FC = () => {
         </div>
         <div className="mt-16 border-t border-gray-100 pt-8 sm:mt-20 lg:mt-24">
           <div className="flex flex-col items-start justify-between gap-4 text-xs text-gray-500 md:flex-row md:items-center">
-            <p>© 2026 WYW Inc. All rights reserved.</p>
+            <p>© 2026 modulo Inc. All rights reserved.</p>
             <div className="flex gap-6">
               <a href="#" className="font-medium text-gray-600 hover:text-gray-900 hover:underline">
                 개인정보처리방침

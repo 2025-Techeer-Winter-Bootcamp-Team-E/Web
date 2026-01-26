@@ -43,13 +43,15 @@ const AIChatbotPanel = ({
   const [questions, setQuestions] = useState<QuestionEntity[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<QuestionAnswerEntity[]>([]);
+  const initialQueryProcessedRef = useRef(false);
 
   const llmMutation = useLlmRecoMutation();
   const shoppingResearchMutation = useShoppingResearchMutation();
   const shoppingResultMutation = useShoppingResultMutation();
 
   useEffect(() => {
-    if (initialQuery && messages.length === 0) {
+    if (initialQuery && !initialQueryProcessedRef.current && messages.length === 0) {
+      initialQueryProcessedRef.current = true;
       handleSendMessage(initialQuery);
     }
   }, [initialQuery]);
@@ -79,8 +81,6 @@ const AIChatbotPanel = ({
     setIsLoading(true);
     setCurrentQuery(query);
 
-    onSearch(query);
-
     try {
       const result = await llmMutation.mutateAsync({ user_query: query });
 
@@ -108,11 +108,21 @@ const AIChatbotPanel = ({
       };
 
       setMessages((prev) => [...prev, promptMessage]);
-    } catch (error) {
+    } catch (error: unknown) {
+      let errorContent = '죄송합니다. 검색 중 오류가 발생했습니다. 다시 시도해주세요.';
+
+      // Check for 401 authentication error
+      if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response?: { status?: number } };
+        if (axiosError.response?.status === 401) {
+          errorContent = '로그인이 필요한 기능입니다. 로그인 후 다시 시도해주세요.';
+        }
+      }
+
       const errorMessage: ChatMessageType = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: '죄송합니다. 검색 중 오류가 발생했습니다. 다시 시도해주세요.',
+        content: errorContent,
         type: 'text',
         timestamp: new Date(),
       };
@@ -386,8 +396,8 @@ const AIChatbotPanel = ({
       <div className="rounded-t-3xl border-b border-gray-200/40 bg-gray-100/60 p-5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="ai-icon-animated flex h-10 w-10 items-center justify-center rounded-2xl">
-              <span className="text-sm font-medium text-white">AI</span>
+            <div className="flex h-10 w-10 items-center justify-center">
+              <img src="/ai-logo.png" alt="AI" className="h-10 w-10 object-contain" />
             </div>
             <div>
               <h2 className="text-sm font-medium tracking-wide text-black">AI Assistant</h2>
@@ -410,8 +420,8 @@ const AIChatbotPanel = ({
       <div className="flex-1 space-y-4 overflow-y-auto p-4 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         {messages.length === 0 && (
           <div className="flex h-full flex-col items-center justify-center text-center">
-            <div className="ai-icon-animated mb-8 flex h-20 w-20 items-center justify-center rounded-3xl">
-              <span className="text-2xl font-medium text-white">AI</span>
+            <div className="mb-8 flex h-20 w-20 items-center justify-center">
+              <img src="/ai-logo.png" alt="AI" className="h-20 w-20 object-contain" />
             </div>
             <p className="text-base font-normal leading-loose text-gray-500">
               찾으시는 제품에 대해
@@ -427,7 +437,7 @@ const AIChatbotPanel = ({
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-3"
           >
-            <div className="ai-icon-animated h-8 w-8 flex-shrink-0 rounded-xl" />
+            <img src="/ai-logo.png" alt="AI" className="h-8 w-8 flex-shrink-0 object-contain" />
             <div className="rounded-2xl bg-white/80 px-4 py-3 border border-gray-100">
               <p className="loading-text-animate text-sm text-gray-500">
                 최적의 상품을 검색 중입니다...

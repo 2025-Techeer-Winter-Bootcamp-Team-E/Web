@@ -45,14 +45,10 @@ const ReviewSection = ({ productCode }: ReviewSectionProps) => {
       {/* AI Summary */}
       {aiData && (
         <div className="rounded-3xl bg-white p-8 shadow-sm">
-          <div className="mb-6 flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center bg-black">
-              <span className="text-xs font-light text-white">AI</span>
-            </div>
-            <p className="text-base font-light tracking-wide text-black">
-              {aiData.ai_summary}
-            </p>
-          </div>
+          <h3 className="mb-6 text-4xl font-bold tracking-tight text-black">AI 통합 리뷰</h3>
+          <p className="mb-8 text-base font-light leading-relaxed tracking-wide text-black">
+            {aiData.ai_summary}
+          </p>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             <div className="space-y-6">
@@ -63,7 +59,7 @@ const ReviewSection = ({ productCode }: ReviewSectionProps) => {
                 <ul className="space-y-2 text-sm font-light text-gray-700">
                   {aiData.pros.map((item, idx) => (
                     <li key={idx} className="flex gap-2 leading-relaxed">
-                      <span className="text-black">/</span> {item}
+                      <span className="text-black">+</span> {item}
                     </li>
                   ))}
                 </ul>
@@ -82,7 +78,7 @@ const ReviewSection = ({ productCode }: ReviewSectionProps) => {
               </div>
             </div>
 
-            <div className="flex flex-col justify-center border border-gray-100 bg-gray-50 p-6">
+            <div className="flex flex-col justify-center rounded-2xl border border-gray-100 bg-gray-50 p-6">
               <h4 className="mb-2 text-xs font-light uppercase tracking-widest text-gray-500">
                 Recommendation
               </h4>
@@ -92,9 +88,9 @@ const ReviewSection = ({ productCode }: ReviewSectionProps) => {
                 </span>
                 <span className="text-lg font-light text-gray-400">/ 100</span>
               </div>
-              <div className="mb-4 h-1 w-full overflow-hidden bg-gray-200">
+              <div className="mb-4 h-1 w-full overflow-hidden rounded-full bg-gray-200">
                 <div
-                  className="h-full bg-black"
+                  className="h-full rounded-full bg-black"
                   style={{ width: `${aiData.recommendation_score}%` }}
                 />
               </div>

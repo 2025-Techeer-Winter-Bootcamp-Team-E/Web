@@ -8,9 +8,11 @@ import {
 } from '@/mocks/data/products';
 import { http, HttpResponse } from 'msw';
 
+const API_BASE = '*/api/v1';
+
 export const productsHandler = [
   // 상품 상세
-  http.get('/products/:product_code', ({ params }) => {
+  http.get(`${API_BASE}/products/:product_code`, ({ params }) => {
     const { product_code } = params;
 
     return HttpResponse.json({
@@ -20,7 +22,7 @@ export const productsHandler = [
   }),
 
   // 가격 추이
-  http.get('/products/:product_code/price-trend', ({ params }) => {
+  http.get(`${API_BASE}/products/:product_code/price-trend`, ({ params }) => {
     const { product_code } = params;
 
     return HttpResponse.json({
@@ -30,7 +32,7 @@ export const productsHandler = [
   }),
 
   // 가격 목록
-  http.get('/products/:product_code/prices', ({ params }) => {
+  http.get(`${API_BASE}/products/:product_code/prices`, ({ params }) => {
     const { product_code } = params;
 
     return HttpResponse.json({
@@ -40,7 +42,7 @@ export const productsHandler = [
   }),
 
   // 리뷰 리스트
-  http.get('/products/:product_code/reviews', ({ params }) => {
+  http.get(`${API_BASE}/products/:product_code/reviews`, ({ params }) => {
     const { product_code } = params;
 
     return HttpResponse.json({
@@ -50,7 +52,7 @@ export const productsHandler = [
   }),
 
   // AI 리뷰 요약
-  http.get('/products/:product_code/reviews/summary', ({ params }) => {
+  http.get(`${API_BASE}/products/:product_code/reviews/summary`, ({ params }) => {
     const { product_code } = params;
 
     return HttpResponse.json({
@@ -59,24 +61,34 @@ export const productsHandler = [
     });
   }),
 
-  http.get('/products', ({ request }) => {
+  http.get(`${API_BASE}/products`, ({ request }) => {
     const url = new URL(request.url);
 
     // 쿼리 파라미터 추출
     const page = Number(url.searchParams.get('page')) || 1;
     const pageSize = Number(url.searchParams.get('page_size')) || 20;
     const mainCat = url.searchParams.get('main_cat');
+    const subCat = url.searchParams.get('sub_cat');
     const brand = url.searchParams.get('brand');
     const minPrice = url.searchParams.get('min_price');
     const maxPrice = url.searchParams.get('max_price');
     const sort = url.searchParams.get('sort') || 'popular';
 
-    // 필터링 로직 (선택사항 - 실제 필터링이 필요한 경우)
+    // 필터링 로직
     let filteredProducts = [...productListPaging.data.products];
 
-    // 카테고리 필터
+    // 메인 카테고리 필터
     if (mainCat) {
-      filteredProducts = filteredProducts.filter((p) => p.category === mainCat || mainCat === '');
+      filteredProducts = filteredProducts.filter((p) => p.category === mainCat);
+    }
+
+    // 서브 카테고리 필터 (브랜드로 필터링)
+    if (subCat) {
+      filteredProducts = filteredProducts.filter((p) =>
+        p.brand === subCat ||
+        p.product_name.includes(subCat) ||
+        (p.sub_category && p.sub_category === subCat)
+      );
     }
 
     // 브랜드 필터

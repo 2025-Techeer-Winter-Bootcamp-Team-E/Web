@@ -1,4 +1,3 @@
-import { API } from '@/constants/api';
 import {
   cartAdd,
   cartDelete,
@@ -9,23 +8,25 @@ import {
 } from '@/mocks/data/orders';
 import { http, HttpResponse } from 'msw';
 
+const API_BASE = '*/api/v1';
+
 export const ordersHandler = [
-  http.get(API.ORDERS_TOKENS, () => {
+  http.get(`${API_BASE}/orders/tokens/`, () => {
     return HttpResponse.json(myTokenCharge);
   }),
-  http.post(API.ORDERS_TOKEN_RECHARGE, () => {
+  http.post(`${API_BASE}/orders/tokens/recharge/`, () => {
     return HttpResponse.json(successTokenCharge);
   }),
-  http.post(API.ORDERS_CART_CHECKOUT, () => {
+  http.post(`${API_BASE}/orders/cart/checkout/`, () => {
     return HttpResponse.json(cartItemCheckout);
   }),
-  http.post(API.ORDERS_CART, () => {
+  http.post(`${API_BASE}/orders/cart/`, () => {
     return HttpResponse.json(cartAdd);
   }),
-  http.delete(API.ORDERS_CART_ITEM_ID(1001), () => {
+  http.delete(`${API_BASE}/orders/cart/:id`, () => {
     return HttpResponse.json(cartDelete);
   }),
-  http.get(API.ORDERS_CART, () => {
+  http.get(`${API_BASE}/orders/cart/`, () => {
     return HttpResponse.json(cartItems);
   }),
 ];
