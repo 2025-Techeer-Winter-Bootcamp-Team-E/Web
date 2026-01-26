@@ -65,7 +65,7 @@ const AnimatedSearchBar = ({
       onSearch(query);
     } else {
       navigateWithAnimation(
-        `${PATH.PRODUCT_LIST}?main_cat=${2}&sub_cat=${9}&ai_query=${encodeURIComponent(query)}&ai_open=true`,
+        `${PATH.PRODUCT_LIST}?main_cat=${11}&sub_cat=${12}&ai_query=${encodeURIComponent(query)}&ai_open=true`,
       );
     }
   };
