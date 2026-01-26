@@ -1,8 +1,8 @@
-import AISearchSection from '@/components/MainPage/AISearchSection';
-import CTASection from '@/components/MainPage/CTASection';
-import FeatureGrid from '@/components/MainPage/FeatureGrid';
-import HeroSection from '@/components/MainPage/HeroSection';
-import TimerSection from '@/components/MainPage/TimerSection';
+import { CTASection } from "@/components/llmSearchResult";
+import AISearchSection from "@/components/mainPage/AISearchSection";
+import FeatureGrid from "@/components/mainPage/FeatureGrid";
+import HeroSection from "@/components/mainPage/HeroSection";
+import TimerSection from "@/components/mainPage/TimerSection";
 
 const MainPage = () => {
   return (
