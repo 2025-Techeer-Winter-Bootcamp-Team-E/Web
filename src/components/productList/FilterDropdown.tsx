@@ -48,7 +48,7 @@ const FilterDropdown = ({ label, options, value, onChange }: FilterDropdownProps
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.15 }}
-            className="absolute left-0 top-full z-50 mt-2 min-w-[160px] rounded-xl border border-gray-100 bg-white p-1 shadow-lg"
+            className="absolute left-0 top-full z-50 mt-2 min-w-40 rounded-xl border border-gray-100 bg-white p-1 shadow-lg"
           >
             {options.map((option) => (
               <button

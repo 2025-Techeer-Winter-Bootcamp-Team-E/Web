@@ -17,12 +17,7 @@ const PaymentMethodSection = ({
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="mb-2 flex items-center gap-3">
-            <h3 className="text-[17px] font-semibold tracking-tight opacity-90">
-              My Token Payment
-            </h3>
-            <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-[11px] font-bold tracking-wider text-white/80 uppercase">
-              Selected
-            </span>
+            <h3 className="text-[17px] font-semibold tracking-tight opacity-90">내 토큰 결제</h3>
           </div>
 
           <div className="mt-8 space-y-1">

@@ -41,7 +41,7 @@ const FeaturedProductCard = ({ product }: FeaturedProductCardProps) => {
 
             <div className="mt-10 flex flex-col gap-5 border-t border-gray-100 pt-8">
               <div className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-[var(--color-gradient-purple)]" />
+                <Sparkles className="h-4 w-4 text-(--color-gradient-purple)" />
                 <p className="text-[15px] font-bold text-gray-900">
                   {product.recommendation_reason}
                 </p>
@@ -49,7 +49,7 @@ const FeaturedProductCard = ({ product }: FeaturedProductCardProps) => {
               <div className="grid grid-cols-1 gap-3">
                 {Object.entries(product.product_specs).map(([key, value]) => (
                   <div key={key} className="flex items-start gap-3">
-                    <div className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--color-gradient-purple)]" />
+                    <div className="mt-2 h-1 w-1 shrink-0 rounded-full bg-(--color-gradient-purple)" />
                     <p className="text-[14px] leading-relaxed font-medium text-gray-600">{value}</p>
                   </div>
                 ))}

@@ -174,17 +174,17 @@ const SignupForm = ({ onSubmit, loading }: SignupFormProps) => {
         <AgreementSection agreements={agreements} onAgreementsChange={setAgreements} />
 
         <Button disabled={loading} type="submit" fullWidth size="lg">
-          Create Account
+          {loading ? '가입 처리 중...' : '가입하기'}
         </Button>
       </form>
       <div className="mt-8 text-center">
         <p className="text-sm text-gray-500">
-          Already have an account?{' '}
+          이미 계정이 있으신가요?{' '}
           <Link
             to={PATH.LOGIN}
             className="font-medium text-(--color-gradient-purple) hover:underline"
           >
-            Sign in
+            로그인하기{' '}
           </Link>
         </p>
       </div>

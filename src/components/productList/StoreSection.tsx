@@ -23,7 +23,7 @@ const StoreCard = ({ store, index }: { store: Store; index: number }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.4 }}
-      className="flex w-44 flex-shrink-0 cursor-pointer flex-col items-center rounded-2xl border border-gray-100 bg-white p-4 transition-shadow hover:shadow-md"
+      className="flex w-44 shrink-0 cursor-pointer flex-col items-center rounded-2xl border border-gray-100 bg-white p-4 transition-shadow hover:shadow-md"
     >
       <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gray-100">
         <span className="text-lg font-bold text-gray-400">

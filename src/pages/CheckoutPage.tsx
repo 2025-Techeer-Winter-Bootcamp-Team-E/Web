@@ -111,7 +111,7 @@ const CheckoutPage = () => {
   return (
     <div className="min-h-screen bg-[#f5f5f7]">
       <div className="mx-auto max-w-6xl px-6 py-12 md:px-12">
-        <h1 className="mb-8 text-3xl font-bold text-gray-900">Checkout</h1>
+        <h1 className="mb-8 text-3xl font-bold text-gray-900">주문서 작성</h1>
         <div className="flex flex-col gap-12 lg:flex-row lg:items-start">
           <div className="flex-1 space-y-6">
             <ShippingInfoSection formData={formData} setFormData={setFormData} />

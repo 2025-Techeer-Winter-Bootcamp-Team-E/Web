@@ -39,7 +39,7 @@ const MyTimerGridPage = () => {
         </div>
       ) : (
         /* 빈 상태 디자인 (기존 코드 스타일 유지) */
-        <div className="flex flex-col items-center justify-center rounded-[2rem] border border-dashed border-[#d2d2d7] bg-[#f5f5f7]/50 py-32 text-center">
+        <div className="flex flex-col items-center justify-center rounded-4xl border border-dashed border-[#d2d2d7] bg-[#f5f5f7]/50 py-32 text-center">
           <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-sm">
             <RefreshCw className="h-8 w-8 text-[#d2d2d7]" />
           </div>

@@ -26,8 +26,8 @@ const LoginForm = ({ onSubmit, loading }: LoginFormProps) => {
           <div className="mb-4 flex items-center justify-center">
             <img src="/videos/logo.png" alt="WYW" className="h-16 w-auto" />
           </div>
-          <h1 className="text-2xl font-semibold text-gray-900">Welcome back</h1>
-          <p className="mt-2 text-sm text-gray-500">Sign in to continue shopping</p>
+          <h1 className="text-2xl font-semibold text-gray-900">Welcome</h1>
+          <p className="mt-2 text-sm text-gray-500">쇼핑을 계속하려면 로그인해 주세요</p>
         </div>
         <Card padding="lg">
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -37,8 +37,8 @@ const LoginForm = ({ onSubmit, loading }: LoginFormProps) => {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              label="Email"
-              placeholder="Enter your email"
+              label="이메일"
+              placeholder="이메일 주소를 입력하세요"
             />
 
             <Input
@@ -47,23 +47,23 @@ const LoginForm = ({ onSubmit, loading }: LoginFormProps) => {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              label="Password"
-              placeholder="Enter your password"
+              label="비밀번호"
+              placeholder="비밀번호를 입력하세요"
             />
             <Button type="submit" disabled={loading} fullWidth size="lg">
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? '로그인 중...' : '로그인'}{' '}
             </Button>
           </form>
         </Card>
 
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-500">
-            Don&apos;t have an account?
+            아직 계정이 없으신가요?{' '}
             <Link
               to={PATH.SIGNUP}
               className="font-medium text-(--color-gradient-purple) hover:underline"
             >
-              Create one
+              회원가입하기
             </Link>
           </p>
         </div>
