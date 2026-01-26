@@ -26,7 +26,7 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-white px-4 py-32">
+    <div className="flex min-h-screen items-center justify-center bg-[#f5f5f7] px-4 py-32">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <div className="mb-4 flex items-center justify-center">

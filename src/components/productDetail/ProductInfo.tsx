@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Minus, Bookmark } from 'lucide-react';
+import { Plus, Minus } from 'lucide-react';
 import type { ProductsCodeResDto } from '@/types/productsType';
 import useCartItemPostMutation from '@/hooks/mutations/useCartItemPostMutation';
+import useProductPricesQuery from '@/hooks/queries/useProductPricesQuery';
 import { PATH } from '@/routes/path';
 
 interface ProductInfoProps {
@@ -40,9 +41,19 @@ const ProductInfo = ({ productInfo }: ProductInfoProps) => {
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
   const { mutate: addCartItem } = useCartItemPostMutation();
+  const { data: pricesData } = useProductPricesQuery(productInfo?.product_code || 0);
 
   const specs = productInfo?.specs ? Object.entries(productInfo.specs) : [];
-  const hasPrice = productInfo?.base_price !== undefined && productInfo?.base_price !== null;
+
+  // 최저가 계산
+  const lowestPrice = useMemo(() => {
+    if (pricesData && pricesData.length > 0) {
+      return Math.min(...pricesData.map(p => p.price));
+    }
+    return productInfo?.base_price;
+  }, [pricesData, productInfo?.base_price]);
+
+  const hasPrice = lowestPrice !== undefined && lowestPrice !== null;
 
   const handleAddToCart = () => {
     if (!productInfo) return;
@@ -69,7 +80,7 @@ const ProductInfo = ({ productInfo }: ProductInfoProps) => {
           name: productInfo.product_name,
           image: productInfo.thumbnail_url,
           quantity: quantity,
-          price: productInfo.base_price,
+          price: lowestPrice || productInfo.base_price,
         },
       },
     });
@@ -77,28 +88,26 @@ const ProductInfo = ({ productInfo }: ProductInfoProps) => {
 
   return (
     <div className="flex h-full flex-col">
-      {/* Header with Product Name and Bookmark */}
-      <div className="mb-2 flex items-start justify-between">
-        <div>
-          <h1 className="text-xl font-light tracking-tight text-black lg:text-2xl">
-            {productInfo?.product_name}
-          </h1>
-          {productInfo?.brand && (
-            <p className="mt-1 text-xs font-light tracking-wide text-gray-500 uppercase">
-              {productInfo.brand}
-            </p>
-          )}
-        </div>
-        <button className="p-1 text-gray-400 transition-colors hover:text-black">
-          <Bookmark className="h-5 w-5" strokeWidth={1.5} />
-        </button>
+      {/* Header with Product Name */}
+      <div className="mb-2">
+        <h1 className="text-xl font-bold tracking-tight text-black lg:text-2xl">
+          {productInfo?.product_name}
+        </h1>
+        {productInfo?.brand && (
+          <p className="mt-1 text-xs font-light tracking-wide text-gray-500 uppercase">
+            {productInfo.brand}
+          </p>
+        )}
       </div>
 
       {/* Price */}
       <div className="mb-6">
-        <span className="text-lg font-light text-black">
-          {hasPrice ? `₩${productInfo.base_price.toLocaleString()}` : '가격 정보 없음'}
+        <span className="text-lg font-bold text-black">
+          {hasPrice ? `₩${lowestPrice!.toLocaleString()}` : '가격 정보 없음'}
         </span>
+        {hasPrice && pricesData && pricesData.length > 0 && (
+          <span className="ml-2 text-sm font-light text-gray-500">최저가</span>
+        )}
       </div>
 
       {/* Quantity Selector */}
@@ -124,7 +133,7 @@ const ProductInfo = ({ productInfo }: ProductInfoProps) => {
       {/* Add to Cart Button */}
       <button
         onClick={handleAddToCart}
-        className="mb-2 w-full bg-black py-4 text-sm font-light tracking-wide text-white transition-opacity hover:opacity-80"
+        className="mb-2 w-full rounded-full bg-black py-4 text-sm font-medium tracking-wide text-white transition-opacity hover:opacity-80"
       >
         쇼핑백에 추가하기
       </button>
@@ -132,7 +141,7 @@ const ProductInfo = ({ productInfo }: ProductInfoProps) => {
       {/* Buy Now Button */}
       <button
         onClick={handleBuyNow}
-        className="mb-6 w-full border border-black bg-white py-4 text-sm font-light tracking-wide text-black transition-colors hover:bg-gray-50"
+        className="mb-6 w-full rounded-full border border-gray-300 bg-white py-4 text-sm font-medium tracking-wide text-black transition-colors hover:bg-gray-50"
       >
         바로 구매하기
       </button>

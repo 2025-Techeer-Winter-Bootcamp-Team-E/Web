@@ -10,11 +10,11 @@ const PriceTrendCard = ({ timerInfo }: PriceTrendCardProps) => {
   const isGoodDeal = priceDiff <= 0;
 
   return (
-    <div className="h-full border border-gray-200 bg-white p-6">
+    <div className="h-full rounded-3xl bg-white p-8 shadow-sm">
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center bg-black">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-black">
             <span className="text-xs font-light text-white">AI</span>
           </div>
           <div>
@@ -22,7 +22,7 @@ const PriceTrendCard = ({ timerInfo }: PriceTrendCardProps) => {
             <p className="text-xs font-light text-gray-500">구매 타이밍 예측</p>
           </div>
         </div>
-        <div className="flex items-center gap-1.5 border border-gray-200 px-3 py-1.5">
+        <div className="flex items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2">
           <Bell className="h-3 w-3 text-black" strokeWidth={1.5} />
           <span className="text-xs font-light text-gray-600">알림 ON</span>
         </div>
@@ -31,7 +31,7 @@ const PriceTrendCard = ({ timerInfo }: PriceTrendCardProps) => {
       {/* Score Badge */}
       <div className="mb-6 flex justify-center">
         <div
-          className={`inline-flex items-center gap-2 px-5 py-2.5 ${
+          className={`inline-flex items-center gap-2 rounded-full px-6 py-3 ${
             isGoodDeal ? 'bg-black text-white' : 'border border-gray-300 text-black'
           }`}
         >
@@ -40,14 +40,14 @@ const PriceTrendCard = ({ timerInfo }: PriceTrendCardProps) => {
           ) : (
             <TrendingUp className="h-4 w-4" strokeWidth={1.5} />
           )}
-          <span className="text-sm font-light">
+          <span className="text-sm font-medium">
             {isGoodDeal ? '지금이 구매 적기!' : '가격 하락 대기 중'}
           </span>
         </div>
       </div>
 
       {/* AI Message */}
-      <div className="mb-6 border border-gray-100 bg-gray-50 p-4">
+      <div className="mb-6 rounded-2xl border border-gray-100 bg-gray-50 p-4">
         <p className="text-center text-sm font-light leading-relaxed text-gray-600">
           {timerInfo.reason_message}
         </p>
@@ -77,14 +77,14 @@ const PriceTrendCard = ({ timerInfo }: PriceTrendCardProps) => {
           { label: '신뢰도', val: timerInfo.confidence_score },
           { label: '추천도', val: timerInfo.recommendation_score },
         ].map((item, i) => (
-          <div key={i} className="border border-gray-100 p-3">
+          <div key={i} className="rounded-2xl border border-gray-100 p-4">
             <div className="mb-2 flex items-center justify-between">
               <span className="text-xs font-light text-gray-500">{item.label}</span>
               <span className="text-sm font-light text-black">{item.val}%</span>
             </div>
-            <div className="h-1 overflow-hidden bg-gray-100">
+            <div className="h-1 overflow-hidden rounded-full bg-gray-100">
               <div
-                className="h-full bg-black transition-all duration-1000"
+                className="h-full rounded-full bg-black transition-all duration-1000"
                 style={{ width: `${item.val}%` }}
               />
             </div>
@@ -105,7 +105,7 @@ const PriceTrendCard = ({ timerInfo }: PriceTrendCardProps) => {
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex h-4 w-4 items-center justify-center bg-black">
+            <div className="flex h-4 w-4 items-center justify-center rounded bg-black">
               <span className="text-[8px] text-white">AI</span>
             </div>
             <span className="text-sm font-light text-gray-500">AI 예측가</span>

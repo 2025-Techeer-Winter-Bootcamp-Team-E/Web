@@ -28,7 +28,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <div
       onClick={() => navigate(`${PATH.PRODUCT_DETAIL(product.product_code)}`)}
-      className="group flex gap-8 rounded-3xl border border-black/5 bg-white p-6 transition-all hover:shadow-[0_20px_40px_rgba(0,0,0,0.04)]"
+      className="group flex cursor-pointer gap-8 rounded-3xl bg-white p-6 shadow-[0_2px_15px_rgba(0,0,0,0.08)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)]"
     >
       <div className="relative h-45 w-45 shrink-0">
         <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-[18px] bg-[#f5f5f7]">

@@ -20,11 +20,11 @@ const PriceTrendGraph = ({ productCode }: { productCode: number }) => {
   const priceChangePercent = ((priceChange / prices[0]) * 100).toFixed(1);
 
   return (
-    <div className="flex h-full flex-col border border-gray-200 bg-white p-6">
+    <div className="flex h-full flex-col rounded-3xl bg-white p-8 shadow-sm">
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center border border-gray-200">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200">
             <TrendingDown className="h-5 w-5 text-black" strokeWidth={1.5} />
           </div>
           <div>
@@ -34,7 +34,7 @@ const PriceTrendGraph = ({ productCode }: { productCode: number }) => {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-1.5 border border-gray-200 px-3 py-1.5">
+        <div className="flex items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2">
           <Calendar className="h-3 w-3 text-gray-500" strokeWidth={1.5} />
           <span className="text-xs font-light text-gray-600">최근 7일</span>
         </div>
@@ -42,21 +42,21 @@ const PriceTrendGraph = ({ productCode }: { productCode: number }) => {
 
       {/* Price Summary Cards */}
       <div className="mb-6 grid grid-cols-3 gap-3">
-        <div className="border border-gray-200 p-3">
+        <div className="rounded-2xl border border-gray-200 p-4">
           <p className="mb-1 text-xs font-light uppercase tracking-wider text-gray-500">최저가</p>
           <p className="text-lg font-light text-black">
             {minPrice.toLocaleString()}
             <span className="text-xs font-light text-gray-400">원</span>
           </p>
         </div>
-        <div className="border border-gray-100 bg-gray-50 p-3">
+        <div className="rounded-2xl border border-gray-100 bg-gray-50 p-4">
           <p className="mb-1 text-xs font-light uppercase tracking-wider text-gray-500">최고가</p>
           <p className="text-lg font-light text-black">
             {maxPrice.toLocaleString()}
             <span className="text-xs font-light text-gray-400">원</span>
           </p>
         </div>
-        <div className="border border-gray-100 bg-gray-50 p-3">
+        <div className="rounded-2xl border border-gray-100 bg-gray-50 p-4">
           <p className="mb-1 text-xs font-light uppercase tracking-wider text-gray-500">변동</p>
           <div className="flex items-center gap-1">
             {priceChange <= 0 ? (

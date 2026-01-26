@@ -83,7 +83,7 @@ const ProductListPage = () => {
   const products = data?.products || [];
 
   return (
-    <div className="flex min-h-screen bg-white">
+    <div className="flex min-h-screen bg-[#f5f5f7]">
       <div
         className={`flex-1 overflow-y-auto transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isAIPanelOpen ? 'mr-[340px]' : 'mr-0'
@@ -112,7 +112,7 @@ const ProductListPage = () => {
             animate={{ x: 0, opacity: 1, scale: 1 }}
             exit={{ x: 340, opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed right-4 top-32 z-40 h-[calc(100vh-160px)] w-[340px]"
+            className="fixed right-6 top-[140px] z-40 h-[calc(100vh-170px)] w-[340px]"
           >
             <motion.div
               initial={{ opacity: 0 }}

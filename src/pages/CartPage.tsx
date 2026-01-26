@@ -25,7 +25,7 @@ const CartPage = () => {
   const availableTokens = tokenData?.current_tokens ?? 0;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#f5f5f7]">
       <div className="mx-auto max-w-6xl px-6 py-12 md:px-10">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Shopping Cart</h1>

@@ -8,7 +8,7 @@ const PriceComparisonTable = () => {
   const comparisons = data ?? [];
 
   return (
-    <div className="border border-gray-200 bg-white">
+    <div className="overflow-hidden rounded-3xl bg-white shadow-sm">
       <div className="flex items-center justify-between border-b border-gray-200 p-6">
         <h3 className="text-lg font-light tracking-wide text-black">가격비교</h3>
         <span className="text-sm font-light text-gray-500">판매처 {comparisons.length}곳</span>
@@ -47,7 +47,7 @@ const PriceComparisonTable = () => {
                     href={comparison.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block border border-black px-4 py-1.5 text-xs font-light text-black transition-all hover:bg-black hover:text-white"
+                    className="inline-block rounded-full border border-black px-4 py-1.5 text-xs font-medium text-black transition-all hover:bg-black hover:text-white"
                   >
                     이동
                   </a>

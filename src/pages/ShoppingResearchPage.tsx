@@ -64,7 +64,7 @@ const ShoppingResearchPage: React.FC = () => {
 
   if (questions.length === 0) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white">
+      <div className="flex min-h-screen items-center justify-center bg-[#f5f5f7]">
         <div className="flex flex-col items-center gap-6">
           <Loader2 className="h-8 w-8 animate-spin text-[var(--color-gradient-purple)]" />
           <p className="text-[17px] font-semibold tracking-tight text-gray-900">
@@ -76,7 +76,7 @@ const ShoppingResearchPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white pt-28 pb-24">
+    <div className="min-h-screen bg-[#f5f5f7] pt-28 pb-24">
       <div className="mx-auto max-w-3xl px-6">
         <QuestionContext context={userQuery} mode="AI 분석 엔진 가동 중" />
 

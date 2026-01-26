@@ -1,4 +1,4 @@
-import { Share2, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import type { ProductsCodeResDto } from '@/types/productsType';
 
 const ImageGallery = ({ data }: { data?: ProductsCodeResDto }) => {
@@ -12,20 +12,15 @@ const ImageGallery = ({ data }: { data?: ProductsCodeResDto }) => {
   };
 
   return (
-    <div className="relative flex min-h-[calc(100vh-120px)] flex-col items-center justify-center">
-      {/* Main Image */}
-      <div className="flex w-full items-center justify-center px-8">
+    <div className="relative flex min-h-[calc(100vh-120px)] flex-col items-center justify-center py-12">
+      {/* Main Image with White Rounded Background */}
+      <div className="flex w-full items-center justify-center rounded-3xl bg-white p-12 shadow-[0_2px_20px_rgba(0,0,0,0.06)]">
         <img
           src={data.thumbnail_url}
           alt={data.product_name}
-          className="max-h-[60vh] w-auto max-w-full object-contain"
+          className="max-h-[50vh] w-auto max-w-full object-contain"
         />
       </div>
-
-      {/* Share Button */}
-      <button className="absolute right-6 top-6 flex h-10 w-10 items-center justify-center border border-gray-200 bg-white transition-all hover:border-black">
-        <Share2 className="h-4 w-4 text-black" strokeWidth={1.5} />
-      </button>
 
       {/* Scroll Arrow */}
       <button

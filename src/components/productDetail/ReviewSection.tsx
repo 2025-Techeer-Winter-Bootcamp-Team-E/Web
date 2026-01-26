@@ -22,7 +22,7 @@ const ReviewSection = ({ productCode }: ReviewSectionProps) => {
     <section className="space-y-12">
       {/* Header */}
       <div className="border-b border-gray-200 pb-6">
-        <h2 className="text-2xl font-light tracking-tight text-black">구매 후기</h2>
+        <h2 className="text-5xl font-bold tracking-tight text-black lg:text-6xl">구매 후기</h2>
         <div className="mt-4 flex items-center gap-4">
           <div className="flex items-center gap-0.5">
             {[...Array(5)].map((_, i) => (
@@ -44,7 +44,7 @@ const ReviewSection = ({ productCode }: ReviewSectionProps) => {
 
       {/* AI Summary */}
       {aiData && (
-        <div className="border border-gray-200 bg-white p-8">
+        <div className="rounded-3xl bg-white p-8 shadow-sm">
           <div className="mb-6 flex items-center gap-3">
             <div className="flex h-8 w-8 items-center justify-center bg-black">
               <span className="text-xs font-light text-white">AI</span>

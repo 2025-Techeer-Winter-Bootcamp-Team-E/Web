@@ -125,7 +125,7 @@ const SignupForm: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen justify-center bg-white px-4 py-24">
+    <div className="flex min-h-screen justify-center bg-[#f5f5f7] px-4 py-24">
       <div className="w-full max-w-lg">
         <div className="mb-8 text-center">
           <div className="mb-4 flex items-center justify-center gap-1">

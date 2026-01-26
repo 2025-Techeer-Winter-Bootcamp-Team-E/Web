@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, ShoppingCart, X, ChevronDown, User } from 'lucide-react';
 import { useLocation, useSearchParams } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { PATH } from '@/routes/path';
 import { CATEGORY } from '@/constants/category';
 import FilterDropdown from '@/components/productList/FilterDropdown';
@@ -190,8 +191,16 @@ const Header: React.FC = () => {
         </div>
 
         {/* Product List Filter Bar - Second Row */}
-        {isProductListPage && (
-          <div className="flex items-center justify-between border-t border-gray-100 py-3">
+        <AnimatePresence>
+          {isProductListPage && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+              className="overflow-hidden"
+            >
+              <div className="flex items-center justify-between border-t border-gray-100 py-3">
             {/* Category Tag - Left */}
             <div className="flex items-center min-w-[200px]">
               {mainCat && (
@@ -257,8 +266,10 @@ const Header: React.FC = () => {
                 onChange={handleSortChange}
               />
             </div>
-          </div>
-        )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Mobile Navigation */}
         {isMobileNavOpen && (

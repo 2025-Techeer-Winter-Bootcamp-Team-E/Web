@@ -24,7 +24,7 @@ const LLMSearchResultPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-white pt-32 pb-24">
+    <div className="min-h-screen bg-[#f5f5f7] pt-32 pb-24">
       <div className="mx-auto max-w-245 px-6">
         <section className="animate-in fade-in slide-in-from-bottom-4 mb-16 duration-1000">
           <AIAnalysisSection analysis={transformedData.aiAnalysis} />

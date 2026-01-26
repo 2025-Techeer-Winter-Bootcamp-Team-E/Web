@@ -58,7 +58,7 @@ const TimerModal = ({
       <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative z-10 w-full max-w-md border border-gray-200 bg-white p-8 shadow-xl">
+      <div className="relative z-10 w-full max-w-md rounded-3xl bg-white p-8 shadow-xl">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -100,14 +100,14 @@ const TimerModal = ({
           <div className="space-y-3">
             <button
               type="submit"
-              className="w-full bg-black py-4 text-sm font-light tracking-wide text-white transition-opacity hover:opacity-80"
+              className="w-full rounded-full bg-black py-4 text-sm font-medium tracking-wide text-white transition-opacity hover:opacity-80"
             >
               {mode === 'create' ? '알림 설정하기' : '저장하기'}
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="w-full py-3 text-sm font-light text-gray-500 transition-colors hover:text-black"
+              className="w-full rounded-full py-3 text-sm font-medium text-gray-500 transition-colors hover:text-black"
             >
               취소
             </button>

@@ -19,14 +19,20 @@
 
 body {
   font-family:
-    'Pretendard Variable',
-    Pretendard,
     -apple-system,
     BlinkMacSystemFont,
-    system-ui,
+    'SF Pro Display',
+    'SF Pro Text',
+    'Apple SD Gothic Neo',
+    'Helvetica Neue',
+    'Segoe UI',
+    Roboto,
     sans-serif;
-  font-weight: 350;
-  letter-spacing: 0.01em;
+  font-weight: 400;
+  letter-spacing: -0.022em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 /* Product card slide up animation */

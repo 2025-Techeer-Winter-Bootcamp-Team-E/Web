@@ -20,7 +20,7 @@ const ProductGridCard = ({ product, index = 0 }: ProductGridCardProps) => {
   return (
     <div
       onClick={handleClick}
-      className="group cursor-pointer rounded-xl border border-gray-100 bg-white p-3 transition-colors hover:border-black max-w-[220px] animate-slideUp"
+      className="group cursor-pointer rounded-2xl bg-white p-3 shadow-[0_2px_15px_rgba(0,0,0,0.08)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] max-w-[220px] animate-slideUp"
       style={{ animationDelay: `${row * 500}ms` }}
     >
       <div className="aspect-square overflow-hidden rounded-lg bg-gray-50">

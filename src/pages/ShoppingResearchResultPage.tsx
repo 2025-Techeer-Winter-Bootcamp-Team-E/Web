@@ -53,7 +53,7 @@ const ShoppingResearchResultPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white">
+      <div className="flex min-h-screen items-center justify-center bg-[#f5f5f7]">
         <div className="flex flex-col items-center gap-6">
           <Loader2 className="h-10 w-10 animate-spin text-[var(--color-gradient-purple)]" strokeWidth={1.5} />
           <p className="text-[17px] font-medium tracking-tight text-gray-500">
@@ -66,7 +66,7 @@ const ShoppingResearchResultPage: React.FC = () => {
 
   if (!results || !results.product || results.product.length === 0) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-white px-6 text-center">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#f5f5f7] px-6 text-center">
         <p className="mb-8 text-[19px] font-semibold text-gray-900">
           검색 결과를 찾을 수 없습니다.
         </p>
@@ -108,7 +108,7 @@ const ShoppingResearchResultPage: React.FC = () => {
   }));
 
   return (
-    <div className="min-h-screen bg-white pt-12 pb-32">
+    <div className="min-h-screen bg-[#f5f5f7] pt-12 pb-32">
       <div className="mx-auto max-w-5xl space-y-12 px-6">
         <StatusBanner text={results.user_query} mode="Analysis Insight" />
         <FeaturedProductCard product={featuredProductData} />

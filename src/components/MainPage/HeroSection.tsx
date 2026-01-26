@@ -4,7 +4,7 @@ import AnimatedSearchBar from '@/components/shared/AnimatedSearchBar';
 
 const HeroSection: React.FC = () => {
   return (
-    <section className="relative min-h-screen overflow-hidden bg-white">
+    <section className="relative min-h-screen overflow-hidden bg-[#f5f5f7]">
       {/* Content */}
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6">
         <motion.div

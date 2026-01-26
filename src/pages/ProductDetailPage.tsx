@@ -36,7 +36,7 @@ const ProductDetailPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#f5f5f7]">
       {/* Hero Section - Gentle Monster Style */}
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex min-h-[calc(100vh-80px)] flex-col gap-8 lg:flex-row lg:gap-12">
@@ -58,13 +58,13 @@ const ProductDetailPage = () => {
         <div className="mb-24">
           <div className="mb-8 flex items-center justify-between border-b border-gray-200 pb-6">
             <div>
-              <h2 className="text-2xl font-light tracking-tight text-black">AI 가격 인텔리전스</h2>
-              <p className="mt-1 text-sm font-light text-gray-500">실시간 가격 분석 및 구매 타이밍 예측</p>
+              <h2 className="text-5xl font-bold tracking-tight text-black lg:text-6xl">AI 가격 인텔리전스</h2>
+              <p className="mt-3 text-lg font-light text-gray-500">실시간 가격 분석 및 구매 타이밍 예측</p>
             </div>
             {!timerInfo && (
               <button
                 onClick={handleOpenModal}
-                className="flex items-center gap-2 border border-black bg-black px-5 py-3 text-sm font-light text-white transition-all hover:bg-white hover:text-black"
+                className="flex items-center gap-2 rounded-full bg-black px-6 py-3 text-sm font-medium text-white transition-all hover:bg-gray-800"
               >
                 <Bell className="h-4 w-4" strokeWidth={1.5} />
                 가격 알림 설정
@@ -94,7 +94,7 @@ const ProductDetailPage = () => {
         <div className="space-y-24">
           <section id="comparison" ref={comparisonRef} className="scroll-mt-32">
             <div className="mb-8 border-b border-gray-200 pb-6">
-              <h3 className="text-2xl font-light tracking-tight text-black">
+              <h3 className="text-5xl font-bold tracking-tight text-black lg:text-6xl">
                 판매처별 최저가
               </h3>
             </div>

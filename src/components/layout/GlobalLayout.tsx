@@ -14,10 +14,10 @@ const GlobalLayout = () => {
   // isExiting 체크를 먼저 해야 함!
   if (isExiting) {
     return (
-      <div className="flex min-h-screen flex-col bg-white overflow-hidden">
+      <div className="flex min-h-screen flex-col bg-[#f5f5f7] overflow-hidden">
         <Header />
         <main className="mt-16 flex-1">
-          <section className="relative min-h-screen overflow-hidden bg-white">
+          <section className="relative min-h-screen overflow-hidden bg-[#f5f5f7]">
             <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6">
               {/* 로고 - 위로 퍼짐 */}
               <motion.div
@@ -77,7 +77,7 @@ const GlobalLayout = () => {
   // 메인 페이지 (진입 애니메이션)
   if (isMainPage) {
     return (
-      <div className="flex min-h-screen flex-col bg-[var(--color-dark-navy)]">
+      <div className="flex min-h-screen flex-col bg-[#f5f5f7]">
         <Header />
         <main className="mt-16 flex-1">
           <motion.div
@@ -95,7 +95,7 @@ const GlobalLayout = () => {
 
   // 다른 모든 페이지는 애니메이션 없이 렌더링
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col bg-[#f5f5f7]">
       <Header />
       <main className="mt-16 flex-1">
         <Outlet />
