@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { Search, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNavigation } from '@/contexts/NavigationContext';
+import { PATH } from '@/routes/path';
 
 const TYPING_PHRASES = [
+  '편집용 고사양 노트북 추천해줘',
   'RTX 4070 그래픽카드 최저가 비교',
-  '게이밍 PC 견적 추천해줘',
   '예산 150만원 가성비 조립 PC',
+  '게이밍 PC 견적 추천해줘',
   'AMD 라이젠 7 CPU 가격 비교',
 ];
 
@@ -62,9 +64,9 @@ const AnimatedSearchBar = ({
     if (onSearch) {
       onSearch(query);
     } else {
-      // Navigate to product list page with default category and AI panel open
-      // Use ai_query instead of q to avoid filtering product list
-      navigateWithAnimation(`/products?main_cat=노트북&sub_cat=LG그램&ai_query=${encodeURIComponent(query)}&ai_open=true`);
+      navigateWithAnimation(
+        `${PATH.PRODUCT_LIST}?main_cat=${2}&sub_cat=${9}&ai_query=${encodeURIComponent(query)}&ai_open=true`,
+      );
     }
   };
 
@@ -80,7 +82,7 @@ const AnimatedSearchBar = ({
       <motion.div layoutId="search-bar" className="mx-auto w-full max-w-xl">
         <div className="relative">
           <div className="flex items-center gap-4 rounded-full bg-white/90 px-6 py-4 shadow-lg backdrop-blur-sm">
-            <Search className="h-5 w-5 flex-shrink-0 text-black" strokeWidth={1.5} />
+            <Search className="h-5 w-5 shrink-0 text-black" strokeWidth={1.5} />
             <input
               type="text"
               value={query}
@@ -104,7 +106,7 @@ const AnimatedSearchBar = ({
   return (
     <motion.div layoutId="search-bar" className="w-full">
       <div className="flex items-center gap-3 border-b border-gray-200 bg-white px-2 py-3">
-        <Search className="h-4 w-4 flex-shrink-0 text-gray-400" strokeWidth={1.5} />
+        <Search className="h-4 w-4 shrink-0 text-gray-400" strokeWidth={1.5} />
         <input
           type="text"
           value={query}

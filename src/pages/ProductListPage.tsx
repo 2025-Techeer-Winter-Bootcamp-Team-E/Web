@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import LLMRecommendationSection from '@/components/productList/LLMRecommendationSection';
@@ -12,21 +12,29 @@ import SortControl from '@/components/productList/Sortcontrol';
 
 const ProductListPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [currentQuery, setCurrentQuery] = useState('');
-  const [llmRecommendations, setLlmRecommendations] = useState<LlmRecommendationEntity[] | null>(
-    null,
-  );
-  const [llmAnalysisMessage, setLlmAnalysisMessage] = useState<string>('');
-  const [isAIPanelOpen, setIsAIPanelOpen] = useState(false);
 
   const searchQuery = searchParams.get('q') || '';
-  const aiQuery = searchParams.get('ai_query') || ''; // AI search query (separate from product filter)
-  const mainCat = searchParams.get('main_cat') || '';
-  const subCat = searchParams.get('sub_cat') || '';
+  const aiQuery = searchParams.get('ai_query') || '';
   const minPrice = searchParams.get('min_price') || '';
   const maxPrice = searchParams.get('max_price') || '';
   const sort = searchParams.get('sort') || 'popular';
   const page = Number(searchParams.get('page')) || 1;
+  const aiOpen = searchParams.get('ai_open') === 'true';
+
+  const [isAIPanelOpen, setIsAIPanelOpen] = useState(aiOpen);
+
+  const [llmRecommendations, setLlmRecommendations] = useState<LlmRecommendationEntity[] | null>(
+    null,
+  );
+  const [llmAnalysisMessage, setLlmAnalysisMessage] = useState<string>('');
+
+  useEffect(() => {
+    if (aiOpen) {
+      const params = new URLSearchParams(searchParams);
+      params.delete('ai_open');
+      setSearchParams(params, { replace: true });
+    }
+  }, []);
 
   const handleApplyPriceRange = (min: string, max: string) => {
     updateURL({
@@ -51,20 +59,19 @@ const ProductListPage = () => {
   };
 
   const queryParams = {
-    q: currentQuery || undefined,
-    main_cat: mainCat || undefined,
-    sub_cat: subCat || undefined,
-    min_price: minPrice ? Number(minPrice) : undefined,
-    max_price: maxPrice ? Number(maxPrice) : undefined,
-    sort: sort as 'price_low' | 'price_high' | 'popular',
-    page,
+    q: searchQuery || undefined,
+    main_cat: searchParams.get('main_cat') || undefined,
+    sub_cat: searchParams.get('sub_cat') || undefined,
+    min_price: searchParams.get('min_price') ? Number(searchParams.get('min_price')) : undefined,
+    max_price: searchParams.get('max_price') ? Number(searchParams.get('max_price')) : undefined,
+    sort: (searchParams.get('sort') || 'popular') as 'price_low' | 'price_high' | 'popular',
+    page: Number(searchParams.get('page')) || 1,
     page_size: 20,
   };
 
   const { data, isLoading } = useProductListQuery(queryParams);
 
   const handleSearch = (query: string) => {
-    setCurrentQuery(query);
     updateURL({ q: query, page: 1 });
   };
 
