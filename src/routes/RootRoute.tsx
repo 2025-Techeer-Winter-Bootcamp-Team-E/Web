@@ -12,6 +12,8 @@ import MyTimerGrid from '@/pages/MyTimerGridPage';
 import { ROUTE_PATH } from '@/routes/path';
 import useScrollToTop from '@/hooks/useScrollTop';
 import ProductListPage from '@/pages/ProductListPage';
+import PublicOnlyRoute from '@/routes/PublicOnlyRoute';
+import ProtectedRoute from '@/routes/ProtectedRoute';
 
 const RootRoute = () => {
   useScrollToTop();
@@ -20,18 +22,23 @@ const RootRoute = () => {
     <Routes>
       <Route element={<GlobalLayout />}>
         <Route path={ROUTE_PATH.ROOT} element={<MainPage />} />
-        <Route path={ROUTE_PATH.LOGIN} element={<LoginPage />} />
-        <Route path={ROUTE_PATH.SIGNUP} element={<SignupPage />} />
-        <Route path={ROUTE_PATH.CART} element={<ShoppingCartPage />} />
-        <Route path={ROUTE_PATH.CHECKOUT} element={<CheckoutPage />} />
-
         <Route path={ROUTE_PATH.PRODUCT_LIST} element={<ProductListPage />} />
         <Route path={ROUTE_PATH.PRODUCT_DETAIL} element={<ProductDetailPage />} />
 
-        <Route path={ROUTE_PATH.MY_PAGE} element={<MyPage />}>
-          <Route index element={<Navigate to={ROUTE_PATH.TIMER} replace />} />
-          <Route path={ROUTE_PATH.TIMER} element={<MyTimerGrid />} />
-          <Route path={ROUTE_PATH.TOKEN} element={<TokenChargePage />} />
+        <Route element={<PublicOnlyRoute />}>
+          <Route path={ROUTE_PATH.LOGIN} element={<LoginPage />} />
+          <Route path={ROUTE_PATH.SIGNUP} element={<SignupPage />} />
+        </Route>
+
+        <Route element={<ProtectedRoute />}>
+          <Route path={ROUTE_PATH.CART} element={<ShoppingCartPage />} />
+          <Route path={ROUTE_PATH.CHECKOUT} element={<CheckoutPage />} />
+
+          <Route path={ROUTE_PATH.MY_PAGE} element={<MyPage />}>
+            <Route index element={<Navigate to={ROUTE_PATH.TIMER} replace />} />
+            <Route path={ROUTE_PATH.TIMER} element={<MyTimerGrid />} />
+            <Route path={ROUTE_PATH.TOKEN} element={<TokenChargePage />} />
+          </Route>
         </Route>
       </Route>
     </Routes>
