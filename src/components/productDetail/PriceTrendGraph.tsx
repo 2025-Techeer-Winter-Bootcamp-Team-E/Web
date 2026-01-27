@@ -17,6 +17,7 @@ const PriceTrendGraph = ({ productTrend }: PriceTrendGraphProps) => {
   const minPrice = prices.length ? Math.min(...prices) : 0;
   const maxPrice = prices.length ? Math.max(...prices) : 0;
 
+  // 현재가는 price_history(price_histories DB)의 마지막 항목에서 가져옴
   const currentPrice = prices.length ? prices[prices.length - 1] : 0;
   const previousPrice = prices.length ? prices[0] : 0;
 

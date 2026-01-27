@@ -2,7 +2,7 @@ interface PriceComparisonTableProps {
   comparisons: {
     mall_name: string;
     price: number;
-    url: string;
+    url: string | null;
   }[];
 }
 
@@ -41,14 +41,20 @@ const PriceComparisonTable = ({ comparisons }: PriceComparisonTableProps) => {
                   </span>
                 </td>
                 <td className="px-6 py-5 text-center">
-                  <a
-                    href={comparison.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block rounded-full border border-black px-4 py-1.5 text-xs font-medium text-black transition-all hover:bg-black hover:text-white"
-                  >
-                    이동
-                  </a>
+                  {comparison.url ? (
+                    <a
+                      href={comparison.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block rounded-full border border-black px-4 py-1.5 text-xs font-medium text-black transition-all hover:bg-black hover:text-white"
+                    >
+                      이동
+                    </a>
+                  ) : (
+                    <span className="inline-block rounded-full border border-gray-300 px-4 py-1.5 text-xs font-medium text-gray-400 cursor-not-allowed">
+                      링크 없음
+                    </span>
+                  )}
                 </td>
               </tr>
             ))}
