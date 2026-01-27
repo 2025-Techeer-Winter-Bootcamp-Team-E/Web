@@ -46,7 +46,7 @@ export type ProductPriceTrendsResDto = {
 export type MallPriceEntity = {
   mall_name: string;
   price: number;
-  url: string;
+  url: string | null;
 };
 
 /**
