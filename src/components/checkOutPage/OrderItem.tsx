@@ -7,7 +7,7 @@ const OrderItem = ({ item }: { item: BuyItemEntity }) => {
         <img
           src={item.image || '/placeholder.png'}
           alt={item.name}
-          className="h-full w-full object-contain p-2"
+          className="h-full w-full object-cover p-2"
         />
       </div>
       <div className="min-w-0 flex-1">

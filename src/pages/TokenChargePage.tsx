@@ -29,7 +29,7 @@ const TokenChargePage = () => {
   };
 
   return (
-    <div className="mx-auto max-w-200 overflow-hidden rounded-4xl border border-black/3 bg-white p-12 shadow-[0_20px_50px_rgba(0,0,0,0.02)]">
+    <div className="max-w-200 overflow-hidden rounded-4xl border border-black/3 bg-white px-12 py-6 shadow-[0_20px_50px_rgba(0,0,0,0.02)]">
       <MyTokenBalance currentToken={currentToken} />
       <TokenChargeForm
         selectedTokenAmount={selectedTokenAmount}

@@ -8,8 +8,7 @@ const MyTimerGridPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const userId = Number(localStorage.getItem('user_id'));
 
-  // 6개씩 페이징 처리
-  const { data } = useTimerAllGetQuery(userId, currentPage, 6);
+  const { data } = useTimerAllGetQuery(userId, currentPage, 8);
   const timers = data?.timers || [];
   const pageInfo = data?.page_info;
 
@@ -22,7 +21,7 @@ const MyTimerGridPage = () => {
     <div className="w-full">
       {timers.length > 0 ? (
         <div className=" ">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {timers.map((timer) => (
               <TimerCard key={timer.timer_id} timer={timer} />
             ))}
@@ -38,9 +37,8 @@ const MyTimerGridPage = () => {
           )}
         </div>
       ) : (
-        /* 빈 상태 디자인 (기존 코드 스타일 유지) */
-        <div className="flex flex-col items-center justify-center rounded-4xl border border-dashed border-[#d2d2d7] bg-[#f5f5f7]/50 py-32 text-center">
-          <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-sm">
+        <div className="flex min-h-120 flex-col items-center justify-center rounded-4xl border border-dashed border-[#d2d2d7] bg-white/50 py-32 text-center">
+          <div className="mb-6 flex h-20 w-20 shrink-0 items-center justify-center self-center rounded-full bg-white shadow-sm">
             <RefreshCw className="h-8 w-8 text-[#d2d2d7]" />
           </div>
           <h3 className="text-[21px] font-semibold text-[#1d1d1f]">보관함이 비어있습니다</h3>

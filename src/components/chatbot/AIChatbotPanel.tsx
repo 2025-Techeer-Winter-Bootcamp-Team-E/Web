@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Search, ArrowRight, ImagePlus, ShoppingBag, X } from 'lucide-react';
+import { Search, ArrowRight, ShoppingBag, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ChatMessage from './ChatMessage';
 import SuggestedTags from './SuggestedTags';
@@ -439,7 +439,7 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
               animate={{ opacity: 1, y: 0 }}
               className="flex items-center gap-3"
             >
-              <img src="/ai-logo.png" alt="AI" className="h-8 w-8 flex-shrink-0 object-contain" />
+              <img src="/ai-logo.png" alt="AI" className="h-8 w-8 shrink-0 object-contain" />
               <div className="rounded-2xl border border-gray-100 bg-white/80 px-4 py-3">
                 <p className="loading-text-animate text-sm text-gray-500">
                   최적의 상품을 검색 중입니다...
@@ -483,11 +483,6 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
               }
               className="flex-1 bg-transparent text-sm font-normal outline-none placeholder:text-gray-400"
             />
-            {!isShoppingResearchMode && (
-              <button className="p-2 text-gray-400 transition-colors hover:text-black">
-                <ImagePlus className="h-4 w-4" strokeWidth={1.5} />
-              </button>
-            )}
             <button
               onClick={() => handleSendMessage(input)}
               className="rounded-xl bg-black p-2 text-white transition-all hover:bg-gray-800"
@@ -498,7 +493,6 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
         </div>
       </motion.div>
 
-      {/* Modal */}
       <ShoppingResultModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

@@ -20,8 +20,8 @@ const TimerCard = ({ timer }: TimerCardProps) => {
   const patchTimerMutation = useTimerPatchMutation();
 
   const handleDelete = (e: React.MouseEvent) => {
-    e.stopPropagation(); // 카드 클릭 이벤트 방지
-    if (!confirm('이 타이머를 삭제하시겠습니까?')) return;
+    e.stopPropagation();
+    if (!confirm('타이머를 삭제하시겠습니까?')) return;
     deleteTimerMutation.mutate(timer.timer_id);
   };
 
@@ -46,15 +46,12 @@ const TimerCard = ({ timer }: TimerCardProps) => {
   return (
     <>
       <div className="group relative flex flex-col overflow-hidden rounded-3xl border border-gray-100 bg-white p-6 shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_30px_rgba(0,0,0,0.1)]">
-        {/* 우측 상단 삭제 버튼 (호버 시 선명하게) */}
         <button
           onClick={handleDelete}
           className="absolute top-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-400 opacity-0 transition-all group-hover:opacity-100 hover:bg-red-50 hover:text-red-500"
         >
           <X className="h-4 w-4" strokeWidth={2} />
         </button>
-
-        {/* 상품 이미지 영역 */}
         <div
           className="relative mb-6 flex aspect-square w-full cursor-pointer items-center justify-center rounded-2xl bg-[#F5F5F7] p-8"
           onClick={() => navigate(PATH.PRODUCT_DETAIL(timer.product_code))}
@@ -63,19 +60,16 @@ const TimerCard = ({ timer }: TimerCardProps) => {
             <img
               src={timer.thumbnail_url}
               alt={timer.product_name}
-              className="h-full object-contain"
+              className="h-full w-full object-cover"
             />
           ) : (
             <span className="text-sm font-light text-gray-400">No Image</span>
           )}
         </div>
-
-        {/* 상품 정보 */}
         <div className="mb-6 space-y-2">
           <h3 className="line-clamp-2 min-h-11 text-base leading-snug font-light tracking-tight text-black">
             {timer.product_name}
           </h3>
-
           <div className="flex items-baseline gap-3">
             <span className="text-xl font-light tracking-tight text-black">
               ₩{timer.predicted_price.toLocaleString()}
@@ -85,8 +79,6 @@ const TimerCard = ({ timer }: TimerCardProps) => {
             </span>
           </div>
         </div>
-
-        {/* AI 분석 요약 스코어 (깔끔한 배지 스타일) */}
         <div className="mb-6 rounded-2xl border border-gray-100 bg-gray-50 p-4">
           <div className="mb-2 flex items-center justify-between">
             <span className="text-xs font-light tracking-widest text-gray-500 uppercase">
@@ -94,13 +86,11 @@ const TimerCard = ({ timer }: TimerCardProps) => {
             </span>
             <span className="text-sm font-light text-black">{timer.recommendation_score}%</span>
           </div>
-          <p className="line-clamp-2 text-sm leading-relaxed font-light text-gray-600">
+          <p className="text-sm leading-relaxed font-light break-keep whitespace-pre-wrap text-gray-600">
             {timer.reason_message}
           </p>
         </div>
-
         <div className="mt-auto flex gap-2">
-          {' '}
           <button
             onClick={() => setIsEditModalOpen(true)}
             className="flex h-11 w-11 items-center justify-center rounded-xl bg-gray-100 text-[#424245] transition-colors hover:bg-gray-200"
@@ -116,7 +106,6 @@ const TimerCard = ({ timer }: TimerCardProps) => {
           </button>
         </div>
       </div>
-
       <TimerModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}

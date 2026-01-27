@@ -52,30 +52,30 @@ const SpecTable = ({ productInfo }: SpecTableProps) => {
         ) : (
           <>
             <div
-              className={`relative w-full overflow-hidden transition-all duration-700 ease-in-out ${
-                open ? 'max-h-full' : 'max-h-150'
+              className={`relative w-full overflow-hidden transition-all duration-1000 ease-in-out ${
+                open ? 'max-h-1250' : 'max-h-150'
               }`}
             >
               <img
                 src={productInfo.product_detail_url}
                 alt="product-detail"
-                className="h-auto w-full rounded-3xl border border-black/5"
+                className="block h-auto w-full"
                 loading="lazy"
               />
-
               {!open && (
-                <div className="absolute bottom-0 left-0 h-40 w-full bg-linear-to-t from-[#f5f5f7] to-transparent" />
+                <div className="absolute bottom-0 left-0 h-60 w-full bg-linear-to-t from-[#f5f5f7] via-[#f5f5f7]/90 to-transparent" />
               )}
             </div>
-
-            <div className={`flex w-full flex-col items-center ${open ? 'mt-16' : 'z-10 -mt-10'}`}>
+            <div
+              className={`flex w-full flex-col items-center ${open ? 'mt-12' : 'relative z-10 -mt-10'}`}
+            >
               <button
                 onClick={() => setOpen((prev) => !prev)}
-                className="group flex items-center gap-3 rounded-full bg-[#1d1d1f] px-10 py-4 text-[15px] font-semibold text-white shadow-xl shadow-black/10 transition-all hover:bg-[#424245] active:scale-95"
+                className="group flex items-center gap-3 rounded-full bg-[#1d1d1f] px-10 py-4 text-[15px] font-semibold text-white shadow-2xl shadow-black/20 transition-all hover:bg-[#424245] active:scale-95"
               >
                 상세 이미지 {open ? '접기' : '펼쳐보기'}
                 <ChevronDown
-                  className={`h-4 w-4 transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
+                  className={`h-4 w-4 transition-transform duration-500 ${open ? 'rotate-180' : ''}`}
                 />
               </button>
             </div>

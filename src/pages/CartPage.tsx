@@ -25,12 +25,11 @@ const CartPage = () => {
 
   return (
     <div className="min-h-screen bg-[#f5f5f7]">
-      <div className="mx-auto max-w-6xl px-6 py-12 md:px-10">
+      <div className="mx-auto max-w-7xl px-6 py-12 md:px-10">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">장바구니</h1>
           <p className="mt-1 text-sm text-gray-500">{cartItems.length}개의 상품이 담겨 있습니다.</p>
         </div>
-
         <div className="flex flex-col items-start gap-10 lg:flex-row">
           <div className="w-full lg:flex-1">
             <div className="mb-4 flex items-center rounded-xl bg-gray-50 px-4 py-3">
