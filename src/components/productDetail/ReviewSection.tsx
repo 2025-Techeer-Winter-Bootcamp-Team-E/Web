@@ -46,7 +46,7 @@ const ReviewSection = ({ productCode }: ReviewSectionProps) => {
             {average_rating.toFixed(1)}
           </span>
           <span className="border-l border-gray-300 pl-4 text-sm font-light text-gray-500">
-            전체 {pagination.count}개의 통합 리뷰
+            전체 {reviews.length}개의 리뷰
           </span>
         </div>
       </div>

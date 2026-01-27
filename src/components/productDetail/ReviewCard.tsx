@@ -1,4 +1,5 @@
 import type { ReviewEntity } from '@/types/productsType';
+import { formatDateTime } from '@/utils/formatDateTime';
 import { Star } from 'lucide-react';
 
 interface ReviewCardProps {
@@ -27,7 +28,10 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
                 ))}
               </div>
             </div>
-            <p className="text-[12px] font-medium text-[#86868b]">{review.created_at}</p>
+            <p className="text-[12px] font-medium text-[#86868b]">
+              {' '}
+              {formatDateTime(review.created_at)}
+            </p>
           </div>
         </div>
       </div>

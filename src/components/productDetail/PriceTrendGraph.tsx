@@ -33,16 +33,15 @@ const PriceTrendGraph = ({ productTrend }: PriceTrendGraphProps) => {
             <TrendingDown className="h-5 w-5 text-black" strokeWidth={1.5} />
           </div>
           <div>
-            <h4 className="text-sm font-light tracking-wide text-black">최저가 추이</h4>
-            <p className="text-xs font-light text-gray-500">
-              ({productTrend.selected_period}
-              {productTrend.period_unit})가격 변동
-            </p>
+            <h4 className="text-md font-light tracking-wide text-black">최저가 추이</h4>
           </div>
         </div>
         <div className="flex items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2">
           <Calendar className="h-3 w-3 text-gray-500" strokeWidth={1.5} />
-          <span className="text-xs font-light text-gray-600">최근 7일</span>
+          <span className="text-xs font-light text-gray-600">
+            최근 {productTrend.selected_period}
+            {productTrend.period_unit === 'month' ? '개월' : '일'}
+          </span>
         </div>
       </div>
 
@@ -140,9 +139,6 @@ const PriceTrendGraph = ({ productTrend }: PriceTrendGraphProps) => {
           <span className="text-xs font-light text-gray-500">현재가</span>
           <span className="text-sm font-light text-black">{currentPrice.toLocaleString()}원</span>
         </div>
-        <button className="text-xs font-light text-black underline underline-offset-2 hover:no-underline">
-          상세 분석 보기
-        </button>
       </div>
     </div>
   );
