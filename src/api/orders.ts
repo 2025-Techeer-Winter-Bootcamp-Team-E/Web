@@ -72,10 +72,10 @@ export const postCartItem = (body: CartItemPostReqDto) =>
  * PATCH /orders/cart/{cart_item_id}
  */
 export const patchCartItem = (cartItemId: number, quantity: number) =>
-  getAPIResponseData<null, null>({
+  getAPIResponseData<null, { quantity: number }>({
     method: 'PATCH',
     url: API.ORDERS_CART_ITEM_ID(cartItemId),
-    params: { quantity },
+    data: { quantity },
   });
 
 /**
