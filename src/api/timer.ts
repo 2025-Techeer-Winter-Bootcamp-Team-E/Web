@@ -27,7 +27,7 @@ export const postTimer = (body: TimerPostReqDto) =>
 export const getTimerByProductCode = (productCode: number) =>
   getAPIResponseData<TimerGetByProductCodeResDto>({
     method: 'GET',
-    url: API.TIMERS_PRODUCT_CODE(productCode),
+    url: `${API.TIMERS}product/${productCode}/`,
   });
 
 /**
@@ -45,10 +45,10 @@ export const patchTimer = (timerId: number, body: TimerUpdateReqDto) =>
  * 적정 구매 타이머 삭제
  * DELETE /timers/{timer_id}
  */
-export const deleteTimer = (timer_id: number) =>
+export const deleteTimer = (timerId: number) =>
   getAPIResponseData<null>({
     method: 'DELETE',
-    url: `${API.TIMERS.replace(/\/$/, '')}/detail/${timer_id}`,
+    url: API.TIMERS_ID(timerId),
   });
 
 /**
