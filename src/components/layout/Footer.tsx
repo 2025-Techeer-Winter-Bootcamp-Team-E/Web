@@ -8,9 +8,8 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <div className="mb-6">
-              <img src="/videos/logo.png" alt="modulo" className="h-8 w-auto" />
+              <img src="/logo.png" alt="modulo" className="h-8 w-auto" />
             </div>
-
             <div className="mb-6 space-y-1">
               <p className="text-2xl font-semibold tracking-tight text-gray-900">1588-0000</p>
               <div className="flex flex-col gap-1 text-xs text-gray-500">
