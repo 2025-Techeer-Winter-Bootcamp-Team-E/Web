@@ -24,18 +24,19 @@ const ProductGridCard = ({ product, index = 0 }: ProductGridCardProps) => {
     >
       <div className="aspect-square overflow-hidden rounded-lg bg-gray-50">
         <img
-          src={product.thumbnail_url || '/api/placeholder/300/300'}
+          src={product.thumbnail_url}
           alt={product.product_name}
           className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
         />
       </div>
       <div className="mt-4 flex flex-1 flex-col">
         <h3 className="line-clamp-2 text-sm font-light text-black">{product.product_name}</h3>
-        <div className="mt-auto flex items-baseline gap-2 pt-3">
+        <div className="mt-auto flex items-center justify-between gap-2 pt-3">
+          <span className="text-sm font-light text-gray-800">최저가</span>
           <span className="text-base font-medium text-black">
-            {product.base_price?.toLocaleString() || '0'}
+            {product.base_price?.toLocaleString() || '0'}{' '}
+            <span className="text-xs font-light text-gray-400">원</span>
           </span>
-          <span className="text-xs font-light text-gray-400">원</span>
         </div>
       </div>
     </div>

@@ -179,12 +179,12 @@ const SignupForm = ({ onSubmit, loading }: SignupFormProps) => {
       </form>
       <div className="mt-8 text-center">
         <p className="text-sm text-gray-500">
-          이미 계정이 있으신가요?{' '}
+          이미 계정이 있으신가요? &nbsp;&nbsp;
           <Link
             to={PATH.LOGIN}
             className="font-medium text-(--color-gradient-purple) hover:underline"
           >
-            로그인하기{' '}
+            로그인
           </Link>
         </p>
       </div>

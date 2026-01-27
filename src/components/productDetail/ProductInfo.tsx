@@ -6,6 +6,7 @@ import useProductPricesQuery from '@/hooks/queries/useProductPricesQuery';
 import { PATH } from '@/routes/path';
 import type { ProductDetailResDto } from '@/types/productsType';
 import { toast } from 'react-toastify';
+import useAuth from '@/hooks/useAuth';
 
 interface ProductInfoProps {
   productInfo?: ProductDetailResDto;
@@ -56,7 +57,13 @@ const ProductInfo = ({ productInfo }: ProductInfoProps) => {
 
   const hasPrice = lowestPrice !== undefined && lowestPrice !== null;
 
+  const { isAuthenticated } = useAuth();
+
   const handleAddToCart = () => {
+    if (!isAuthenticated) {
+      navigate(PATH.LOGIN);
+      return;
+    }
     if (!productInfo) return;
     addCartItem(
       {
@@ -72,6 +79,10 @@ const ProductInfo = ({ productInfo }: ProductInfoProps) => {
   };
 
   const handleBuyNow = () => {
+    if (!isAuthenticated) {
+      navigate(PATH.LOGIN);
+      return;
+    }
     if (!productInfo) return;
     navigate(PATH.CHECKOUT, {
       state: {
@@ -131,15 +142,13 @@ const ProductInfo = ({ productInfo }: ProductInfoProps) => {
         </div>
       </div>
 
-      {/* Add to Cart Button */}
       <button
         onClick={handleAddToCart}
         className="mb-2 w-full rounded-full bg-black py-4 text-sm font-medium tracking-wide text-white transition-opacity hover:opacity-80"
       >
-        쇼핑백에 추가하기
+        장바구니에 추가하기
       </button>
 
-      {/* Buy Now Button */}
       <button
         onClick={handleBuyNow}
         className="mb-6 w-full rounded-full border border-gray-300 bg-white py-4 text-sm font-medium tracking-wide text-black transition-colors hover:bg-gray-50"
@@ -147,7 +156,6 @@ const ProductInfo = ({ productInfo }: ProductInfoProps) => {
         바로 구매하기
       </button>
 
-      {/* Accordion Sections */}
       <div className="mt-auto">
         <Accordion title="무료 배송 & 반품">
           <div className="space-y-2 text-sm leading-relaxed font-light text-gray-600">

@@ -104,7 +104,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 >
                   {mall.mall_name}
                 </span>
-
                 <span
                   className={`${
                     isBestPrice

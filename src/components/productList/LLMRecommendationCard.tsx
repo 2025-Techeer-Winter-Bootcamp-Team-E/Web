@@ -36,8 +36,12 @@ const LLMRecommendationCard = ({ product, index }: LLMRecommendationCardProps) =
       <p className="mb-2 text-xs font-light break-keep whitespace-pre-wrap text-gray-500">
         {product.recommendation_reason}
       </p>
-      <div className="mt-auto flex items-center justify-between">
-        <span className="text-sm font-medium text-black">{product.price.toLocaleString()}원</span>
+      <div className="mt-3 flex items-center justify-between">
+        <span className="text-sm font-light text-gray-800">최저가</span>
+        <span className="text-sm font-medium text-black">
+          {product.price.toLocaleString()}{' '}
+          <span className="text-xs font-light text-gray-400">원</span>
+        </span>
       </div>
     </motion.div>
   );

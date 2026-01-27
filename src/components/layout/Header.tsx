@@ -116,15 +116,17 @@ const Header: React.FC = () => {
             ))}
           </nav>
 
-          {/* Right Actions */}
           <div className="flex items-center gap-4">
-            <button
-              className="p-2 text-black transition-opacity hover:opacity-60"
-              onClick={() => navigateWithAnimation(PATH.CART)}
-              aria-label="장바구니"
-            >
-              <ShoppingCart className="h-5 w-5" strokeWidth={1.5} />
-            </button>
+            {isAuthenticated && (
+              <button
+                className="p-2 text-black transition-opacity hover:opacity-60"
+                onClick={() => navigateWithAnimation(PATH.CART)}
+                aria-label="장바구니"
+              >
+                <ShoppingCart className="h-5 w-5" strokeWidth={1.5} />
+              </button>
+            )}
+
             {isAuthenticated ? (
               <button
                 onClick={() => navigateWithAnimation(PATH.MY_PAGE)}
