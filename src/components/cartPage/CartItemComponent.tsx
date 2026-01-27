@@ -2,6 +2,7 @@ import Checkbox from '@/components/cartPage/Checkbox';
 import QuantityControl from '@/components/cartPage/QuantityControl';
 import { PATH } from '@/routes/path';
 import type { CartItemEntity } from '@/types/ordersType';
+import { X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const CartItemComponent = ({
@@ -43,16 +44,9 @@ const CartItemComponent = ({
             <button
               onClick={onRemove}
               className="rounded-full p-1 text-[#d2d2d7] transition-all hover:bg-[#F5F5F7] hover:text-[#1d1d1f]"
+              aria-label="삭제"
             >
-              <svg
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1.5}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <X className="h-5 w-5" strokeWidth={1.5} />
             </button>
           </div>
 

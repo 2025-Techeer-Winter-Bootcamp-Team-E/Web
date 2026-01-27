@@ -15,8 +15,7 @@ const CartPage = () => {
   const cartItems = data || [];
   const itemIds = cartItems.map((item) => item.cart_item_id);
 
-  const { selectedItems, toggleItem, toggleAll, removeItem, allSelected } =
-    useCartSelection(itemIds);
+  const { selectedItems, toggleItem, toggleAll, allSelected } = useCartSelection(itemIds);
 
   const { total } = useCartSummary(cartItems, selectedItems);
 
@@ -36,7 +35,7 @@ const CartPage = () => {
               <Checkbox
                 checked={allSelected}
                 onChange={toggleAll}
-                label={`Select All (${selectedItems.length}/${cartItems.length})`}
+                label={`전체 선택 (${selectedItems.length}/${cartItems.length})`}
               />
             </div>
             <div className="space-y-3">
@@ -46,7 +45,6 @@ const CartPage = () => {
                   item={item}
                   isSelected={selectedItems.includes(item.cart_item_id)}
                   onToggle={() => toggleItem(item.cart_item_id)}
-                  onRemoveSuccess={() => removeItem(item.cart_item_id)}
                 />
               ))}
             </div>

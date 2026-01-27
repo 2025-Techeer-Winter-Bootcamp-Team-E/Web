@@ -1,36 +1,23 @@
 import CartItemComponent from '@/components/cartPage/CartItemComponent';
-import useCartItemDeleteMutation from '@/hooks/mutations/useCartItemDeleteMutation';
 import useCartItemPatchMutation from '@/hooks/mutations/useCartItemPatchMutation';
 import type { CartItemEntity } from '@/types/ordersType';
 
-interface Props {
+interface CartItemWrapperProps {
   item: CartItemEntity;
   isSelected: boolean;
   onToggle: () => void;
-  onRemoveSuccess: () => void;
 }
 
-const CartItemWrapper = ({ item, isSelected, onToggle, onRemoveSuccess }: Props) => {
-  const updateMutation = useCartItemPatchMutation();
-  const deleteMutation = useCartItemDeleteMutation();
+const CartItemWrapper = ({ item, isSelected, onToggle }: CartItemWrapperProps) => {
+  const { mutate } = useCartItemPatchMutation();
 
-  const handleQuantityChange = (quantity: number) => {
-    if (quantity < 1) return;
-
-    updateMutation.mutate({
-      cartItemId: item.cart_item_id,
-      quantity,
-    });
+  const handleQuantityChange = (newQuantity: number) => {
+    mutate({ cartItemId: item.cart_item_id, quantity: newQuantity });
   };
 
   const handleRemove = () => {
     if (!confirm('상품을 장바구니에서 삭제하시겠습니까?')) return;
-
-    deleteMutation.mutate(item.cart_item_id, {
-      onSuccess: () => {
-        onRemoveSuccess();
-      },
-    });
+    mutate({ cartItemId: item.cart_item_id, quantity: 0 });
   };
 
   return (

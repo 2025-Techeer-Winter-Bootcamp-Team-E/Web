@@ -7,7 +7,7 @@ const useCartItemPatchMutation = () => {
 
   return useMutation({
     mutationFn: ({ cartItemId, quantity }: { cartItemId: number; quantity: number }) =>
-      patchCartItem(cartItemId, { quantity }),
+      patchCartItem(cartItemId, quantity),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEY.CART });
     },
