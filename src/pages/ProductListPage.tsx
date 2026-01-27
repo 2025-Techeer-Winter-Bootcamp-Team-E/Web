@@ -175,7 +175,7 @@ const ProductListPage = () => {
             <motion.img
               src="/ai-logo.png"
               alt="AI Assistant"
-              className="h-20 w-20 object-contain drop-shadow-xl"
+              className="h-24 w-24 object-contain drop-shadow-xl"
               animate={{ rotate: 360 }}
               transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
               whileHover={{ scale: 1.1 }}

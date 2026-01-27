@@ -13,11 +13,7 @@ const HeroSection: React.FC = () => {
           transition={{ delay: 0.3, duration: 2.5, ease: [0.16, 1, 0.3, 1] }}
           className="mb-12 text-center"
         >
-          <img
-            src="/videos/logo.png"
-            alt="WYW - Whatever You Want"
-            className="mx-auto mb-6 h-20 w-auto md:h-24 lg:h-28"
-          />
+          <img src="/logo.png" alt="modulo" className="mx-auto mb-6 h-20 w-auto md:h-24 lg:h-28" />
           <p className="text-xl font-bold tracking-wide text-black md:text-2xl">
             당신이 원하는 제품은 이곳에 전부 있습니다
           </p>

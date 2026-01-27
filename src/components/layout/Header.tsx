@@ -67,7 +67,7 @@ const Header: React.FC = () => {
             className="ml-2 flex cursor-pointer items-center transition-opacity hover:opacity-60"
             onClick={() => navigateWithAnimation('/')}
           >
-            <img src="/videos/logo.png" alt="WYW" className="h-7 w-auto" />
+            <img src="/logo.png" alt="modulo" className="h-7 w-auto" />
           </div>
 
           {/* Desktop Category Navigation - Always Centered */}

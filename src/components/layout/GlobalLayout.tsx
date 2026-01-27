@@ -19,18 +19,12 @@ const GlobalLayout = () => {
         <main className="mt-16 flex-1">
           <section className="relative min-h-screen overflow-hidden bg-[#f5f5f7]">
             <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6">
-              {/* 로고 - 위로 퍼짐 */}
               <motion.div
                 initial={{ opacity: 1, y: 0 }}
                 animate={{ opacity: 0, y: -150 }}
                 transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
                 className="mb-12 text-center"
               >
-                <img
-                  src="/videos/logo.png"
-                  alt="WYW - Whatever You Want"
-                  className="mx-auto mb-6 h-20 w-auto md:h-24 lg:h-28"
-                />
                 <p className="text-sm font-light tracking-[0.2em] text-gray-500">
                   당신이 원하는 제품은 이곳에 전부 있습니다.
                 </p>
@@ -81,7 +75,7 @@ const GlobalLayout = () => {
     return (
       <div className="flex min-h-screen flex-col bg-[#f5f5f7]">
         <Header />
-        <main className="mt-16 flex-1">
+        <main className="flex-1">
           <motion.div
             key="main-page"
             initial={{ opacity: 0, scale: 0.95 }}
