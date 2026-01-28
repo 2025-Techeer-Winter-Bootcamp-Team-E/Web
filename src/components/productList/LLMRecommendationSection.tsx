@@ -17,7 +17,7 @@ const LLMRecommendationSection = ({ products, analysisMessage }: LLMRecommendati
           <p className="mt-1 text-sm font-light text-gray-500">{analysisMessage}</p>
         )}
       </div>
-      <div className="flex gap-4 overflow-x-auto pb-2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3  ">
         {products.map((product, index) => (
           <LLMRecommendationCard key={product.product_code} product={product} index={index} />
         ))}

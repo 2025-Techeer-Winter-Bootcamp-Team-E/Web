@@ -64,9 +64,7 @@ const AnimatedSearchBar = ({
     if (onSearch) {
       onSearch(query);
     } else {
-      navigateWithAnimation(
-        `${PATH.PRODUCT_LIST}?main_cat=${11}&sub_cat=${12}&ai_query=${encodeURIComponent(query)}&ai_open=true`,
-      );
+      navigateWithAnimation(`${PATH.AI_AGENT}?q=${encodeURIComponent(query)}`);
     }
   };
 
@@ -112,7 +110,7 @@ const AnimatedSearchBar = ({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="찾으시는 부품을 검색해보세요..."
+          placeholder="찾으시는 상품을 검색해보세요"
           className="flex-1 bg-transparent text-sm font-light outline-none placeholder:text-gray-400"
         />
         <button

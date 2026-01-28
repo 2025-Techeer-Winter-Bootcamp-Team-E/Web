@@ -13,19 +13,32 @@ import type {
   ResearchQuestionEntity,
   ShoppingResearchResultEntity,
 } from '@/types/searchType';
-import ShoppingResultModal from '@/components/shoppingResearchResult/ShoppingResultModal';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { PATH } from '@/routes/path';
 
 const SUGGESTED_TAGS = ['RTX 4070', '라이젠 7', '게이밍 노트북'];
 
 interface AIChatbotPanelProps {
   onLlmResult?: (products: LlmRecommendationEntity[], analysisMessage: string) => void;
+  onShoppingResult?: (products: ShoppingResearchResultEntity[], query: string) => void;
   initialQuery?: string;
   onClose?: () => void;
+  actions: {
+    setIsLoading: (loading: boolean) => void;
+    handleLlmResult: (products: LlmRecommendationEntity[], message: string) => void;
+    handleShoppingResult: (products: ShoppingResearchResultEntity[], query: string) => void;
+  };
 }
 
-const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPanelProps) => {
+const AIChatbotPanel = ({
+  onLlmResult,
+  onShoppingResult,
+  initialQuery = '',
+  onClose,
+  actions,
+}: AIChatbotPanelProps) => {
+  const navigate = useNavigate();
+
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -39,14 +52,12 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
   const [answers, setAnswers] = useState<ResearchQuestionAnswerEntity[]>([]);
   const initialQueryProcessedRef = useRef(false);
 
-  // Modal state
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalProducts, setModalProducts] = useState<ShoppingResearchResultEntity[]>([]);
-  const [modalQuery, setModalQuery] = useState('');
-
   const llmMutation = useLlmRecoMutation();
   const shoppingResearchMutation = useShoppingResearchMutation();
   const shoppingResultMutation = useShoppingResultMutation();
+
+  const location = useLocation();
+  const isAIAgentPage = location.pathname === PATH.AI_AGENT;
 
   useEffect(() => {
     if (initialQuery && !initialQueryProcessedRef.current && messages.length === 0) {
@@ -77,11 +88,18 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
 
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
-    setIsLoading(true);
     setCurrentQuery(query);
+
+    // ✅ 즉시 AI Agent 페이지로 이동
+    navigate(`${PATH.AI_AGENT}?q=${encodeURIComponent(query)}`);
+
+    // 로딩 시작
+    setIsLoading(true);
+    actions.setIsLoading(true);
 
     try {
       const result = await llmMutation.mutateAsync({ user_query: query });
+      actions.handleLlmResult(result.recommended_products, result.analysis_message);
 
       const assistantMessage: ChatMessageType = {
         id: (Date.now() + 1).toString(),
@@ -95,7 +113,7 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
       setMessages((prev) => [...prev, assistantMessage]);
 
       if (onLlmResult && result.recommended_products.length > 0) {
-        onLlmResult(result.recommended_products, result.analysis_message);
+        navigate(`${PATH.AI_AGENT}?q=${encodeURIComponent(query)}`);
       }
 
       const promptMessage: ChatMessageType = {
@@ -108,6 +126,8 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
 
       setMessages((prev) => [...prev, promptMessage]);
     } catch (error: unknown) {
+      actions.setIsLoading(false);
+
       let errorContent = '죄송합니다. 검색 중 오류가 발생했습니다. 다시 시도해주세요.';
 
       if (error && typeof error === 'object' && 'response' in error) {
@@ -133,12 +153,22 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
   const handleStartShoppingResearch = async () => {
     if (!currentQuery) return;
 
+    const loadingMessage: ChatMessageType = {
+      id: `loading-${Date.now()}`,
+      role: 'assistant',
+      content: '맞춤 질문을 생성하고 있습니다...',
+      type: 'loading',
+      timestamp: new Date(),
+    };
+    setMessages((prev) => [...prev, loadingMessage]);
     setIsLoading(true);
 
     try {
       const result = await shoppingResearchMutation.mutateAsync({
         user_query: currentQuery,
       });
+
+      setMessages((prev) => prev.filter((msg) => msg.id !== loadingMessage.id));
 
       setSearchId(result.search_id);
       setQuestions(result.questions);
@@ -150,7 +180,7 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
         const questionMessage: ChatMessageType = {
           id: Date.now().toString(),
           role: 'assistant',
-          content: `쇼핑 리서치를 시작합니다.\n\n질문 1/${result.questions.length}: ${result.questions[0].question}`,
+          content: `${result.questions[0].question}`,
           type: 'shopping_question',
           questionData: result.questions[0],
           timestamp: new Date(),
@@ -200,7 +230,7 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
       const questionMessage: ChatMessageType = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: `질문 ${nextIndex + 1}/${questions.length}: ${nextQuestion.question}`,
+        content: `${nextQuestion.question}`,
         type: 'shopping_question',
         questionData: nextQuestion,
         timestamp: new Date(),
@@ -208,6 +238,7 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
       setMessages((prev) => [...prev, questionMessage]);
     } else {
       setIsLoading(true);
+      actions.setIsLoading(true);
 
       try {
         const result = await shoppingResultMutation.mutateAsync({
@@ -217,9 +248,8 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
         });
 
         if (result.product && result.product.length > 0) {
-          setModalProducts(result.product);
-          setModalQuery(currentQuery);
-          setIsModalOpen(true);
+          actions.handleShoppingResult(result.product, currentQuery);
+          onShoppingResult?.(result.product, currentQuery);
         }
 
         const resultMessage: ChatMessageType = {
@@ -251,6 +281,7 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
         setMessages((prev) => [...prev, errorMessage]);
       } finally {
         setIsLoading(false);
+        actions.setIsLoading(false);
       }
     }
   };
@@ -274,9 +305,6 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
     if (!products || products.length === 0) {
       return;
     }
-    setModalProducts(products);
-    setModalQuery(currentQuery);
-    setIsModalOpen(true);
   };
 
   const isCurrentQuestion = (message: ChatMessageType) => {
@@ -290,8 +318,8 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
       return (
         <div key={message.id} className="space-y-3">
           <ChatMessage message={{ ...message, llmProducts: undefined }} />
-          <div className="ml-11 space-y-2">
-            {message.llmProducts.slice(0, 3).map((product) => (
+          <div className="space-y-2">
+            {message.llmProducts.map((product) => (
               <Link
                 to={PATH.PRODUCT_DETAIL(product.product_code)}
                 key={product.product_code}
@@ -340,7 +368,7 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
         <div key={message.id} className="space-y-3">
           <ChatMessage message={message} />
           {showOptions && (
-            <div className="ml-11">
+            <div>
               <p className="mb-2 text-xs font-light tracking-wide text-gray-400 uppercase">
                 Quick Select
               </p>
@@ -370,14 +398,6 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
       return (
         <div key={message.id} className="space-y-3">
           <ChatMessage message={{ ...message, shoppingResults: undefined }} />
-          <div className="ml-11">
-            <button
-              onClick={() => handleViewResults(message.shoppingResults!)}
-              className="flex items-center gap-2 rounded-full border border-black bg-black px-4 py-2 text-sm font-light text-white transition-all hover:bg-white hover:text-black"
-            >
-              상세 결과 보기
-            </button>
-          </div>
         </div>
       );
     }
@@ -392,28 +412,15 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
         className="flex h-full w-85 flex-col overflow-hidden rounded-3xl border border-gray-200/50 bg-gray-50/85 shadow-2xl backdrop-blur-xl"
         style={{ backdropFilter: 'blur(20px) saturate(150%)' }}
       >
-        <div className="rounded-t-3xl border-b border-gray-200/40 bg-gray-100/60 p-5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center">
-                <img src="/ai-logo.png" alt="AI" className="h-10 w-10 object-contain" />
-              </div>
-              <div>
-                <h2 className="text-sm font-medium tracking-wide text-black">AI Assistant</h2>
-                <p className="text-xs font-light text-gray-500">
-                  {isShoppingResearchMode ? 'Shopping Research' : 'Smart Shopping'}
-                </p>
-              </div>
-            </div>
-            {onClose && (
-              <button
-                onClick={onClose}
-                className="flex h-8 w-8 items-center justify-center rounded-xl border border-gray-200/50 bg-white/50 text-gray-500 transition-all hover:border-black hover:bg-black hover:text-white"
-              >
-                <X className="h-4 w-4" strokeWidth={1.5} />
-              </button>
-            )}
-          </div>
+        <div className="mt-4 mr-4 flex items-center justify-end">
+          {!isAIAgentPage && (
+            <button
+              onClick={onClose}
+              className="flex h-8 w-8 items-center justify-center rounded-xl border border-gray-200/50 bg-white/50 text-gray-500 transition-all hover:bg-gray-200 hover:text-gray-500"
+            >
+              <X className="h-4 w-4" strokeWidth={1.5} />
+            </button>
+          )}
         </div>
 
         <div
@@ -422,9 +429,6 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
         >
           {messages.length === 0 && (
             <div className="flex h-full flex-col items-center justify-center text-center">
-              <div className="mb-8 flex h-20 w-20 items-center justify-center">
-                <img src="/ai-logo.png" alt="AI" className="h-20 w-20 object-contain" />
-              </div>
               <p className="text-base leading-loose font-normal text-gray-500">
                 찾으시는 제품에 대해
                 <br />
@@ -433,16 +437,15 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
             </div>
           )}
           {messages.map((message) => renderMessage(message))}
-          {isLoading && (
+          {isLoading && !messages.some((msg) => msg.type === 'loading') && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               className="flex items-center gap-3"
             >
-              <img src="/ai-logo.png" alt="AI" className="h-8 w-8 shrink-0 object-contain" />
               <div className="rounded-2xl border border-gray-100 bg-white/80 px-4 py-3">
                 <p className="loading-text-animate text-sm text-gray-500">
-                  최적의 상품을 검색 중입니다...
+                  상품을 찾는 중입니다...
                 </p>
               </div>
             </motion.div>
@@ -492,13 +495,6 @@ const AIChatbotPanel = ({ onLlmResult, initialQuery = '', onClose }: AIChatbotPa
           </div>
         </div>
       </motion.div>
-
-      <ShoppingResultModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        products={modalProducts}
-        userQuery={modalQuery}
-      />
     </>
   );
 };

@@ -1,4 +1,8 @@
-import type { LlmRecommendationEntity, ResearchQuestionEntity, ShoppingResearchResultEntity } from "@/types/searchType";
+import type {
+  LlmRecommendationEntity,
+  ResearchQuestionEntity,
+  ShoppingResearchResultEntity,
+} from '@/types/searchType';
 
 export interface Product {
   product_code: number;
@@ -13,7 +17,8 @@ export type ChatMessageType =
   | 'llm_result'
   | 'shopping_prompt'
   | 'shopping_question'
-  | 'shopping_result';
+  | 'shopping_result'
+  | 'loading';
 
 export interface ChatMessage {
   id: string;

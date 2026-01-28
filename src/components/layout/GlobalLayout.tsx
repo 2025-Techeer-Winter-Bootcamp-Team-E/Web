@@ -1,17 +1,80 @@
 import { useLocation, Outlet } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Search, ArrowRight } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import { useNavigation } from '@/contexts/NavigationContext';
+import AIChatbotPanel from '@/components/chatbot/AIChatbotPanel';
+import { useChatbotData } from '@/hooks/useChatbotData';
+import { useEffect } from 'react';
+import { PATH } from '@/routes/path';
 
 const GlobalLayout = () => {
+  const { state, actions } = useChatbotData();
+  const { isExiting } = useNavigation();
   const location = useLocation();
   const isMainPage = location.pathname === '/';
-  const { isExiting } = useNavigation();
+  const isAIAgentPage = location.pathname === PATH.AI_AGENT;
 
-  // 메인 페이지에서 나가는 중 (exit 애니메이션 - 로고와 검색창이 바깥으로 퍼짐)
-  // isExiting 체크를 먼저 해야 함!
+  const searchParams = new URLSearchParams(location.search);
+  const query = searchParams.get('q');
+
+  useEffect(() => {
+    if (isAIAgentPage) {
+      actions.toggleAIPanel(true);
+    } else if (!isMainPage) {
+      actions.toggleAIPanel(false);
+    }
+  }, [isAIAgentPage, isMainPage]);
+
+  const showChatbot = !isMainPage && !isExiting;
+
+  const renderChatbot = () => {
+    if (!showChatbot) return null;
+    return (
+      <>
+        <AnimatePresence>
+          {/* state.isAIPanelOpen 사용 */}
+          {state.isAIPanelOpen && (
+            <motion.div
+              initial={{ x: 340, opacity: 0, scale: 0.95 }}
+              animate={{ x: 0, opacity: 1, scale: 1 }}
+              exit={{ x: 340, opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed top-35 right-6 z-40 h-[calc(100vh-170px)] w-85"
+            >
+              <AIChatbotPanel
+                actions={actions}
+                onLlmResult={actions.handleLlmResult}
+                onShoppingResult={actions.handleShoppingResult}
+                onClose={() => actions.toggleAIPanel(false)}
+                initialQuery={query || ''}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {!state.isAIPanelOpen && (
+            <motion.button
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              onClick={() => actions.toggleAIPanel(true)}
+              className="fixed right-6 bottom-6 z-50 flex cursor-pointer items-center justify-center"
+            >
+              <motion.img
+                src="/ai-logo.png"
+                alt="AI Assistant"
+                className="h-24 w-24 object-contain drop-shadow-xl"
+              />
+            </motion.button>
+          )}
+        </AnimatePresence>
+      </>
+    );
+  };
+
+  // 1. 메인에서 나가는 중일 때
   if (isExiting) {
     return (
       <div className="flex min-h-screen flex-col overflow-hidden bg-[#f5f5f7]">
@@ -29,40 +92,6 @@ const GlobalLayout = () => {
                   당신이 원하는 제품은 이곳에 전부 있습니다.
                 </p>
               </motion.div>
-
-              {/* 검색창 - 아래로 퍼짐 */}
-              <motion.div
-                initial={{ opacity: 1, y: 0 }}
-                animate={{ opacity: 0, y: 150 }}
-                transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full max-w-xl"
-              >
-                <div className="mx-auto w-full max-w-xl">
-                  <div className="relative">
-                    <div className="flex items-center gap-4 border-b border-black px-2 py-4">
-                      <Search className="h-5 w-5 shrink-0 text-black" strokeWidth={1.5} />
-                      <span className="flex-1 text-lg font-light text-gray-400">
-                        검색어를 입력하세요
-                      </span>
-                      <div className="rounded-full p-2 text-black">
-                        <ArrowRight className="h-5 w-5" strokeWidth={1.5} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* 하단 텍스트 - 아래로 퍼짐 */}
-              <motion.div
-                initial={{ opacity: 1, y: 0 }}
-                animate={{ opacity: 0, y: 100 }}
-                transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                className="mt-16 text-center"
-              >
-                <p className="text-sm font-light tracking-wide text-gray-400">
-                  원하는 제품을 검색하고 최저가를 비교해보세요
-                </p>
-              </motion.div>
             </div>
           </section>
         </main>
@@ -70,7 +99,7 @@ const GlobalLayout = () => {
     );
   }
 
-  // 메인 페이지 (진입 애니메이션)
+  // 2. 메인 페이지 진입 시 (챗봇 없음)
   if (isMainPage) {
     return (
       <div className="flex min-h-screen flex-col bg-[#f5f5f7]">
@@ -90,13 +119,18 @@ const GlobalLayout = () => {
     );
   }
 
-  // 다른 모든 페이지는 애니메이션 없이 렌더링
+  // 3. 일반 페이지 (챗봇 포함)
   return (
     <div className="flex min-h-screen flex-col bg-[#f5f5f7]">
       <Header />
-      <main className="mt-16 flex-1">
-        <Outlet />
+      <main
+        className={`flex-1 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          !isMainPage ? 'mt-16' : ''
+        } ${state.isAIPanelOpen && !isMainPage ? 'pr-85' : 'pr-0'}`}
+      >
+        <Outlet context={{ ...state, actions }} />
       </main>
+      {renderChatbot()}
       <Footer />
     </div>
   );

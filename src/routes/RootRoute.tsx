@@ -14,6 +14,7 @@ import useScrollToTop from '@/hooks/useScrollTop';
 import ProductListPage from '@/pages/ProductListPage';
 import PublicOnlyRoute from '@/routes/PublicOnlyRoute';
 import ProtectedRoute from '@/routes/ProtectedRoute';
+import AIAgentPage from '@/pages/AIAgentPage';
 
 const RootRoute = () => {
   useScrollToTop();
@@ -24,6 +25,7 @@ const RootRoute = () => {
         <Route path={ROUTE_PATH.ROOT} element={<MainPage />} />
         <Route path={ROUTE_PATH.PRODUCT_LIST} element={<ProductListPage />} />
         <Route path={ROUTE_PATH.PRODUCT_DETAIL} element={<ProductDetailPage />} />
+        <Route path={ROUTE_PATH.AI_AGENT} element={<AIAgentPage />} />
 
         <Route element={<PublicOnlyRoute />}>
           <Route path={ROUTE_PATH.LOGIN} element={<LoginPage />} />

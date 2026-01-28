@@ -23,13 +23,13 @@ const LLMRecommendationCard = ({ product, index }: LLMRecommendationCardProps) =
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.4 }}
       onClick={handleClick}
-      className="flex w-56 shrink-0 cursor-pointer flex-col rounded-2xl bg-white p-4 shadow-[0_2px_15px_rgba(0,0,0,0.08)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
+      className="flex h-full w-full shrink-0 cursor-pointer flex-col rounded-2xl bg-white p-4 shadow-[0_2px_15px_rgba(0,0,0,0.08)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
     >
-      <div className="mb-3 flex h-32 items-center justify-center overflow-hidden rounded-lg bg-gray-50">
+      <div className="aspect-square overflow-hidden rounded-lg bg-gray-50">
         <img
           src={product.thumbnail_url}
           alt={product.product_name}
-          className="h-full w-full object-contain"
+          className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
         />
       </div>
       <h3 className="mb-2 line-clamp-2 text-sm font-light text-black">{product.product_name}</h3>

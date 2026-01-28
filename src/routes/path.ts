@@ -3,6 +3,8 @@ export const ROUTE_PATH = {
   LOGIN: '/login',
   SIGNUP: '/signup',
 
+  AI_AGENT: '/ai-agent',
+
   CART: '/cart',
   CHECKOUT: '/checkout',
 
@@ -22,6 +24,9 @@ export const PATH = {
   ROOT: '/',
   LOGIN: '/login',
   SIGNUP: '/signup',
+
+  AI_AGENT: '/ai-agent',
+  AI_AGENT_SEARCH: (query: string) => `/ai-agent?q=${encodeURIComponent(query)}`,
 
   CART: '/cart',
   CHECKOUT: '/checkout',

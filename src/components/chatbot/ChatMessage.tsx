@@ -6,31 +6,34 @@ interface ChatMessageProps {
 }
 
 const ChatMessage = ({ message }: ChatMessageProps) => {
-  if (message.role === 'user') {
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex justify-end"
-      >
-        <div className="max-w-[80%] rounded-2xl rounded-tr-sm bg-black px-4 py-3 text-sm font-normal text-white shadow-lg">
-          {message.content}
-        </div>
-      </motion.div>
-    );
-  }
+  const isUser = message.role === 'user';
+  const isLoading = message.type === 'loading';
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex gap-3"
+      className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}
     >
-      <img src="/ai-logo.png" alt="AI" className="h-8 w-8 flex-shrink-0 object-contain" />
-      <div className="max-w-[80%]">
-        <div className="rounded-2xl rounded-tl-sm border border-gray-100/50 bg-white/60 px-4 py-3 backdrop-blur-sm">
-          <p className="text-sm font-normal leading-relaxed text-gray-700">{message.content}</p>
-        </div>
+      <div
+        className={`max-w-[85%] rounded-2xl px-4 py-3 ${
+          isUser ? 'bg-black text-white' : 'border border-gray-100 bg-white/80 text-gray-800'
+        }`}
+      >
+        {isLoading ? (
+          <div className="flex items-center gap-1">
+            <span className="text-sm text-gray-500">{message.content}</span>
+            <div className="loading-dots flex gap-1">
+              <span className="loading-dot"></span>
+              <span className="loading-dot"></span>
+              <span className="loading-dot"></span>
+            </div>
+          </div>
+        ) : (
+          <p className="text-sm leading-relaxed font-light whitespace-pre-wrap">
+            {message.content}
+          </p>
+        )}
       </div>
     </motion.div>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import AnimatedSearchBar from '@/components/shared/AnimatedSearchBar';
+import AnimatedSearchBar from '@/components/mainPage/AnimatedSearchBar';
 
 const HeroSection: React.FC = () => {
   return (

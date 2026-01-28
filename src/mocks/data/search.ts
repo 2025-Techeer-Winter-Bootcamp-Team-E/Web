@@ -55,6 +55,86 @@ export const llmSearch = {
         },
         product_detail_url: 'https://myshop.com/products/501',
       },
+      {
+        product_id: 501,
+        product_code: 123456,
+        product_image_url: 'https://s3.amazonaws.com/my-bucket/products/galaxy-book4-pro.jpg',
+        product_name: '삼성전자 갤럭시북4 프로',
+        recommendation_reason:
+          '1.23kg의 초경량 무게로 전공 서적과 함께 휴대하기 좋으며, 16GB RAM으로 개발 환경 구동에 충분합니다.',
+        price: 1890000,
+        specs: {
+          cpu: 'Intel Core Ultra 7',
+          ram: '16GB',
+          weight: '1.23kg',
+          display: 'Dynamic AMOLED 2X',
+        },
+        product_detail_url: 'https://myshop.com/products/501',
+      },
+      {
+        product_id: 501,
+        product_code: 123456,
+        product_image_url: 'https://s3.amazonaws.com/my-bucket/products/galaxy-book4-pro.jpg',
+        product_name: '삼성전자 갤럭시북4 프로',
+        recommendation_reason:
+          '1.23kg의 초경량 무게로 전공 서적과 함께 휴대하기 좋으며, 16GB RAM으로 개발 환경 구동에 충분합니다.',
+        price: 1890000,
+        specs: {
+          cpu: 'Intel Core Ultra 7',
+          ram: '16GB',
+          weight: '1.23kg',
+          display: 'Dynamic AMOLED 2X',
+        },
+        product_detail_url: 'https://myshop.com/products/501',
+      },
+      {
+        product_id: 501,
+        product_code: 123456,
+        product_image_url: 'https://s3.amazonaws.com/my-bucket/products/galaxy-book4-pro.jpg',
+        product_name: '삼성전자 갤럭시북4 프로',
+        recommendation_reason:
+          '1.23kg의 초경량 무게로 전공 서적과 함께 휴대하기 좋으며, 16GB RAM으로 개발 환경 구동에 충분합니다.',
+        price: 1890000,
+        specs: {
+          cpu: 'Intel Core Ultra 7',
+          ram: '16GB',
+          weight: '1.23kg',
+          display: 'Dynamic AMOLED 2X',
+        },
+        product_detail_url: 'https://myshop.com/products/501',
+      },
+      {
+        product_id: 501,
+        product_code: 123456,
+        product_image_url: 'https://s3.amazonaws.com/my-bucket/products/galaxy-book4-pro.jpg',
+        product_name: '삼성전자 갤럭시북4 프로',
+        recommendation_reason:
+          '1.23kg의 초경량 무게로 전공 서적과 함께 휴대하기 좋으며, 16GB RAM으로 개발 환경 구동에 충분합니다.',
+        price: 1890000,
+        specs: {
+          cpu: 'Intel Core Ultra 7',
+          ram: '16GB',
+          weight: '1.23kg',
+          display: 'Dynamic AMOLED 2X',
+        },
+        product_detail_url: 'https://myshop.com/products/501',
+      },
+      {
+        product_id: 501,
+        product_code: 123456,
+        product_image_url: 'https://s3.amazonaws.com/my-bucket/products/galaxy-book4-pro.jpg',
+        product_name: '삼성전자 갤럭시북4 프로',
+        recommendation_reason:
+          '1.23kg의 초경량 무게로 전공 서적과 함께 휴대하기 좋으며, 16GB RAM으로 개발 환경 구동에 충분합니다.',
+        price: 1890000,
+        specs: {
+          cpu: 'Intel Core Ultra 7',
+          ram: '16GB',
+          weight: '1.23kg',
+          display: 'Dynamic AMOLED 2X',
+        },
+        product_detail_url: 'https://myshop.com/products/501',
+      },
     ],
   },
 };
@@ -112,7 +192,7 @@ export const ShoppingResearchResule = {
   message: '쇼핑 리서치 결과 분석 성공 (상위 5개 상품)',
   data: {
     user_query: '전문가용 영상편집 노트북 찾아줘',
-    products: [
+    product : [
       {
         similarity_score: 0.98,
         product_image_url: 'https://s3.amazonaws.com/my-bucket/products/macbook-pro-14.jpg',
