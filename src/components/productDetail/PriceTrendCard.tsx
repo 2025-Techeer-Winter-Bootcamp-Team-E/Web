@@ -1,5 +1,5 @@
 import type { TimerGetByProductCodeResDto } from '@/types/timerType';
-import { TrendingDown, TrendingUp, Target, Bell } from 'lucide-react';
+import { TrendingDown, TrendingUp, Target } from 'lucide-react';
 
 interface PriceTrendCardProps {
   timerInfo: TimerGetByProductCodeResDto;
@@ -19,10 +19,6 @@ const PriceTrendCard = ({ timerInfo }: PriceTrendCardProps) => {
             <h4 className="text-sm font-light tracking-wide text-black">AI 가격 분석</h4>
             <p className="text-xs font-light text-gray-500">구매 타이밍 예측</p>
           </div>
-        </div>
-        <div className="flex items-center gap-1.5 rounded-full border border-gray-200 px-4 py-2">
-          <Bell className="h-3 w-3 text-black" strokeWidth={1.5} />
-          <span className="text-xs font-light text-gray-600">알림 ON</span>
         </div>
       </div>
 

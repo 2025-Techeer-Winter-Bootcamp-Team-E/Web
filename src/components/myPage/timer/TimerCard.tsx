@@ -53,7 +53,7 @@ const TimerCard = ({ timer }: TimerCardProps) => {
           <X className="h-4 w-4" strokeWidth={2} />
         </button>
         <div
-          className="relative mb-6 flex aspect-square w-full cursor-pointer items-center justify-center rounded-2xl bg-[#F5F5F7] p-8"
+          className="relative mb-6 flex aspect-square w-full cursor-pointer items-center justify-center rounded-2xl bg-[#F5F5F7]"
           onClick={() => navigate(PATH.PRODUCT_DETAIL(timer.product_code))}
         >
           {timer.thumbnail_url ? (

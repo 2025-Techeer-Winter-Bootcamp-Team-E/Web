@@ -114,7 +114,7 @@ export type ShoppingResearchResultEntity = {
   recommendation_reason: string;
   price: number;
   performance_score: number;
-  product_specs: ProductSpecs;
+  product_specs: { summary: string };
   ai_review_summary: string;
   product_detail_url: string;
   optimal_product_info: MallInfoEntity;

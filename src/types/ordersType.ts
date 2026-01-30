@@ -114,7 +114,7 @@ export type CartItemEntity = {
   cart_item_id: number;
   product_code: number;
   product_name: string;
-  product_representative_image_url: string;
+  product_resentative_image_url: string;
   quantity: number;
   price: number;
   total_price: number;

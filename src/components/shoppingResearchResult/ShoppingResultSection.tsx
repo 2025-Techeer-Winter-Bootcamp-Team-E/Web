@@ -114,7 +114,7 @@ const ShoppingResultSection = ({ products }: ShoppingResultSectionProps) => {
 
                     {/* 스펙 요약 리스트 (심플하게 조정) */}
                     <div className="mt-4 space-y-1.5 border-t border-gray-50 pt-4">
-                      {Object.entries(product.product_specs || {})
+                      {Object.entries(product.product_specs.summary || {})
                         .slice(0, 3)
                         .map(([key, value]) => (
                           <div key={key} className="flex justify-between text-[11px]">
