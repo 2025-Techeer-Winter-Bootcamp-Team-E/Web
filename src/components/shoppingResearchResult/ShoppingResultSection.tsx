@@ -99,7 +99,7 @@ const ShoppingResultSection = ({ products }: ShoppingResultSectionProps) => {
                   </div>
 
                   <div className="flex flex-1 flex-col p-5">
-                    <h5 className="line-clamp-2 min-h-10 text-[15px] font-light text-black">
+                    <h5 className="line-clamp-2 min-h-10 text-[15px] font-medium text-black">
                       {product.product_name}
                     </h5>
 
@@ -112,16 +112,10 @@ const ShoppingResultSection = ({ products }: ShoppingResultSectionProps) => {
                       </div>
                     </div>
 
-                    {/* 스펙 요약 리스트 (심플하게 조정) */}
                     <div className="mt-4 space-y-1.5 border-t border-gray-50 pt-4">
-                      {Object.entries(product.product_specs.summary || {})
-                        .slice(0, 3)
-                        .map(([key, value]) => (
-                          <div key={key} className="flex justify-between text-[11px]">
-                            <span className="text-gray-400 uppercase">{key}</span>
-                            <span className="font-medium text-gray-700">{String(value)}</span>
-                          </div>
-                        ))}
+                      <span className="font-light text-gray-700">
+                        {product.recommendation_reason}
+                      </span>
                     </div>
                   </div>
                 </Link>
