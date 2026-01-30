@@ -145,9 +145,9 @@ const Header: React.FC = () => {
             )}
             <button className="p-2 lg:hidden" onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}>
               {isMobileNavOpen ? (
-                <X className="h-5 w-5 text-black" strokeWidth={1.5} />
+                <X aria-label="닫기" className="h-5 w-5 text-black" strokeWidth={1.5} />
               ) : (
-                <Menu className="h-5 w-5 text-black" strokeWidth={1.5} />
+                <Menu aria-label="메뉴" className="h-5 w-5 text-black" strokeWidth={1.5} />
               )}
             </button>
           </div>

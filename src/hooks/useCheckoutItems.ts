@@ -21,7 +21,7 @@ export const useCheckoutItems = ({
       cart_item_id: item.cart_item_id,
       product_code: item.product_code,
       name: item.product_name,
-      image: item.product_representative_image_url,
+      image: item.product_resentative_image_url,
       quantity: item.quantity,
       price: item.price,
     }));

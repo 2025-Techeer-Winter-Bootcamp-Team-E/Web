@@ -30,7 +30,7 @@ const CartItemComponent = ({
           className="h-24 w-24 shrink-0 overflow-hidden rounded-[18px] bg-[#f5f5f7] ring-1 ring-black/3"
         >
           <img
-            src={item.product_representative_image_url}
+            src={item.product_resentative_image_url}
             alt={item.product_name}
             className="h-full w-full object-cover p-3 mix-blend-multiply"
           />

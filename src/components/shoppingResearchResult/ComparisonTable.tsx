@@ -82,7 +82,8 @@ const ComparisonTable = ({ products }: ComparisonTableProps) => {
                         key={product.product_code}
                         className="px-6 py-5 text-center text-[14px] font-medium text-[#424245]"
                       >
-                        {product.product_specs?.[specKey] ?? '—'}
+                        {product.product_specs?.[specKey as keyof typeof product.product_specs] ??
+                          '—'}
                       </td>
                     ))}
                   </tr>
